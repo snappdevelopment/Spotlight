@@ -26,9 +26,12 @@ class NewMoviesFragment : Fragment() {
         newMoviesViewModel = ViewModelProvider(this).get(NewMoviesViewModel::class.java)
         binding = FragmentNewMoviesBinding.inflate(inflater, container, false)
 
-        val textView: TextView = viewBinding.textHome
+        val recyclerView = viewBinding.recyclerView
+        recyclerView.adapter = NewMoviesAdapter(mutableListOf<String>("Hey!!!", "Yoo", "Hello", "Ayy"))
+
+
         newMoviesViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+//            textView.text = it
         })
         return viewBinding.root
     }
