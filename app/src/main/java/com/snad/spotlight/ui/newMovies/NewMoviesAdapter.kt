@@ -17,15 +17,18 @@ class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.A
 
     override fun onBindViewHolder(holder: NewMoviesViewHolder, position: Int) {
         val item = items[position]
-        Picasso.get()
-            .load("https://image.tmdb.org/t/p/w92${item.poster_path}")
+        val picasso = Picasso.get()
+        picasso.setIndicatorsEnabled(true)
+        picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
             .resize(92, 138)
             .centerCrop()
             .transform(RoundedCornersTransformation(2, 1))
             .into(holder.coverImageView)
+        //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
         holder.releaseDateTextView.text = item.release_date.substring(0, 4)
         holder.overviewTextView.text = item.overview
+        holder.averageVoteTextView.text = item.vote_average.toString()
     }
 
     override fun getItemCount(): Int = items.size
@@ -37,5 +40,6 @@ class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.A
         val titleTextView = viewBinding.titleTextView
         val releaseDateTextView = viewBinding.releaseDateTextView
         val overviewTextView = viewBinding.overviewTextView
+        val averageVoteTextView = viewBinding.averageVoteTextView
     }
 }
