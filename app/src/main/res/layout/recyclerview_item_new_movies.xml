@@ -23,6 +23,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/newMovieTitle"
         android:layout_marginLeft="@dimen/new_movies_rv_item_title_margin"
         android:layout_marginRight="@dimen/new_movies_rv_item_title_margin"
         android:textSize="@dimen/new_movies_rv_item_title_size"
@@ -32,18 +33,39 @@
         app:layout_constraintTop_toTopOf="@id/coverImageView"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Fast and the Furious 9 Long title adkfkasdfjksd asdk"/>
+        tools:text="Fast and the Furious 9: Final Race"/>
 
     <TextView
         android:id="@+id/releaseDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/new_movies_rv_item_release_date_top_margin"
         android:layout_marginLeft="@dimen/new_movies_rv_item_release_date_margin"
         android:layout_marginRight="@dimen/new_movies_rv_item_release_date_margin"
         android:textSize="@dimen/new_movies_rv_item_release_date_size"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
         tools:text="2020"/>
+
+    <ImageView
+        android:id="@+id/averageVoteImageView"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_icon_margin"
+        android:src="@drawable/ic_star_filled"
+        app:layout_constraintTop_toTopOf="@+id/releaseDateTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
+        app:layout_constraintStart_toEndOf="@+id/releaseDateTextView"/>
+
+    <TextView
+        android:id="@+id/averageVoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_text_margin"
+        app:layout_constraintStart_toEndOf="@+id/averageVoteImageView"
+        app:layout_constraintTop_toTopOf="@+id/averageVoteImageView"
+        app:layout_constraintBottom_toBottomOf="@+id/averageVoteImageView"
+        tools:text="5.7"/>
 
     <TextView
         android:id="@+id/overviewTextView"

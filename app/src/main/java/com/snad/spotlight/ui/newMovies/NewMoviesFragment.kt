@@ -1,16 +1,18 @@
 package com.snad.spotlight.ui.newMovies
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.NewMoviesRepository
+import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentNewMoviesBinding
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesService
@@ -29,6 +31,7 @@ class NewMoviesFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: NewMoviesAdapter
+    private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private val movies = mutableListOf<NewMovie>()
 
     override fun onCreateView(
@@ -38,6 +41,7 @@ class NewMoviesFragment : Fragment() {
     ): View? {
         binding = FragmentNewMoviesBinding.inflate(inflater, container, false)
 
+        loadingProgressBar = viewBinding.loadingProgressbar
         recyclerView = viewBinding.recyclerView
         recyclerViewAdapter = NewMoviesAdapter(movies)
         recyclerView.adapter = recyclerViewAdapter
@@ -59,9 +63,12 @@ class NewMoviesFragment : Fragment() {
 
         newMoviesViewModel.state.observe(viewLifecycleOwner, Observer { state ->
             when(state) {
-                is NewMoviesState.DoneState -> updateRecyclerView(state.newMovies)
+                is NewMoviesState.DoneState -> showDoneState(state.newMovies)
+                is NewMoviesState.LoadingState -> showLoadingState()
+                is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
+                is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
+                is NewMoviesState.ErrorState -> showErrorState()
             }
-            //Todo: handle states
         })
 
         newMoviesViewModel.loadNewMovies()
@@ -74,10 +81,58 @@ class NewMoviesFragment : Fragment() {
         binding = null
     }
 
-    private fun updateRecyclerView(newMovies: NewMovies) {
+    private fun showDoneState(newMovies: NewMovies) {
+        loadingProgressBar.hide()
+
         val moviesList = newMovies.movies
         movies.clear()
         movies.addAll(moviesList)
         recyclerViewAdapter.notifyDataSetChanged()
+    }
+
+    private fun showLoadingState() {
+        loadingProgressBar.show()
+    }
+
+    private fun showAuthenticationErrorState() {
+        loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_authentication_title)
+            .setMessage(R.string.dialog_error_authentication_message)
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                activity?.finishAndRemoveTask()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showNetworkErrorState() {
+        loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_network_title)
+            .setMessage(R.string.dialog_error_network_message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
+                newMoviesViewModel.loadNewMovies()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showErrorState() {
+        loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_title)
+            .setMessage(R.string.dialog_error_message)
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                activity?.finishAndRemoveTask()
+            }
+            .create()
+            .show()
     }
 }

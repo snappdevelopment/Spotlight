@@ -1,6 +1,5 @@
 package com.snad.spotlight.ui.newMovies
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,8 +26,8 @@ class NewMoviesViewModel(
                     is NewMoviesResult.NetworkError -> state.value = NewMoviesState.NetworkErrorState
                     is NewMoviesResult.ConnectionError -> state.value = NewMoviesState.NetworkErrorState
                     is NewMoviesResult.AuthenticationError -> state.value = NewMoviesState.AuthenticationErrorState
-                    is NewMoviesResult.ApiError -> state.value = NewMoviesState.Error
-                    is NewMoviesResult.Error -> state.value = NewMoviesState.Error
+                    is NewMoviesResult.ApiError -> state.value = NewMoviesState.ErrorState
+                    is NewMoviesResult.Error -> state.value = NewMoviesState.ErrorState
                 }
             }
         }
@@ -40,5 +39,5 @@ sealed class NewMoviesState {
     object LoadingState: NewMoviesState()
     object NetworkErrorState: NewMoviesState()
     object AuthenticationErrorState: NewMoviesState()
-    object Error: NewMoviesState()
+    object ErrorState: NewMoviesState()
 }
