@@ -8,7 +8,6 @@ class NewMoviesRepository(
     private val newMoviesApi: NewMoviesApi
 ) {
     suspend fun loadNewMovies(): NewMoviesResult {
-        //Todo: read from database
         val result = newMoviesApi.loadNewMovies()
         return when(result) {
             is NewMoviesApiResult.Success -> NewMoviesResult.Success(result.newMovies)

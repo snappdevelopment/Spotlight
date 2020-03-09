@@ -18,11 +18,11 @@ class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.A
     override fun onBindViewHolder(holder: NewMoviesViewHolder, position: Int) {
         val item = items[position]
         val picasso = Picasso.get()
-        picasso.setIndicatorsEnabled(true)
+//        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
             .resize(92, 138)
             .centerCrop()
-            .transform(RoundedCornersTransformation(2, 1))
+            .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
