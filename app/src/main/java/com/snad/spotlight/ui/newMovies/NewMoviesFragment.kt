@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.NewMoviesRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentNewMoviesBinding
+import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesService
 import com.snad.spotlight.network.models.NewMovie
 import com.snad.spotlight.network.models.NewMovies
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -46,8 +49,17 @@ class NewMoviesFragment : Fragment() {
         recyclerViewAdapter = NewMoviesAdapter(movies)
         recyclerView.adapter = recyclerViewAdapter
 
+        val cacheSize = 10 * 1024 * 1024 // 10 MB
+        val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
+
+        val httpClient = OkHttpClient.Builder()
+            .cache(cache)
+            .addInterceptor(ApiKeyInterceptor())
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
+            .client(httpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
 

@@ -7,7 +7,7 @@
     <dimen name="new_movies_rv_item_padding">16dp</dimen>
     <dimen name="new_movies_rv_item_margin">8dp</dimen>
 
-    <dimen name="new_movies_rv_item_title_size">24sp</dimen>
+    <dimen name="new_movies_rv_item_title_size">20sp</dimen>
     <dimen name="new_movies_rv_item_title_margin">8dp</dimen>
 
     <dimen name="new_movies_rv_item_release_date_size">14sp</dimen>
