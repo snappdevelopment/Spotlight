@@ -16,11 +16,23 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexKeepFile file('multidex-config.txt')
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            multiDexKeepFile file('multidex-config.txt')
         }
     }
     kotlinOptions {
@@ -56,6 +68,10 @@ dependencies {
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2' //kotlin annotation support
     implementation 'com.squareup.picasso:picasso:2.71828' //async image loading
     implementation 'jp.wasabeef:picasso-transformations:2.2.1' //rounded corners for images
+    implementation "androidx.room:room-runtime:2.2.4" //database for persistence
+    implementation "androidx.room:room-ktx:2.2.4" //room kotlin extensions, coroutine support
+    kapt "androidx.room:room-compiler:2.2.4" //room compiler for persistence
+    implementation 'androidx.multidex:multidex:2.0.1' //because of max method count
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
