@@ -26,10 +26,7 @@ class LibraryFragment : Fragment() {
         libraryViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-        val textView: TextView = viewBinding.textDashboard
-        libraryViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        libraryViewModel.
         return viewBinding.root
     }
 
