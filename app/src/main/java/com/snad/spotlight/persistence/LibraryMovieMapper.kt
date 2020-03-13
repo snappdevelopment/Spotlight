@@ -12,8 +12,8 @@ fun Movie.toLibraryMovie(
         genre.name
     }
     return LibraryMovie(
-        addedAt = addedAt,
-        hasBeenWatched = hasBeenWatched,
+        added_at = addedAt,
+        has_been_watched = hasBeenWatched,
         adult = this.adult,
         backdrop_path = this.backdrop_path,
         budget = this.budget,

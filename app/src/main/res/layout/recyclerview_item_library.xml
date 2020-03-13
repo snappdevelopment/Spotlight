@@ -23,9 +23,9 @@
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/newMovieTitle"
-        android:layout_marginLeft="@dimen/library_rv_item_title_margin"
-        android:layout_marginRight="@dimen/library_rv_item_title_margin"
+        android:textColor="@color/libraryTitle"
+        android:layout_marginStart="@dimen/library_rv_item_title_margin"
+        android:layout_marginEnd="@dimen/library_rv_item_title_margin"
         android:textSize="@dimen/library_rv_item_title_size"
         android:maxLines="2"
         android:ellipsize="end"
@@ -40,12 +40,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/library_rv_item_release_date_top_margin"
-        android:layout_marginLeft="@dimen/library_rv_item_release_date_margin"
-        android:layout_marginRight="@dimen/library_rv_item_release_date_margin"
+        android:layout_marginStart="@dimen/library_rv_item_release_date_margin"
         android:textSize="@dimen/library_rv_item_release_date_size"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
         tools:text="2020"/>
+
+    <TextView
+        android:id="@+id/runtimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/library_rv_item_runtime_margin"
+        android:textSize="@dimen/library_rv_item_runtime_size"
+        app:layout_constraintTop_toTopOf="@id/releaseDateTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
+        app:layout_constraintStart_toEndOf="@id/releaseDateTextView"
+        tools:text="120 min."/>
 
     <ImageView
         android:id="@+id/averageVoteImageView"
@@ -55,18 +65,29 @@
         android:src="@drawable/ic_star_filled"
         app:layout_constraintTop_toTopOf="@+id/releaseDateTextView"
         app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
-        app:layout_constraintStart_toEndOf="@+id/releaseDateTextView"/>
+        app:layout_constraintStart_toEndOf="@+id/runtimeTextView"/>
 
     <TextView
         android:id="@+id/averageVoteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_text_margin"
+        android:layout_marginStart="@dimen/library_rv_item_average_vote_text_margin"
         android:textSize="@dimen/library_rv_item_average_vote_text_size"
         app:layout_constraintStart_toEndOf="@+id/averageVoteImageView"
         app:layout_constraintTop_toTopOf="@+id/averageVoteImageView"
         app:layout_constraintBottom_toBottomOf="@+id/averageVoteImageView"
         tools:text="5.7"/>
+
+    <TextView
+        android:id="@+id/genreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/library_rv_item_genre_text_margin"
+        android:textSize="@dimen/library_rv_item_genre_text_size"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/coverImageView"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
+        tools:text="Drama, Thriller" />
 
 
 

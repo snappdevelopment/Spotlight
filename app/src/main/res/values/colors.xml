@@ -4,8 +4,9 @@
     <color name="colorPrimaryDark">#3145B5</color>
     <color name="colorAccent">#D81B60</color>
     <color name="bottomNavigationIconTintSelected">#3F51B5</color>
-    <color name="bottomNavigationIconTint">#4E4E4E</color>
+    <color name="bottomNavigationIconTint">#595959</color>
 
     <color name="newMovieTitle">#404040</color>
+    <color name="libraryTitle">#404040</color>
 <!--    <color name="actionbar_text">#4E4E4E</color>-->
 </resources>
