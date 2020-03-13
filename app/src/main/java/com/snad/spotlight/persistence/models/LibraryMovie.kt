@@ -6,13 +6,14 @@ import java.util.Calendar
 
 @Entity(tableName = "movies")
 data class LibraryMovie(
-    val addedAt: Calendar,
-    val hasBeenWatched: Boolean,
+    @PrimaryKey
+    val id : Int,
+    val added_at: Calendar,
+    val has_been_watched: Boolean,
     val adult : Boolean,
     val backdrop_path : String?,
     val budget : Int,
     val genres : String,
-    val id : Int,
     val imdb_id : String?,
     val overview : String?,
     val popularity : Double,
@@ -25,7 +26,4 @@ data class LibraryMovie(
     val video : Boolean,
     val vote_average : Double,
     val vote_count : Int
-    ) {
-    @PrimaryKey(autoGenerate = true)
-    var uid: Long = 0
-}
+    )

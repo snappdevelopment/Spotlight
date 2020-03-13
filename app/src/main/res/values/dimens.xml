@@ -33,8 +33,14 @@
     <dimen name="library_rv_item_release_date_margin">8dp</dimen>
     <dimen name="library_rv_item_release_date_top_margin">5dp</dimen>
 
+    <dimen name="library_rv_item_runtime_size">12sp</dimen>
+    <dimen name="library_rv_item_runtime_margin">8dp</dimen>
+
     <dimen name="library_rv_item_average_vote_text_size">12sp</dimen>
     <dimen name="library_rv_item_average_vote_text_margin">2dp</dimen>
     <dimen name="library_rv_item_average_vote_icon_margin">8dp</dimen>
+
+    <dimen name="library_rv_item_genre_text_margin">8dp</dimen>
+    <dimen name="library_rv_item_genre_text_size">12sp</dimen>
 
 </resources>
