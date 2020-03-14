@@ -18,6 +18,10 @@ class LibraryRepository(
         }
     }
 
+    suspend fun updateMovie(movie: LibraryMovie) {
+        libraryDb.updateMovie(movie)
+    }
+
     suspend fun deleteMovie(movie: LibraryMovie) {
         libraryDb.deleteMovie(movie)
     }
