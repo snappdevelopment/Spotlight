@@ -8,4 +8,6 @@
 
     <color name="newMovieTitle">#404040</color>
 <!--    <color name="actionbar_text">#4E4E4E</color>-->
+    <color name="addMovie">@android:color/darker_gray</color>
+    <color name="addMovieSelected">#3F51B5</color>
 </resources>

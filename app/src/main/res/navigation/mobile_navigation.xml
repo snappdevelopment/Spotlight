@@ -17,4 +17,10 @@
         android:label="@string/title_library"
         tools:layout="@layout/fragment_library" />
 
+    <fragment
+        android:id="@+id/navigation_movie_details"
+        android:name="com.snad.spotlight.ui.movieDetails.MovieDetailsFragment"
+        android:label="@string/title_movieDetails"
+        tools:layout="@layout/fragment_movie_details" />
+
 </navigation>
