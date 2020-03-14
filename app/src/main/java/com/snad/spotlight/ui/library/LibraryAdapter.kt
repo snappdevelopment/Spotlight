@@ -1,6 +1,7 @@
 package com.snad.spotlight.ui.library
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
@@ -8,7 +9,11 @@ import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class LibraryAdapter(private val items: MutableList<LibraryMovie>): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
+class LibraryAdapter(
+    private val items: MutableList<LibraryMovie>,
+    private val longClickListener: (LibraryMovie) -> Unit,
+    private val watchedClickListener: (LibraryMovie) -> Unit
+): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
         val viewBinding = RecyclerviewItemLibraryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -17,6 +22,16 @@ class LibraryAdapter(private val items: MutableList<LibraryMovie>): RecyclerView
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val item = items[position]
+        holder.movieCard.setOnLongClickListener {
+            longClickListener(item)
+            true
+        }
+        holder.movieCard.isSelected = item.has_been_watched
+        holder.watchedImageButton.setOnClickListener {
+            val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
+            watchedClickListener(watchedItem)
+        }
+        holder.watchedImageButton.isSelected = item.has_been_watched
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
@@ -37,11 +52,13 @@ class LibraryAdapter(private val items: MutableList<LibraryMovie>): RecyclerView
     class LibraryViewHolder(
         viewBinding: RecyclerviewItemLibraryBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
+        val movieCard = viewBinding.movieCard
         val coverImageView = viewBinding.coverImageView
         val titleTextView = viewBinding.titleTextView
         val releaseDateTextView = viewBinding.releaseDateTextView
         val runtimeTextView = viewBinding.runtimeTextView
         val averageVoteTextView = viewBinding.averageVoteTextView
         val genreTextView = viewBinding.genreTextView
+        val watchedImageButton = viewBinding.watchedImageButton
     }
 }

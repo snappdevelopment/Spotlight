@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movieCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/new_movies_rv_item_padding"
@@ -59,8 +60,8 @@
 
     <ImageView
         android:id="@+id/averageVoteImageView"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginStart="@dimen/library_rv_item_average_vote_icon_margin"
         android:src="@drawable/ic_star_filled"
         app:layout_constraintTop_toTopOf="@+id/releaseDateTextView"
@@ -89,6 +90,17 @@
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
         tools:text="Drama, Thriller" />
 
-
+    <ImageButton
+        android:id="@+id/watchedImageButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/watched_background_selector"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:src="@drawable/watched_icon_selector"
+        android:padding="6dp"
+        android:scaleType="fitCenter"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/coverImageView"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

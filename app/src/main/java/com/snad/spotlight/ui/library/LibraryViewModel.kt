@@ -34,6 +34,18 @@ class LibraryViewModel(
         }
     }
 
+    fun updateLibraryMovie(libraryMovie: LibraryMovie) {
+        viewModelScope.launch(Dispatchers.IO) {
+            libraryRepository.updateMovie(libraryMovie)
+        }
+    }
+
+    fun deleteLibraryMovie(libraryMovie: LibraryMovie) {
+        viewModelScope.launch(Dispatchers.IO) {
+            libraryRepository.deleteMovie(libraryMovie)
+        }
+    }
+
 }
 
 sealed class LibraryState {

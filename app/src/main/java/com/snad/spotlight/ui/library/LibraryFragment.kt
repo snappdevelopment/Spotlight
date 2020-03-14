@@ -43,7 +43,7 @@ class LibraryFragment : Fragment() {
 
         loadingProgressBar = viewBinding.loadingProgressbar
         recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = LibraryAdapter(movies)
+        recyclerViewAdapter = LibraryAdapter(movies, this::movieLongClickListener, this::movieWatchedClickListener)
         recyclerView.adapter = recyclerViewAdapter
 
         val app = context!!.applicationContext as App
@@ -64,28 +64,28 @@ class LibraryFragment : Fragment() {
             }
         })
 
-//        val fakeMovie = LibraryMovie(1111,
-//            Calendar.getInstance(),
-//            false,
-//            false,
-//            "",
-//            100000,
-//            "Drama, Comedy",
-//            null,
-//            null,
-//            5.2,
-//            null,
-//            "2020.02.14",
-//            2000000,
-//            180,
-//            null,
-//            "Fake Movie",
-//            false,
-//            8.2,
-//            5)
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            libraryDb.insertMovie(fakeMovie)
-//        }
+        val fakeMovie = LibraryMovie(1111,
+            Calendar.getInstance(),
+            false,
+            false,
+            "",
+            100000,
+            "Drama, Comedy",
+            null,
+            null,
+            5.2,
+            null,
+            "2020.02.14",
+            2000000,
+            180,
+            null,
+            "Fake Movie",
+            false,
+            8.2,
+            5)
+        lifecycleScope.launch(Dispatchers.IO) {
+            libraryDb.insertMovie(fakeMovie)
+        }
 
         libraryViewModel.loadLibraryMovies()
 
@@ -97,6 +97,24 @@ class LibraryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    private fun movieLongClickListener(libraryMovie: LibraryMovie) {
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_delete_movie_title)
+            .setMessage(R.string.dialog_delete_movie_message)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                libraryViewModel.deleteLibraryMovie(libraryMovie)
+            }
+            .setNegativeButton(android.R.string.cancel) { dialog, which ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    private fun movieWatchedClickListener(libraryMovie: LibraryMovie) {
+        libraryViewModel.updateLibraryMovie(libraryMovie)
     }
 
     private fun showDoneState(libraryMovies: List<LibraryMovie>) {
