@@ -8,16 +8,16 @@
     <dimen name="new_movies_rv_item_margin">8dp</dimen>
 
     <dimen name="new_movies_rv_item_title_size">20sp</dimen>
-    <dimen name="new_movies_rv_item_title_margin">8dp</dimen>
+    <dimen name="new_movies_rv_item_title_margin">12dp</dimen>
 
     <dimen name="new_movies_rv_item_release_date_size">14sp</dimen>
-    <dimen name="new_movies_rv_item_release_date_margin">8dp</dimen>
+    <dimen name="new_movies_rv_item_release_date_margin">12dp</dimen>
     <dimen name="new_movies_rv_item_release_date_top_margin">5dp</dimen>
 
     <dimen name="new_movies_rv_item_average_vote_icon_margin">8dp</dimen>
     <dimen name="new_movies_rv_item_average_vote_text_margin">2dp</dimen>
 
     <dimen name="new_movies_rv_item_overview_size">14sp</dimen>
-    <dimen name="new_movies_rv_item_overview_margin_left_right">8dp</dimen>
+    <dimen name="new_movies_rv_item_overview_margin_left">12dp</dimen>
     <dimen name="new_movies_rv_item_overview_margin_top">12dp</dimen>
 </resources>
