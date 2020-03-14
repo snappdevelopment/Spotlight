@@ -14,4 +14,10 @@
     <string name="dialog_error_network_button_retry">Retry</string>
     <string name="dialog_error_title">Unknown Error</string>
     <string name="dialog_error_message">An unknown error occurred. Please notify the maintainer of the app. The app will be closed now.</string>
+
+    <!--LibraryMovies-->
+    <string name="dialog_wrong_operation_title">Unknown Error</string>
+    <string name="dialog_wrong_operation_message">An unknown error occurred. Please notify the maintainer of the app. The app will be closed now.</string>
+    <string name="dialog_delete_movie_title">Remove Movie</string>
+    <string name="dialog_delete_movie_message">Do you want to remove this movie from your library?</string>
 </resources>
