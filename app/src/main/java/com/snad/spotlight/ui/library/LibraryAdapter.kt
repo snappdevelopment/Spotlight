@@ -12,6 +12,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 class LibraryAdapter(
     private val items: MutableList<LibraryMovie>,
     private val longClickListener: (LibraryMovie) -> Unit,
+    private val clickListener: (Int) -> Unit,
     private val watchedClickListener: (LibraryMovie) -> Unit
 ): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
 
@@ -26,6 +27,9 @@ class LibraryAdapter(
             longClickListener(item)
             true
         }
+        holder.movieCard.setOnClickListener {
+            clickListener(item.id)
+        }
         holder.movieCard.isSelected = item.has_been_watched
         holder.watchedImageButton.setOnClickListener {
             val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
@@ -35,7 +39,7 @@ class LibraryAdapter(
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
-            .resize(92, 138)
+            .resize(52, 98)
             .centerCrop()
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)

@@ -28,7 +28,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_new_movies, R.id.navigation_library
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        findNavController(R.id.nav_host_fragment).navigateUp()
+        return true
     }
 }

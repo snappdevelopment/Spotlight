@@ -8,8 +8,18 @@
 
     <color name="newMovieTitle">#404040</color>
     <color name="libraryTitle">#404040</color>
+    <color name="movieDetailTitle">#FFFFFF</color>
+
     <color name="watchedStatus">#3F51B5</color>
     <color name="notWatchedStatus">@android:color/darker_gray</color>
     <color name="addMovie">@android:color/darker_gray</color>
     <color name="addMovieSelected">#3F51B5</color>
+
+    <color name="movieDetailHeadline">#404040</color>
+    <color name="movieDetailFAB">#FFFFFF</color>
+    <color name="movieDetailFABSelected">#3F51B5</color>
+    <color name="movieDetailReleaseDate">#FFFFFF</color>
+
+    <color name="movieDetailIconColor">#404040</color>
+    <color name="movieDetailIconColorSelected">#FFFFFF</color>
 </resources>

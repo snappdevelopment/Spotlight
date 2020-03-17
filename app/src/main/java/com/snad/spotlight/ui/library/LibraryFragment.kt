@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.App
 import com.snad.spotlight.LibraryRepository
@@ -43,7 +44,11 @@ class LibraryFragment : Fragment() {
 
         loadingProgressBar = viewBinding.loadingProgressbar
         recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = LibraryAdapter(movies, this::movieLongClickListener, this::movieWatchedClickListener)
+        recyclerViewAdapter = LibraryAdapter(
+            movies,
+            this::movieLongClickListener,
+            this::movieClickListener,
+            this::movieWatchedClickListener)
         recyclerView.adapter = recyclerViewAdapter
 
         val app = context!!.applicationContext as App
@@ -64,24 +69,25 @@ class LibraryFragment : Fragment() {
             }
         })
 
-        val fakeMovie = LibraryMovie(1111,
+        val fakeMovie = LibraryMovie(
+            1112,
             Calendar.getInstance(),
             false,
             false,
-            "",
+            "/pCUdYAaarKqY2AAUtV6xXYO8UGY.jpg",
             100000,
             "Drama, Comedy",
             null,
-            null,
+            "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
             5.2,
-            null,
+            "/4GpwvwDjgwiShr1UBJIn5fk1gwT.jpg",
             "2020.02.14",
             2000000,
             180,
-            null,
-            "Fake Movie",
+            "How much can you know about yourself if you've never been in a fight?",
+            "Fight Club",
             false,
-            8.2,
+            7.8,
             5)
         lifecycleScope.launch(Dispatchers.IO) {
             libraryDb.insertMovie(fakeMovie)
@@ -111,6 +117,12 @@ class LibraryFragment : Fragment() {
             }
             .create()
             .show()
+    }
+
+    private fun movieClickListener(id: Int) {
+        val bundle = Bundle()
+        bundle.putInt("id", id)
+        findNavController().navigate(R.id.action_navigation_library_to_navigation_movie_details, bundle)
     }
 
     private fun movieWatchedClickListener(libraryMovie: LibraryMovie) {
