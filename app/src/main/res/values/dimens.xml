@@ -43,4 +43,39 @@
     <dimen name="library_rv_item_genre_text_margin">8dp</dimen>
     <dimen name="library_rv_item_genre_text_size">12sp</dimen>
 
+    <!--MovieDetails-->
+    <dimen name="movie_details_title_margin">16dp</dimen>
+    <dimen name="movie_detail_title_size">24sp</dimen>
+    <dimen name="movie_detail_cover_top_margin">100dp</dimen>
+    <dimen name="movie_detail_cover_start_margin">16dp</dimen>
+
+    <dimen name="movie_detail_release_date_size">16sp</dimen>
+    <dimen name="movie_detail_release_date_margin">16dp</dimen>
+    <dimen name="movie_detail_release_date_top_margin">5dp</dimen>
+
+    <dimen name="movie_detail_runtime_size">12sp</dimen>
+    <dimen name="movie_detail_runtime_margin">16dp</dimen>
+
+    <dimen name="movie_detail_average_vote_text_size">16sp</dimen>
+    <dimen name="movie_detail_average_vote_text_margin">4dp</dimen>
+    <dimen name="movie_detail_average_vote_icon_margin">16dp</dimen>
+
+    <dimen name="movie_detail_tagline_top_margin">12dp</dimen>
+    <dimen name="movie_detail_tagline_start_margin">16dp</dimen>
+    <dimen name="movie_detail_tagline_margin">16dp</dimen>
+    <dimen name="movie_detail_tagline_size">14sp</dimen>
+
+    <dimen name="movie_detail_genre_text_size">12sp</dimen>
+    <dimen name="movie_detail_genre_margin">8dp</dimen>
+    <dimen name="movie_detail_genre_margin_top">5dp</dimen>
+
+    <dimen name="movie_detail_overview_margin_top">8dp</dimen>
+    <dimen name="movie_detail_overview_size">14sp</dimen>
+    <dimen name="movie_detail_overview_headline_size">16sp</dimen>
+    <dimen name="movie_detail_overview_card_margin_top">40dp</dimen>
+    <dimen name="movie_detail_overview_card_margin_end">16dp</dimen>
+
+    <dimen name="movie_detail_add_movie_margin">16dp</dimen>
+
+
 </resources>

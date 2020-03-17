@@ -16,7 +16,7 @@ class LibraryDb(
         }
     }
 
-    suspend fun getMovieById(id: Long): LibraryDbResult {
+    suspend fun getMovieById(id: Int): LibraryDbResult {
         val movie = dao.getMovieById(id)
         return if(movie != null) {
             LibraryDbResult.SuccessMovieById(movie)
@@ -26,9 +26,8 @@ class LibraryDb(
         }
     }
 
-    suspend fun insertMovie(movie: LibraryMovie): LibraryDbResult {
+    suspend fun insertMovie(movie: LibraryMovie) {
         dao.insertMovie(movie)
-        return LibraryDbResult.SuccessInsertMovie
     }
 
     suspend fun updateMovie(movie: LibraryMovie) {

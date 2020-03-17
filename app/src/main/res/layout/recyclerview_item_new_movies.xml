@@ -17,6 +17,7 @@
         android:layout_width="92dp"
         android:layout_height="138dp"
         android:elevation="2dp"
+        android:outlineProvider="bounds"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +72,7 @@
     <TextView
         android:id="@+id/overviewTextView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/new_movies_rv_item_overview_margin_left"
         android:layout_marginTop="@dimen/new_movies_rv_item_overview_margin_top"
         android:maxLines="5"

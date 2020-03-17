@@ -8,7 +8,7 @@ fun Movie.toLibraryMovie(
     addedAt: Calendar = Calendar.getInstance(),
     hasBeenWatched: Boolean = false
 ): LibraryMovie {
-    val genres = this.genres.joinToString(separator = ",", limit = 3, truncated = "") {genre ->
+    val genres = this.genres.joinToString(separator = ",", limit = 2, truncated = "") {genre ->
         genre.name
     }
     return LibraryMovie(
