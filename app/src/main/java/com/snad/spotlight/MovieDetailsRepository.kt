@@ -1,18 +1,23 @@
 package com.snad.spotlight
 
+import com.snad.spotlight.network.MovieApi
+import com.snad.spotlight.network.MovieApiResult
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.LibraryDbResult
 import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.spotlight.persistence.toLibraryMovie
 
 class MovieDetailsRepository(
-    private val libraryDb: LibraryDb
+    private val libraryDb: LibraryDb,
+    private val movieApi: MovieApi
 ) {
     suspend fun loadMovie(id: Int): MovieDetailsResult {
         val result = libraryDb.getMovieById(id)
         return when(result) {
+            //Todo: load changes from Api and write to db
             is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(result.libraryMovie, true)
-            is LibraryDbResult.ErrorMovieById -> loadMovieFromApi()
-            else -> MovieDetailsResult.ErrorUnknown
+            is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
+            else -> MovieDetailsResult.Error
         }
     }
 
@@ -20,13 +25,32 @@ class MovieDetailsRepository(
         libraryDb.insertMovie(movie)
     }
 
-    private suspend fun loadMovieFromApi(): MovieDetailsResult {
-        //todo: get movie from api if not in db
-        return MovieDetailsResult.ErrorUnknown
+    suspend fun deleteMovie(movie: LibraryMovie) {
+        libraryDb.deleteMovie(movie)
+    }
+
+    suspend fun updateMovie(movie: LibraryMovie) {
+        libraryDb.updateMovie(movie)
+    }
+
+    private suspend fun loadMovieFromApi(id: Int): MovieDetailsResult {
+        val result = movieApi.loadMovie(id)
+        return when(result) {
+            is MovieApiResult.Success -> MovieDetailsResult.Success(result.movie.toLibraryMovie(), false)
+            is MovieApiResult.NetworkError -> MovieDetailsResult.NetworkError
+            is MovieApiResult.ConnectionError -> MovieDetailsResult.ConnectionError
+            is MovieApiResult.AuthenticationError -> MovieDetailsResult.AuthenticationError
+            is MovieApiResult.ApiError -> MovieDetailsResult.ApiError
+            is MovieApiResult.Error -> MovieDetailsResult.Error
+        }
     }
 }
 
 sealed class MovieDetailsResult {
     data class Success(val movie: LibraryMovie, val isInLibrary: Boolean): MovieDetailsResult()
-    object ErrorUnknown: MovieDetailsResult()
+    object NetworkError: MovieDetailsResult()
+    object ConnectionError: MovieDetailsResult()
+    object AuthenticationError: MovieDetailsResult()
+    object ApiError: MovieDetailsResult()
+    object Error: MovieDetailsResult()
 }

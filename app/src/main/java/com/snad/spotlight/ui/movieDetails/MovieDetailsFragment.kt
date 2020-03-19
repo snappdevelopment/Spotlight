@@ -1,10 +1,10 @@
 package com.snad.spotlight.ui.movieDetails
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,10 +15,18 @@ import com.snad.spotlight.App
 import com.snad.spotlight.MovieDetailsRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
+import com.snad.spotlight.network.ApiKeyInterceptor
+import com.snad.spotlight.network.MovieApi
+import com.snad.spotlight.network.MovieService
+import com.snad.spotlight.network.NewMoviesService
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import okhttp3.Cache
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MovieDetailsFragment: Fragment() {
 
@@ -27,7 +35,7 @@ class MovieDetailsFragment: Fragment() {
     private val viewBinding: FragmentMovieDetailsBinding
         get() = binding!!
 
-    private lateinit var addMovieFAB: FloatingActionButton
+    private lateinit var addOrRemoveMovieFAB: FloatingActionButton
     private lateinit var loadingProgressBar: ContentLoadingProgressBar
 
 
@@ -41,12 +49,29 @@ class MovieDetailsFragment: Fragment() {
 
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
-        addMovieFAB = viewBinding.addMovieFAB
+        addOrRemoveMovieFAB = viewBinding.addOrRemoveMovieFAB
         loadingProgressBar = viewBinding.loadingProgressbar
+
+        val cacheSize = 10 * 1024 * 1024 // 10 MB
+        val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
+
+        val httpClient = OkHttpClient.Builder()
+            .cache(cache)
+            .addInterceptor(ApiKeyInterceptor())
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .client(httpClient)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+
+        val service = retrofit.create<MovieService>(MovieService::class.java)
 
         val app = context!!.applicationContext as App
         val libraryDb = LibraryDb(app.appDb)
-        val movieDetailsRepository = MovieDetailsRepository(libraryDb)
+        val movieApi = MovieApi(service)
+        val movieDetailsRepository = MovieDetailsRepository(libraryDb, movieApi)
 
         movieDetailsViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -58,17 +83,28 @@ class MovieDetailsFragment: Fragment() {
             when(state) {
                 is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
                 is MovieDetailsState.LoadingState -> showLoadingState()
+                is MovieDetailsState.ErrorNetworkState -> showNetworkErrorState(movieId)
+                is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
                 is MovieDetailsState.ErrorState -> showErrorState()
             }
         })
 
-        addMovieFAB.setOnClickListener {
-            movieDetailsViewModel.addMovieToLibrary()
+        addOrRemoveMovieFAB.setOnClickListener {
+            movieDetailsViewModel.addOrRemoveMovie()
+        }
+
+        viewBinding.hasBeenWatchedFAB.setOnClickListener {
+            movieDetailsViewModel.toogleHasBeenWatched()
         }
 
         movieDetailsViewModel.loadMovie(movieId)
 
         return viewBinding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {
@@ -91,13 +127,13 @@ class MovieDetailsFragment: Fragment() {
         }
         when(isInLibrary) {
             true -> {
-                viewBinding.addMovieFAB.isSelected = true
-                //hasBeenWatched einblenden
-                //hasBeenWatched.isSelected = movie.hasBeenWatched
+                viewBinding.addOrRemoveMovieFAB.isSelected = true
+                viewBinding.hasBeenWatchedFAB.visibility = View.VISIBLE
+                viewBinding.hasBeenWatchedFAB.isSelected = movie.has_been_watched
             }
             false -> {
-                viewBinding.addMovieFAB.isSelected = false
-                //hasBeenWatched ausblenden
+                viewBinding.addOrRemoveMovieFAB.isSelected = false
+                viewBinding.hasBeenWatchedFAB.visibility = View.GONE
             }
         }
         Picasso.get()
@@ -107,7 +143,7 @@ class MovieDetailsFragment: Fragment() {
             .transform(RoundedCornersTransformation(4, 1))
             .into(viewBinding.coverImageView)
         Picasso.get()
-            .load("https://image.tmdb.org/t/p/w1280${movie.backdrop_path}")
+            .load("https://image.tmdb.org/t/p/w780${movie.backdrop_path}")
             .fit()
             .transform(RoundedCornersTransformation(4, 1))
             .into(viewBinding.backdropImageView)
@@ -117,7 +153,46 @@ class MovieDetailsFragment: Fragment() {
         loadingProgressBar.show()
     }
 
+    private fun showAuthenticationErrorState() {
+        loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_authentication_title)
+            .setMessage(R.string.dialog_error_authentication_message)
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                activity?.finishAndRemoveTask()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showNetworkErrorState(id: Int) {
+        loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_network_title)
+            .setMessage(R.string.dialog_error_network_message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
+                movieDetailsViewModel.loadMovie(id)
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
     private fun showErrorState() {
         loadingProgressBar.hide()
+
+        AlertDialog.Builder(context)
+            .setTitle(R.string.dialog_error_title)
+            .setMessage(R.string.dialog_error_message)
+            .setCancelable(false)
+            .setPositiveButton(android.R.string.ok) { dialog, which ->
+                activity?.finishAndRemoveTask()
+            }
+            .create()
+            .show()
     }
 }

@@ -16,7 +16,6 @@ class NewMoviesApi(
     suspend fun loadNewMovies(): NewMoviesApiResult {
         return try {
             val newMovies = newMoviesService.getNewMovies(language, page)
-            Log.d("NewMoviesApi", newMovies.toString())
             NewMoviesApiResult.Success(newMovies)
         }
         catch (error: Exception) {

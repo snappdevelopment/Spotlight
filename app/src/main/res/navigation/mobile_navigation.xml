@@ -9,7 +9,14 @@
         android:id="@+id/navigation_new_movies"
         android:name="com.snad.spotlight.ui.newMovies.NewMoviesFragment"
         android:label="@string/title_new_movies"
-        tools:layout="@layout/fragment_new_movies" />
+        tools:layout="@layout/fragment_new_movies" >
+        <action
+            android:id="@+id/action_navigation_new_movies_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@id/navigation_new_movies" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_library"

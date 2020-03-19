@@ -8,7 +8,7 @@ import java.util.Calendar
 data class LibraryMovie(
     @PrimaryKey
     val id : Int,
-    val added_at: Calendar,
+    val added_at: Calendar?,
     val has_been_watched: Boolean,
     val adult : Boolean,
     val backdrop_path : String?,
