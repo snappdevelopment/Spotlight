@@ -5,10 +5,10 @@ import com.snad.spotlight.persistence.models.LibraryMovie
 import java.util.Calendar
 
 fun Movie.toLibraryMovie(
-    addedAt: Calendar = Calendar.getInstance(),
+    addedAt: Calendar? = null,
     hasBeenWatched: Boolean = false
 ): LibraryMovie {
-    val genres = this.genres.joinToString(separator = ",", limit = 2, truncated = "") {genre ->
+    val genres = this.genres.joinToString(separator = ", ", limit = 2, truncated = "") {genre ->
         genre.name
     }
     return LibraryMovie(

@@ -69,29 +69,29 @@ class LibraryFragment : Fragment() {
             }
         })
 
-        val fakeMovie = LibraryMovie(
-            1112,
-            Calendar.getInstance(),
-            false,
-            false,
-            "/pCUdYAaarKqY2AAUtV6xXYO8UGY.jpg",
-            100000,
-            "Drama, Comedy",
-            null,
-            "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
-            5.2,
-            "/4GpwvwDjgwiShr1UBJIn5fk1gwT.jpg",
-            "2020.02.14",
-            2000000,
-            180,
-            "How much can you know about yourself if you've never been in a fight?",
-            "Fight Club",
-            false,
-            7.8,
-            5)
-        lifecycleScope.launch(Dispatchers.IO) {
-            libraryDb.insertMovie(fakeMovie)
-        }
+//        val fakeMovie = LibraryMovie(
+//            1112,
+//            Calendar.getInstance(),
+//            false,
+//            false,
+//            "/pCUdYAaarKqY2AAUtV6xXYO8UGY.jpg",
+//            100000,
+//            "Drama, Comedy",
+//            null,
+//            "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
+//            5.2,
+//            "/4GpwvwDjgwiShr1UBJIn5fk1gwT.jpg",
+//            "2020.02.14",
+//            2000000,
+//            180,
+//            "How much can you know about yourself if you've never been in a fight?",
+//            "Fight Club",
+//            false,
+//            7.8,
+//            5)
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            libraryDb.insertMovie(fakeMovie)
+//        }
 
         libraryViewModel.loadLibraryMovies()
 

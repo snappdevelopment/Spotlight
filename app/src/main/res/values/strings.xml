@@ -23,5 +23,5 @@
 
     <!--MovieDetail-->
     <string name="movie_detail_overview_headline">Story</string>
-    <string name="movie_detail_runtime">%1$d min.</string>
+    <string name="movie_detail_runtime">%1$d min</string>
 </resources>

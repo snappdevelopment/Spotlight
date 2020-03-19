@@ -42,6 +42,5 @@ class LibraryDb(
 sealed class LibraryDbResult {
     data class SuccessAllMovies(val libraryMovies: List<LibraryMovie>): LibraryDbResult()
     data class SuccessMovieById(val libraryMovie: LibraryMovie): LibraryDbResult()
-    object SuccessInsertMovie: LibraryDbResult()
     object ErrorMovieById: LibraryDbResult()
 }

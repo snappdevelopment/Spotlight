@@ -8,7 +8,10 @@ import com.snad.spotlight.network.models.NewMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.Adapter<NewMoviesAdapter.NewMoviesViewHolder>() {
+class NewMoviesAdapter(
+    private val items: MutableList<NewMovie>,
+    private val clickListener: (Int) -> Unit
+): RecyclerView.Adapter<NewMoviesAdapter.NewMoviesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewMoviesViewHolder {
         val viewBinding = RecyclerviewItemNewMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -17,6 +20,9 @@ class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.A
 
     override fun onBindViewHolder(holder: NewMoviesViewHolder, position: Int) {
         val item = items[position]
+        holder.movieCard.setOnClickListener {
+            clickListener(item.id)
+        }
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
@@ -36,6 +42,7 @@ class NewMoviesAdapter(private val items: MutableList<NewMovie>): RecyclerView.A
     class NewMoviesViewHolder(
         viewBinding: RecyclerviewItemNewMoviesBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
+        val movieCard = viewBinding.movieCard
         val coverImageView = viewBinding.coverImageView
         val titleTextView = viewBinding.titleTextView
         val releaseDateTextView = viewBinding.releaseDateTextView

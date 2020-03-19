@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.NewMoviesRepository
 import com.snad.spotlight.R
@@ -46,7 +47,10 @@ class NewMoviesFragment : Fragment() {
 
         loadingProgressBar = viewBinding.loadingProgressbar
         recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = NewMoviesAdapter(movies)
+        recyclerViewAdapter = NewMoviesAdapter(
+            movies,
+            this::movieClickListener
+        )
         recyclerView.adapter = recyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
@@ -93,6 +97,12 @@ class NewMoviesFragment : Fragment() {
         binding = null
     }
 
+    private fun movieClickListener(id: Int) {
+        val bundle = Bundle()
+        bundle.putInt("id", id)
+        findNavController().navigate(R.id.action_navigation_new_movies_to_navigation_movie_details, bundle)
+    }
+
     private fun showDoneState(newMovies: NewMovies) {
         loadingProgressBar.hide()
 
@@ -129,6 +139,7 @@ class NewMoviesFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
                 newMoviesViewModel.loadNewMovies()
+                dialog.dismiss()
             }
             .create()
             .show()

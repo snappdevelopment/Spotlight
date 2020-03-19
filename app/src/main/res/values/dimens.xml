@@ -46,15 +46,17 @@
     <!--MovieDetails-->
     <dimen name="movie_details_title_margin">16dp</dimen>
     <dimen name="movie_detail_title_size">24sp</dimen>
-    <dimen name="movie_detail_cover_top_margin">100dp</dimen>
+    <dimen name="movie_detail_cover_top_margin">140dp</dimen>
     <dimen name="movie_detail_cover_start_margin">16dp</dimen>
 
     <dimen name="movie_detail_release_date_size">16sp</dimen>
     <dimen name="movie_detail_release_date_margin">16dp</dimen>
     <dimen name="movie_detail_release_date_top_margin">5dp</dimen>
+    <dimen name="movie_detail_release_date_margin_bottom">8dp</dimen>
 
     <dimen name="movie_detail_runtime_size">12sp</dimen>
     <dimen name="movie_detail_runtime_margin">16dp</dimen>
+    <dimen name="movie_detail_runtime_divider_margin">8dp</dimen>
 
     <dimen name="movie_detail_average_vote_text_size">16sp</dimen>
     <dimen name="movie_detail_average_vote_text_margin">4dp</dimen>
