@@ -1,23 +1,30 @@
 package com.snad.spotlight.ui.movieDetails
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.palette.graphics.Palette
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.App
 import com.snad.spotlight.MovieDetailsRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
-import com.snad.spotlight.network.*
+import com.snad.spotlight.network.ApiKeyInterceptor
+import com.snad.spotlight.network.MovieApi
+import com.snad.spotlight.network.MovieService
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import okhttp3.Cache
@@ -152,7 +159,54 @@ class MovieDetailsFragment: Fragment() {
             .load("https://image.tmdb.org/t/p/w780${movie.backdrop_path}")
             .fit()
             .transform(RoundedCornersTransformation(4, 1))
-            .into(viewBinding.backdropImageView)
+            .into(viewBinding.backdropImageView, object: Callback {
+                override fun onSuccess() {
+                    setColorPalette(isInLibrary, movie.has_been_watched)
+                }
+
+                override fun onError(e: Exception?) {}
+            })
+    }
+
+    private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {
+        val bitmap = viewBinding.backdropImageView.drawable.toBitmap()
+        Palette.from(bitmap)
+            .maximumColorCount(24)
+            .generate { palette ->
+                if (palette != null) {
+                    val primarySwatch = palette.dominantSwatch
+                    var accentSwatch = palette.lightMutedSwatch
+
+                    if(accentSwatch == null || accentSwatch == primarySwatch) {
+                        accentSwatch = palette.mutedSwatch
+                        if (accentSwatch == null || accentSwatch == primarySwatch) {
+                            accentSwatch = palette.vibrantSwatch
+                        }
+                    }
+
+                    if (primarySwatch != null && accentSwatch != null) {
+                        viewBinding.scrollView.setBackgroundColor(primarySwatch.rgb)
+                        viewBinding.backdropFilter.setBackgroundColor(primarySwatch.rgb)
+                        viewBinding.runtimeTextView.setTextColor(primarySwatch.bodyTextColor)
+                        viewBinding.runtimeDivider.setBackgroundColor(primarySwatch.bodyTextColor)
+                        viewBinding.genreTextView.setTextColor(primarySwatch.bodyTextColor)
+                        viewBinding.averageVoteTextView.setTextColor(primarySwatch.bodyTextColor)
+                        viewBinding.averageVoteImageView.setColorFilter(primarySwatch.bodyTextColor)
+                        viewBinding.taglineTextView.setTextColor(primarySwatch.bodyTextColor)
+                        viewBinding.overviewCardView.setCardBackgroundColor(accentSwatch.rgb)
+                        viewBinding.overviewHeadlineTextView.setTextColor(accentSwatch.titleTextColor)
+                        viewBinding.overviewTextView.setTextColor(accentSwatch.bodyTextColor)
+
+                        viewBinding.addOrRemoveMovieFAB.backgroundTintList =
+                            if(isInLibrary) ColorStateList.valueOf(accentSwatch.rgb) else ColorStateList.valueOf(resources.getColor(R.color.movieDetailFAB, null))
+
+                        viewBinding.hasBeenWatchedFAB.backgroundTintList =
+                            if(hasBeenWatched) ColorStateList.valueOf(accentSwatch.rgb) else ColorStateList.valueOf(resources.getColor(R.color.movieDetailFAB, null))
+
+                        activity?.window?.statusBarColor = primarySwatch.rgb
+                    }
+                }
+            }
     }
 
     private fun showLoadingState() {

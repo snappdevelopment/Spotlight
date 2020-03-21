@@ -72,6 +72,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.4" //room kotlin extensions, coroutine support
     kapt "androidx.room:room-compiler:2.2.4" //room compiler for persistence
     implementation 'androidx.multidex:multidex:2.0.1' //because of max method count
+    implementation "androidx.palette:palette-ktx:1.0.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
