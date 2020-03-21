@@ -15,10 +15,7 @@ import com.snad.spotlight.App
 import com.snad.spotlight.MovieDetailsRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
-import com.snad.spotlight.network.ApiKeyInterceptor
-import com.snad.spotlight.network.MovieApi
-import com.snad.spotlight.network.MovieService
-import com.snad.spotlight.network.NewMoviesService
+import com.snad.spotlight.network.*
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
@@ -66,11 +63,11 @@ class MovieDetailsFragment: Fragment() {
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
 
-        val service = retrofit.create<MovieService>(MovieService::class.java)
+        val movieService = retrofit.create<MovieService>(MovieService::class.java)
 
         val app = context!!.applicationContext as App
         val libraryDb = LibraryDb(app.appDb)
-        val movieApi = MovieApi(service)
+        val movieApi = MovieApi(movieService)
         val movieDetailsRepository = MovieDetailsRepository(libraryDb, movieApi)
 
         movieDetailsViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
@@ -115,15 +112,24 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.genreTextView.text = movie.genres
         when(movie.runtime) {
             null -> viewBinding.runtimeTextView.visibility = View.GONE
-            else -> viewBinding.runtimeTextView.text = getString(R.string.movie_detail_runtime, movie.runtime)
+            else -> {
+                viewBinding.runtimeTextView.text = getString(R.string.movie_detail_runtime, movie.runtime)
+                viewBinding.runtimeTextView.visibility = View.VISIBLE
+            }
         }
         when(movie.tagline) {
-            null -> viewBinding.taglineTextView.visibility = View.GONE
-            else -> viewBinding.taglineTextView.text = movie.tagline
+            null, "" -> viewBinding.taglineTextView.visibility = View.GONE
+            else -> {
+                viewBinding.taglineTextView.text = "\"${movie.tagline}\""
+                viewBinding.taglineTextView.visibility = View.VISIBLE
+            }
         }
         when(movie.overview) {
-            null -> viewBinding.overviewTextView.visibility = View.GONE
-            else -> viewBinding.overviewTextView.text = movie.overview
+            null, "" -> viewBinding.overviewCardView.visibility = View.GONE
+            else -> {
+                viewBinding.overviewTextView.text = movie.overview
+                viewBinding.overviewCardView.visibility = View.VISIBLE
+            }
         }
         when(isInLibrary) {
             true -> {

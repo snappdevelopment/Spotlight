@@ -8,9 +8,12 @@ fun Movie.toLibraryMovie(
     addedAt: Calendar? = null,
     hasBeenWatched: Boolean = false
 ): LibraryMovie {
-    val genres = this.genres.joinToString(separator = ", ", limit = 2, truncated = "") {genre ->
+    val genres = this.genres.joinToString(separator = ", ", limit = 2, truncated = "") { genre ->
         genre.name
+    }.dropLastWhile { character ->
+        character == ' ' || character == ','
     }
+
     return LibraryMovie(
         added_at = addedAt,
         has_been_watched = hasBeenWatched,

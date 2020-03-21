@@ -62,10 +62,9 @@
     <dimen name="movie_detail_average_vote_text_margin">4dp</dimen>
     <dimen name="movie_detail_average_vote_icon_margin">16dp</dimen>
 
-    <dimen name="movie_detail_tagline_top_margin">12dp</dimen>
     <dimen name="movie_detail_tagline_start_margin">16dp</dimen>
     <dimen name="movie_detail_tagline_margin">16dp</dimen>
-    <dimen name="movie_detail_tagline_size">14sp</dimen>
+    <dimen name="movie_detail_tagline_size">16sp</dimen>
 
     <dimen name="movie_detail_genre_text_size">12sp</dimen>
     <dimen name="movie_detail_genre_margin">8dp</dimen>
@@ -74,7 +73,7 @@
     <dimen name="movie_detail_overview_margin_top">8dp</dimen>
     <dimen name="movie_detail_overview_size">14sp</dimen>
     <dimen name="movie_detail_overview_headline_size">16sp</dimen>
-    <dimen name="movie_detail_overview_card_margin_top">40dp</dimen>
+    <dimen name="movie_detail_overview_card_margin_top">25dp</dimen>
     <dimen name="movie_detail_overview_card_margin_end">16dp</dimen>
 
     <dimen name="movie_detail_add_movie_margin">16dp</dimen>

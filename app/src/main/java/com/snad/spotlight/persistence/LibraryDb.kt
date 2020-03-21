@@ -9,20 +9,19 @@ class LibraryDb(
 ) {
     private val dao = db.libraryMovieDao()
 
-    suspend fun getAllMovies(): Flow<LibraryDbResult> {
+    fun getAllMovies(): Flow<LibraryDbResult> {
         return dao.getAllMovies().map { list ->
             LibraryDbResult.SuccessAllMovies(list)
-            //Todo: Error einbauen wenn nötig
         }
     }
 
-    suspend fun getMovieById(id: Int): LibraryDbResult {
+    fun getMovieById(id: Int): Flow<LibraryDbResult> {
         val movie = dao.getMovieById(id)
-        return if(movie != null) {
-            LibraryDbResult.SuccessMovieById(movie)
-        }
-        else {
-            LibraryDbResult.ErrorMovieById
+        return movie.map { libraryMovie ->
+            when(libraryMovie) {
+                null -> LibraryDbResult.ErrorMovieById
+                else -> LibraryDbResult.SuccessMovieById(libraryMovie)
+            }
         }
     }
 
