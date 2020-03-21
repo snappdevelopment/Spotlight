@@ -40,6 +40,7 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
         loadingProgressBar = viewBinding.loadingProgressbar
