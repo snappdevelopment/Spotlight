@@ -19,5 +19,5 @@ interface LibraryMovieDao {
     fun getAllMovies(): Flow<List<LibraryMovie>>
 
     @Query("SELECT * FROM movies WHERE id LIKE :id")
-    suspend fun getMovieById(id: Int): LibraryMovie?
+    fun getMovieById(id: Int): Flow<LibraryMovie?>
 }

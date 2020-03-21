@@ -124,16 +124,16 @@
         android:id="@+id/taglineTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/movie_detail_tagline_top_margin"
         android:layout_marginStart="@dimen/movie_detail_tagline_start_margin"
         android:layout_marginEnd="@dimen/movie_detail_tagline_margin"
         android:textSize="@dimen/movie_detail_tagline_size"
-        app:layout_constraintTop_toBottomOf="@id/coverImageView"
+        app:layout_constraintTop_toTopOf="@id/averageVoteTextView"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="This is the tagline of the movie. It gives a short description of the plot."/>
+        tools:text="This is the tagline of the movie."/>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/overviewCardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/movie_detail_overview_card_margin_top"
@@ -141,7 +141,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@id/averageVoteImageView"
+        app:layout_constraintTop_toBottomOf="@id/taglineTextView"
         app:layout_constraintStart_toStartOf="@id/coverImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="4dp"
@@ -181,6 +181,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         style="?android:attr/progressBarStyle"
+        android:background="?android:attr/selectableItemBackground"
+        android:translationZ="5dp"
         android:indeterminate="true"
         android:layout_gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"

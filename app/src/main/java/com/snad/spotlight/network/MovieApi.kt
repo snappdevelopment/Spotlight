@@ -14,7 +14,6 @@ class MovieApi(
     suspend fun loadMovie(id: Int): MovieApiResult {
         return try {
             val movie = movieService.getMovie(id, language)
-            Log.d("MovieApi", movie.toString())
             MovieApiResult.Success(movie)
         }
         catch (error: Exception) {

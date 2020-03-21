@@ -6,18 +6,22 @@ import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.LibraryDbResult
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.snad.spotlight.persistence.toLibraryMovie
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class MovieDetailsRepository(
     private val libraryDb: LibraryDb,
     private val movieApi: MovieApi
 ) {
-    suspend fun loadMovie(id: Int): MovieDetailsResult {
+    suspend fun loadMovie(id: Int): Flow<MovieDetailsResult> {
+        //Todo: load changes from Api and write to db
         val result = libraryDb.getMovieById(id)
-        return when(result) {
-            //Todo: load changes from Api and write to db
-            is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(result.libraryMovie, true)
-            is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
-            else -> MovieDetailsResult.Error
+        return result.map { libraryDbResult ->
+            when(libraryDbResult) {
+                is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(libraryDbResult.libraryMovie, true)
+                is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
+                else -> MovieDetailsResult.Error
+            }
         }
     }
 
