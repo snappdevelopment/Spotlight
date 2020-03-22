@@ -30,23 +30,22 @@ class LibraryAdapter(
         holder.movieCard.setOnClickListener {
             clickListener(item.id)
         }
-        holder.movieCard.isSelected = item.has_been_watched
-        holder.watchedImageButton.setOnClickListener {
+        holder.hasBeenWatchedFAB.setOnClickListener {
             val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
             watchedClickListener(watchedItem)
         }
-        holder.watchedImageButton.isSelected = item.has_been_watched
+        holder.hasBeenWatchedFAB.isSelected = item.has_been_watched
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
-            .resize(52, 98)
+            .resize(92, 138)
             .centerCrop()
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
         holder.releaseDateTextView.text = item.release_date.substring(0, 4)
-        holder.runtimeTextView.text = if(item.runtime != null) "${item.runtime} min." else ""
+        holder.runtimeTextView.text = if(item.runtime != null) "${item.runtime} min" else ""
         holder.averageVoteTextView.text = item.vote_average.toString()
         holder.genreTextView.text = item.genres
     }
@@ -63,6 +62,6 @@ class LibraryAdapter(
         val runtimeTextView = viewBinding.runtimeTextView
         val averageVoteTextView = viewBinding.averageVoteTextView
         val genreTextView = viewBinding.genreTextView
-        val watchedImageButton = viewBinding.watchedImageButton
+        val hasBeenWatchedFAB = viewBinding.hasBeenWatchedFAB
     }
 }

@@ -15,8 +15,10 @@
 
     <ImageView
         android:id="@+id/coverImageView"
-        android:layout_width="52dp"
-        android:layout_height="98dp"
+        android:layout_width="92dp"
+        android:layout_height="138dp"
+        android:elevation="2dp"
+        android:outlineProvider="bounds"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +58,7 @@
         app:layout_constraintTop_toTopOf="@id/releaseDateTextView"
         app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
         app:layout_constraintStart_toEndOf="@id/releaseDateTextView"
-        tools:text="120 min."/>
+        tools:text="120 min"/>
 
     <ImageView
         android:id="@+id/averageVoteImageView"
@@ -85,22 +87,32 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/library_rv_item_genre_text_margin"
         android:textSize="@dimen/library_rv_item_genre_text_size"
-        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/coverImageView"
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
         tools:text="Drama, Thriller" />
 
-    <ImageButton
-        android:id="@+id/watchedImageButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:background="@drawable/watched_background_selector"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:src="@drawable/watched_icon_selector"
-        android:padding="6dp"
-        android:scaleType="fitCenter"
-        android:gravity="center"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/coverImageView"/>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/hasBeenWatchedFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/library_rv_item_fab_margin"
+            android:elevation="6dp"
+            app:borderWidth="0dp"
+            android:src="@drawable/watched_icon_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            app:maxImageSize="20dp"
+            app:fabCustomSize="35dp"
+            app:backgroundTint="@drawable/add_movie_and_watched_fab_color_selector" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
