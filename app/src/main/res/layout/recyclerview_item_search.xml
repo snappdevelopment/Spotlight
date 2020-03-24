@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movieCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/new_movies_rv_item_padding"
+    android:layout_margin="@dimen/new_movies_rv_item_margin"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/card_background"
+    android:elevation="4dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/coverImageView"
+        android:layout_width="92dp"
+        android:layout_height="138dp"
+        android:elevation="2dp"
+        android:outlineProvider="bounds"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/newMovieTitle"
+        android:layout_marginStart="@dimen/new_movies_rv_item_title_margin"
+        android:textSize="@dimen/new_movies_rv_item_title_size"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="@id/coverImageView"
+        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Fast and the Furious 9: Final Race"/>
+
+    <TextView
+        android:id="@+id/releaseDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/new_movies_rv_item_release_date_top_margin"
+        android:layout_marginStart="@dimen/new_movies_rv_item_release_date_margin"
+        android:layout_marginEnd="@dimen/new_movies_rv_item_release_date_margin"
+        android:textSize="@dimen/new_movies_rv_item_release_date_size"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        tools:text="2020"/>
+
+    <ImageView
+        android:id="@+id/averageVoteImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_icon_margin"
+        android:src="@drawable/ic_star_filled"
+        app:layout_constraintTop_toTopOf="@+id/releaseDateTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
+        app:layout_constraintStart_toEndOf="@+id/releaseDateTextView"/>
+
+    <TextView
+        android:id="@+id/averageVoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_text_margin"
+        android:textSize="@dimen/new_movies_rv_item_average_vote_text_size"
+        app:layout_constraintStart_toEndOf="@+id/averageVoteImageView"
+        app:layout_constraintTop_toTopOf="@+id/averageVoteImageView"
+        app:layout_constraintBottom_toBottomOf="@+id/averageVoteImageView"
+        tools:text="5.7"/>
+
+    <TextView
+        android:id="@+id/overviewTextView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/new_movies_rv_item_overview_margin_left"
+        android:layout_marginTop="@dimen/new_movies_rv_item_overview_margin_top"
+        android:maxLines="5"
+        android:ellipsize="end"
+        android:textSize="@dimen/new_movies_rv_item_overview_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        app:layout_constraintTop_toBottomOf="@id/releaseDateTextView"
+        tools:text="This is a very long description. Lorem ipsum my akdj aksd fkas dkas fdkas dkae skkd fe skd j eks fk ek sjd fka sdk fj aks dkf ek ak dkfe  ak  ksdkfaksdjf aksd fkejf ksdjf kwejfksdjf kejskdjfekfj ksdjf ek" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
