@@ -114,9 +114,11 @@ class MovieDetailsFragment: Fragment() {
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {
         loadingProgressBar.hide()
         viewBinding.titleTextView.text = movie.title
-        viewBinding.releaseDateTextView.text = movie.release_date.substring(0, 4)
         viewBinding.averageVoteTextView.text = movie.vote_average.toString()
+        viewBinding.runtimeDivider.visibility = if(movie.genres == "") View.INVISIBLE else View.VISIBLE
         viewBinding.genreTextView.text = movie.genres
+        if(movie.release_date == "") viewBinding.releaseDateTextView.visibility = View.GONE
+        else viewBinding.releaseDateTextView.text = movie.release_date.substring(0, 4)
         when(movie.runtime) {
             null -> viewBinding.runtimeTextView.visibility = View.GONE
             else -> {

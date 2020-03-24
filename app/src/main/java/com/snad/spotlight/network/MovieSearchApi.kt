@@ -1,55 +1,54 @@
 package com.snad.spotlight.network
 
 import android.util.Log
-import com.snad.spotlight.apiKey
-import com.snad.spotlight.network.models.NewMovies
+import com.snad.spotlight.network.models.MovieSearchResults
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-class NewMoviesApi(
-    private val newMoviesService: NewMoviesService
+class MovieSearchApi(
+    private val searchService: SearchService
 ) {
-    private val language = "en-US"
     private val page = 1
 
-    suspend fun loadNewMovies(): NewMoviesApiResult {
+    suspend fun searchMovie(title: String): MovieSearchApiResult {
         return try {
-            val newMovies = newMoviesService.getNewMovies(language, page)
-            NewMoviesApiResult.Success(newMovies)
+            val searchResults = searchService.searchMovie(title, page)
+            MovieSearchApiResult.Success(searchResults)
         }
         catch (error: Exception) {
+            Log.d("MovieApi", error.toString())
             when(error) {
                 is SocketTimeoutException -> {
-                    Log.d("NewMoviesApi", "Timeout: ${error.message} ${error.cause}")
-                    NewMoviesApiResult.NetworkError
+                    Log.d("MovieSearchApi", "Timeout: ${error.message} ${error.cause}")
+                    MovieSearchApiResult.NetworkError
                 }
                 is IOException -> {
-                    Log.d("NewMoviesApi", "IOException: ${error.message} ${error.cause}")
-                    NewMoviesApiResult.ConnectionError
+                    Log.d("MovieSearchApi", "IOException: ${error.message} ${error.cause}")
+                    MovieSearchApiResult.ConnectionError
                 }
                 is HttpException -> when(error.code()) {
                     401 -> {
-                        Log.d("NewMoviesApi", "${error.code()} ${error.response().toString()}")
-                        NewMoviesApiResult.AuthenticationError
+                        Log.d("MovieSearchApi", "${error.code()} ${error.response().toString()}")
+                        MovieSearchApiResult.AuthenticationError
                     }
                     404 -> {
-                        Log.d("NewMoviesApi", "${error.code()} ${error.response().toString()}")
-                        NewMoviesApiResult.ApiError
+                        Log.d("MovieSearchApi", "${error.code()} ${error.response().toString()}")
+                        MovieSearchApiResult.ApiError
                     }
-                    else -> NewMoviesApiResult.Error
+                    else -> MovieSearchApiResult.Error
                 }
-                else -> NewMoviesApiResult.Error
+                else -> MovieSearchApiResult.Error
             }
         }
     }
 }
 
-sealed class NewMoviesApiResult {
-    class Success(val newMovies: NewMovies): NewMoviesApiResult()
-    object NetworkError: NewMoviesApiResult()
-    object ConnectionError: NewMoviesApiResult()
-    object AuthenticationError: NewMoviesApiResult()
-    object ApiError: NewMoviesApiResult()
-    object Error: NewMoviesApiResult()
+sealed class MovieSearchApiResult {
+    class Success(val searchResults: MovieSearchResults): MovieSearchApiResult()
+    object NetworkError:MovieSearchApiResult()
+    object ConnectionError: MovieSearchApiResult()
+    object AuthenticationError: MovieSearchApiResult()
+    object ApiError: MovieSearchApiResult()
+    object Error: MovieSearchApiResult()
 }

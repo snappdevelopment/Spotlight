@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_movie_roll"
         android:title="@string/title_bottom_navigation_library" />
 
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_magnify"
+        android:title="@string/title_bottom_navigation_search" />
+
 </menu>

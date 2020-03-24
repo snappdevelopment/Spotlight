@@ -44,7 +44,8 @@ class LibraryAdapter(
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
-        holder.releaseDateTextView.text = item.release_date.substring(0, 4)
+        if(item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
+        else holder.releaseDateTextView.text = item.release_date.substring(0, 4)
         holder.runtimeTextView.text = if(item.runtime != null) "${item.runtime} min" else ""
         holder.averageVoteTextView.text = item.vote_average.toString()
         holder.genreTextView.text = item.genres

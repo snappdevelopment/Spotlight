@@ -1,30 +1,30 @@
 package com.snad.spotlight
 
-import com.snad.spotlight.network.NewMoviesApi
-import com.snad.spotlight.network.NewMoviesApiResult
-import com.snad.spotlight.network.models.NewMovies
+import com.snad.spotlight.network.MovieSearchApi
+import com.snad.spotlight.network.MovieSearchApiResult
+import com.snad.spotlight.network.models.MovieSearchResults
 
-class NewMoviesRepository(
-    private val newMoviesApi: NewMoviesApi
+class SearchRepository(
+    private val movieSearchApi: MovieSearchApi
 ) {
-    suspend fun loadNewMovies(): NewMoviesResult {
-        val result = newMoviesApi.loadNewMovies()
+    suspend fun searchMovies(title: String): SearchRepositoryResult {
+        val result = movieSearchApi.searchMovie(title)
         return when(result) {
-            is NewMoviesApiResult.Success -> NewMoviesResult.Success(result.newMovies)
-            is NewMoviesApiResult.NetworkError -> NewMoviesResult.NetworkError
-            is NewMoviesApiResult.ConnectionError -> NewMoviesResult.ConnectionError
-            is NewMoviesApiResult.AuthenticationError -> NewMoviesResult.AuthenticationError
-            is NewMoviesApiResult.ApiError -> NewMoviesResult.ApiError
-            is NewMoviesApiResult.Error -> NewMoviesResult.Error
+            is MovieSearchApiResult.Success -> SearchRepositoryResult.Success(result.searchResults)
+            is MovieSearchApiResult.NetworkError -> SearchRepositoryResult.NetworkError
+            is MovieSearchApiResult.ConnectionError -> SearchRepositoryResult.ConnectionError
+            is MovieSearchApiResult.AuthenticationError -> SearchRepositoryResult.AuthenticationError
+            is MovieSearchApiResult.ApiError -> SearchRepositoryResult.ApiError
+            is MovieSearchApiResult.Error -> SearchRepositoryResult.Error
         }
     }
 }
 
-sealed class NewMoviesResult {
-    class Success(val newMovies: NewMovies): NewMoviesResult()
-    object NetworkError: NewMoviesResult()
-    object ConnectionError: NewMoviesResult()
-    object AuthenticationError: NewMoviesResult()
-    object ApiError: NewMoviesResult()
-    object Error: NewMoviesResult()
+sealed class SearchRepositoryResult {
+    class Success(val searchResults: MovieSearchResults): SearchRepositoryResult()
+    object NetworkError: SearchRepositoryResult()
+    object ConnectionError: SearchRepositoryResult()
+    object AuthenticationError: SearchRepositoryResult()
+    object ApiError: SearchRepositoryResult()
+    object Error: SearchRepositoryResult()
 }

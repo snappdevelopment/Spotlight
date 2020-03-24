@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/new_movies_rv_item_release_date_top_margin"
         android:layout_marginStart="@dimen/new_movies_rv_item_release_date_margin"
-        android:layout_marginEnd="@dimen/new_movies_rv_item_release_date_margin"
         android:textSize="@dimen/new_movies_rv_item_release_date_size"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintStart_toEndOf="@id/coverImageView"
@@ -53,10 +52,10 @@
         android:id="@+id/averageVoteImageView"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_icon_margin"
+        android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_icon_margin_start"
         android:src="@drawable/ic_star_filled"
-        app:layout_constraintTop_toTopOf="@+id/releaseDateTextView"
-        app:layout_constraintBottom_toBottomOf="@+id/releaseDateTextView"
+        app:layout_constraintTop_toTopOf="@+id/averageVoteTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/averageVoteTextView"
         app:layout_constraintStart_toEndOf="@+id/releaseDateTextView"/>
 
     <TextView
@@ -64,10 +63,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/new_movies_rv_item_average_vote_text_margin"
+        android:layout_marginTop="@dimen/new_movies_rv_item_average_vote_text_margin_top"
         android:textSize="@dimen/new_movies_rv_item_average_vote_text_size"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintStart_toEndOf="@+id/averageVoteImageView"
-        app:layout_constraintTop_toTopOf="@+id/averageVoteImageView"
-        app:layout_constraintBottom_toBottomOf="@+id/averageVoteImageView"
         tools:text="5.7"/>
 
     <TextView

@@ -1,7 +1,6 @@
 package com.snad.spotlight.ui.newMovies
 
 import android.app.AlertDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,7 @@ import com.snad.spotlight.databinding.FragmentNewMoviesBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesService
-import com.snad.spotlight.network.models.NewMovie
+import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.network.models.NewMovies
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -37,7 +36,7 @@ class NewMoviesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: NewMoviesAdapter
     private lateinit var loadingProgressBar: ContentLoadingProgressBar
-    private val movies = mutableListOf<NewMovie>()
+    private val movies = mutableListOf<ListMovie>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

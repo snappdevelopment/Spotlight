@@ -41,4 +41,17 @@
             app:argType="integer" />
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.snad.spotlight.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@id/navigation_search" />
+    </fragment>
+
 </navigation>

@@ -5,6 +5,7 @@
     <string name="title_movieDetails">Details</string>
     <string name="title_bottom_navigation_new">New</string>
     <string name="title_bottom_navigation_library">Library</string>
+    <string name="title_bottom_navigation_search">Search</string>
 
     <!--NewMovies-->
     <string name="dialog_error_authentication_title">Authentication Error</string>
@@ -24,4 +25,9 @@
     <!--MovieDetail-->
     <string name="movie_detail_overview_headline">Story</string>
     <string name="movie_detail_runtime">%1$d min</string>
+
+    <!--Search-->
+    <string name="search_search_view_hint">Search for a movie</string>
+    <string name="search_initial_state">Search for a movie</string>
+    <string name="search_no_results_state">No movies found</string>
 </resources>
