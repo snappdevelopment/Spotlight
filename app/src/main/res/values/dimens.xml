@@ -17,6 +17,8 @@
     <dimen name="new_movies_rv_item_average_vote_text_size">14sp</dimen>
     <dimen name="new_movies_rv_item_average_vote_text_margin">2dp</dimen>
     <dimen name="new_movies_rv_item_average_vote_icon_margin">8dp</dimen>
+    <dimen name="new_movies_rv_item_average_vote_icon_margin_start">12dp</dimen>
+    <dimen name="new_movies_rv_item_average_vote_text_margin_top">5dp</dimen>
 
     <dimen name="new_movies_rv_item_overview_size">14sp</dimen>
     <dimen name="new_movies_rv_item_overview_margin_left">12dp</dimen>
@@ -28,19 +30,26 @@
 
     <dimen name="library_rv_item_title_size">20sp</dimen>
     <dimen name="library_rv_item_title_margin">8dp</dimen>
+    <dimen name="library_rv_item_title_margin_start">12dp</dimen>
 
     <dimen name="library_rv_item_release_date_size">14sp</dimen>
     <dimen name="library_rv_item_release_date_margin">8dp</dimen>
+    <dimen name="library_rv_item_release_date_margin_start">12dp</dimen>
     <dimen name="library_rv_item_release_date_top_margin">5dp</dimen>
 
     <dimen name="library_rv_item_runtime_size">14sp</dimen>
     <dimen name="library_rv_item_runtime_margin">8dp</dimen>
+    <dimen name="library_rv_item_runtime_margin_start">12dp</dimen>
+    <dimen name="library_rv_item_runtime_margin_top">5dp</dimen>
 
     <dimen name="library_rv_item_average_vote_text_size">14sp</dimen>
     <dimen name="library_rv_item_average_vote_text_margin">2dp</dimen>
+    <dimen name="library_rv_item_average_vote_text_margin_top">5dp</dimen>
     <dimen name="library_rv_item_average_vote_icon_margin">8dp</dimen>
+    <dimen name="library_rv_item_average_vote_icon_margin_start">12dp</dimen>
 
     <dimen name="library_rv_item_genre_text_margin">8dp</dimen>
+    <dimen name="library_rv_item_genre_text_margin_start">12dp</dimen>
     <dimen name="library_rv_item_genre_text_size">14sp</dimen>
 
     <dimen name="library_rv_item_fab_margin">8dp</dimen>
@@ -80,5 +89,29 @@
 
     <dimen name="movie_detail_add_movie_margin">16dp</dimen>
 
+    <!--Search-->
+    <dimen name="search_search_view_margin">8dp</dimen>
+    <dimen name="search_search_view_margin_bottom">16dp</dimen>
+    <dimen name="search_no_results_text_size">24sp</dimen>
+
+    <dimen name="search_rv_item_padding">16dp</dimen>
+    <dimen name="search_rv_item_margin">8dp</dimen>
+
+    <dimen name="search_rv_item_title_margin">12dp</dimen>
+    <dimen name="search_rv_item_title_size">20sp</dimen>
+
+    <dimen name="search_rv_item_release_date_top_margin">5dp</dimen>
+    <dimen name="search_rv_item_release_date_margin">12dp</dimen>
+    <dimen name="search_rv_item_release_date_margin_end">8dp</dimen>
+    <dimen name="search_rv_item_release_date_size">14sp</dimen>
+
+    <dimen name="search_rv_item_average_vote_text_size">14sp</dimen>
+    <dimen name="search_rv_item_average_vote_text_margin">2dp</dimen>
+    <dimen name="search_rv_item_average_vote_text_margin_start">12dp</dimen>
+
+    <dimen name="search_rv_item_overview_size">14sp</dimen>
+    <dimen name="search_rv_item_overview_margin_left">12dp</dimen>
+    <dimen name="search_rv_item_overview_margin_top">12dp</dimen>
+    <dimen name="search_rv_item_average_vote_text_margin_top">5dp</dimen>
 
 </resources>

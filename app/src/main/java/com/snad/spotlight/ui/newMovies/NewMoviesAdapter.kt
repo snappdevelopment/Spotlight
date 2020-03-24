@@ -1,15 +1,16 @@
 package com.snad.spotlight.ui.newMovies
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.databinding.RecyclerviewItemNewMoviesBinding
-import com.snad.spotlight.network.models.NewMovie
+import com.snad.spotlight.network.models.ListMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class NewMoviesAdapter(
-    private val items: MutableList<NewMovie>,
+    private val items: MutableList<ListMovie>,
     private val clickListener: (Int) -> Unit
 ): RecyclerView.Adapter<NewMoviesAdapter.NewMoviesViewHolder>() {
 
@@ -32,7 +33,8 @@ class NewMoviesAdapter(
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
-        holder.releaseDateTextView.text = item.release_date.substring(0, 4)
+        if(item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
+        else holder.releaseDateTextView.text = item.release_date.substring(0, 4)
         holder.overviewTextView.text = item.overview
         holder.averageVoteTextView.text = item.vote_average.toString()
     }

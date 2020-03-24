@@ -5,39 +5,47 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.NewMoviesRepository
 import com.snad.spotlight.NewMoviesResult
+import com.snad.spotlight.SearchRepository
+import com.snad.spotlight.SearchRepositoryResult
+import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.network.models.NewMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NewMoviesViewModel(
-    private val newMoviesRepository: NewMoviesRepository
+class SearchViewModel(
+    private val searchRepository: SearchRepository
 ) : ViewModel() {
 
-    val state = MutableLiveData<NewMoviesState>()
+    val state: MutableLiveData<SearchState> = MutableLiveData(SearchState.InitialState)
 
-    fun loadNewMovies() {
-        state.value = NewMoviesState.LoadingState
+    fun searchMovies(title: String) {
+        state.value = SearchState.LoadingState
         viewModelScope.launch(Dispatchers.IO) {
-            val result = newMoviesRepository.loadNewMovies()
+            val result = searchRepository.searchMovies(title)
             withContext(Dispatchers.Main) {
                 when(result) {
-                    is NewMoviesResult.Success -> state.value = NewMoviesState.DoneState(result.newMovies)
-                    is NewMoviesResult.NetworkError -> state.value = NewMoviesState.NetworkErrorState
-                    is NewMoviesResult.ConnectionError -> state.value = NewMoviesState.NetworkErrorState
-                    is NewMoviesResult.AuthenticationError -> state.value = NewMoviesState.AuthenticationErrorState
-                    is NewMoviesResult.ApiError -> state.value = NewMoviesState.ErrorState
-                    is NewMoviesResult.Error -> state.value = NewMoviesState.ErrorState
+                    is SearchRepositoryResult.Success -> {
+                        if(result.searchResults.total_results == 0) state.value = SearchState.NoResultsState
+                        else state.value = SearchState.DoneState(result.searchResults.results)
+                    }
+                    is SearchRepositoryResult.NetworkError -> state.value = SearchState.NetworkErrorState
+                    is SearchRepositoryResult.ConnectionError -> state.value = SearchState.NetworkErrorState
+                    is SearchRepositoryResult.AuthenticationError -> state.value = SearchState.AuthenticationErrorState
+                    is SearchRepositoryResult.ApiError -> state.value = SearchState.ErrorState
+                    is SearchRepositoryResult.Error -> state.value = SearchState.ErrorState
                 }
             }
         }
     }
 }
 
-sealed class NewMoviesState {
-    class DoneState(val newMovies: NewMovies): NewMoviesState()
-    object LoadingState: NewMoviesState()
-    object NetworkErrorState: NewMoviesState()
-    object AuthenticationErrorState: NewMoviesState()
-    object ErrorState: NewMoviesState()
+sealed class SearchState {
+    class DoneState(val searchResults: List<ListMovie>): SearchState()
+    object InitialState: SearchState()
+    object LoadingState: SearchState()
+    object NoResultsState: SearchState()
+    object NetworkErrorState: SearchState()
+    object AuthenticationErrorState: SearchState()
+    object ErrorState: SearchState()
 }
