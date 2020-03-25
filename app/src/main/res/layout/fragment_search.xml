@@ -52,14 +52,27 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:visibility="visible"/>
 
+    <ImageView
+        android:id="@+id/statusIconImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="@dimen/search_status_icon_margin_bottom"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/statusTextView"
+        tools:src="@drawable/ic_video_vintage"/>
+
     <TextView
         android:id="@+id/statusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_initial_state"
-        android:textSize="@dimen/search_no_results_text_size"
+        android:textSize="@dimen/search_status_text_size"
+        android:textColor="@android:color/darker_gray"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statusIconImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

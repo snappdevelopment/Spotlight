@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
@@ -40,6 +41,8 @@ class LibraryAdapter(
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
             .resize(92, 138)
             .centerCrop()
+            .placeholder(R.drawable.cover_image_placeholder)
+            .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon

@@ -27,7 +27,12 @@ class SearchViewModel(
                 when(result) {
                     is SearchRepositoryResult.Success -> {
                         if(result.searchResults.total_results == 0) state.value = SearchState.NoResultsState
-                        else state.value = SearchState.DoneState(result.searchResults.results)
+                        else {
+                            val sortedList = result.searchResults.results.sortedByDescending { listMovie ->
+                                listMovie.popularity
+                            }
+                            state.value = SearchState.DoneState(sortedList)
+                        }
                     }
                     is SearchRepositoryResult.NetworkError -> state.value = SearchState.NetworkErrorState
                     is SearchRepositoryResult.ConnectionError -> state.value = SearchState.NetworkErrorState

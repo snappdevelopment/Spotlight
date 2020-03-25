@@ -155,6 +155,8 @@ class MovieDetailsFragment: Fragment() {
             .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
             .resize(92, 138)
             .centerCrop()
+            .placeholder(R.drawable.cover_image_placeholder)
+            .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(viewBinding.coverImageView)
         Picasso.get()
