@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.RecyclerView
+import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemNewMoviesBinding
 import com.snad.spotlight.databinding.RecyclerviewItemSearchBinding
 import com.snad.spotlight.network.models.ListMovie
@@ -31,6 +32,8 @@ class SearchAdapter(
         picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
             .resize(92, 138)
             .centerCrop()
+            .placeholder(R.drawable.cover_image_placeholder)
+            .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
         //Todo: placeholder und error image mit app icon

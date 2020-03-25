@@ -92,7 +92,8 @@
     <!--Search-->
     <dimen name="search_search_view_margin">8dp</dimen>
     <dimen name="search_search_view_margin_bottom">16dp</dimen>
-    <dimen name="search_no_results_text_size">24sp</dimen>
+    <dimen name="search_status_text_size">24sp</dimen>
+    <dimen name="search_status_icon_margin_bottom">12dp</dimen>
 
     <dimen name="search_rv_item_padding">16dp</dimen>
     <dimen name="search_rv_item_margin">8dp</dimen>
@@ -108,10 +109,10 @@
     <dimen name="search_rv_item_average_vote_text_size">14sp</dimen>
     <dimen name="search_rv_item_average_vote_text_margin">2dp</dimen>
     <dimen name="search_rv_item_average_vote_text_margin_start">12dp</dimen>
+    <dimen name="search_rv_item_average_vote_text_margin_top">5dp</dimen>
 
     <dimen name="search_rv_item_overview_size">14sp</dimen>
     <dimen name="search_rv_item_overview_margin_left">12dp</dimen>
     <dimen name="search_rv_item_overview_margin_top">12dp</dimen>
-    <dimen name="search_rv_item_average_vote_text_margin_top">5dp</dimen>
 
 </resources>

@@ -28,6 +28,6 @@
 
     <!--Search-->
     <string name="search_search_view_hint">Search for a movie</string>
-    <string name="search_initial_state">Search for a movie</string>
-    <string name="search_no_results_state">No movies found</string>
+    <string name="search_initial_state">Search Movies</string>
+    <string name="search_no_results_state">No Movies Found</string>
 </resources>

@@ -1,11 +1,14 @@
 package com.snad.spotlight.ui.search
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.core.widget.ContentLoadingProgressBar
@@ -25,6 +28,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
 
 
 class SearchFragment : Fragment() {
@@ -39,6 +43,7 @@ class SearchFragment : Fragment() {
     private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private lateinit var searchView: SearchView
     private lateinit var statusTextView: TextView
+    private lateinit var statusIconImageView: ImageView
     private val movies = mutableListOf<ListMovie>()
 
     override fun onCreateView(
@@ -51,6 +56,7 @@ class SearchFragment : Fragment() {
         loadingProgressBar = viewBinding.loadingProgressbar
         searchView = viewBinding.searchView
         statusTextView = viewBinding.statusTextView
+        statusIconImageView = viewBinding.statusIconImageView
         recyclerView = viewBinding.recyclerView
         recyclerViewAdapter = SearchAdapter(
             movies,
@@ -97,11 +103,15 @@ class SearchFragment : Fragment() {
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if(query != null && query != "") searchViewModel.searchMovies(query)
+                searchView.clearFocus()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {return true}
         })
+
+        searchView.requestFocus()
+        showKeyboard()
 
         return viewBinding.root
     }
@@ -120,6 +130,7 @@ class SearchFragment : Fragment() {
     private fun showDoneState(moviesList: List<ListMovie>) {
         loadingProgressBar.hide()
         statusTextView.visibility = View.GONE
+        statusIconImageView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
 
         movies.clear()
@@ -128,9 +139,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoadingState() {
-        loadingProgressBar.show()
         recyclerView.visibility = View.INVISIBLE
         statusTextView.visibility = View.GONE
+        statusIconImageView.visibility = View.GONE
+        loadingProgressBar.show()
     }
 
     private fun showInitialState() {
@@ -138,6 +150,8 @@ class SearchFragment : Fragment() {
         recyclerView.visibility = View.INVISIBLE
         statusTextView.text = getString(R.string.search_initial_state)
         statusTextView.visibility = View.VISIBLE
+        statusIconImageView.setImageResource(R.drawable.ic_video_vintage)
+        statusIconImageView.visibility = View.VISIBLE
     }
 
     private fun showNoResultsState() {
@@ -145,6 +159,8 @@ class SearchFragment : Fragment() {
         recyclerView.visibility = View.INVISIBLE
         statusTextView.text = getString(R.string.search_no_results_state)
         statusTextView.visibility = View.VISIBLE
+        statusIconImageView.setImageResource(R.drawable.ic_emoticon_sad_outline)
+        statusIconImageView.visibility = View.VISIBLE
     }
 
     private fun showAuthenticationErrorState() {
@@ -190,5 +206,17 @@ class SearchFragment : Fragment() {
             }
             .create()
             .show()
+    }
+
+    private fun showKeyboard() {
+        val timerTask: TimerTask = object : TimerTask() {
+            override fun run() {
+                val inputMethodManager = requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_FORCED)
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+        val timer = Timer()
+        timer.schedule(timerTask, 500)
     }
 }
