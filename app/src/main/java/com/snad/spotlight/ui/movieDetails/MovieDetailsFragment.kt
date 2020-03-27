@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -14,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.App
 import com.snad.spotlight.MovieDetailsRepository
@@ -22,6 +22,7 @@ import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.MovieApi
 import com.snad.spotlight.network.MovieService
+import com.snad.spotlight.network.models.Backdrop
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Callback
@@ -41,7 +42,9 @@ class MovieDetailsFragment: Fragment() {
 
     private lateinit var addOrRemoveMovieFAB: FloatingActionButton
     private lateinit var loadingProgressBar: ContentLoadingProgressBar
-
+    private lateinit var backdropsRecyclerView: RecyclerView
+    private lateinit var backdropsRecyclerViewAdapter: BackdropsAdapter
+    private val backdrops = mutableListOf<Backdrop>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +58,9 @@ class MovieDetailsFragment: Fragment() {
 
         addOrRemoveMovieFAB = viewBinding.addOrRemoveMovieFAB
         loadingProgressBar = viewBinding.loadingProgressbar
+        backdropsRecyclerView = viewBinding.backdropsRecyclerView
+        backdropsRecyclerViewAdapter = BackdropsAdapter(backdrops)
+        backdropsRecyclerView.adapter = backdropsRecyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -119,18 +125,13 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.genreTextView.text = movie.genres
         if(movie.release_date == "") viewBinding.releaseDateTextView.visibility = View.GONE
         else viewBinding.releaseDateTextView.text = movie.release_date.substring(0, 4)
+        if(movie.tagline != null && movie.tagline != "") viewBinding.taglineTextView.text = "\"${movie.tagline}\""
+        else viewBinding.taglineTextView.text = ""
         when(movie.runtime) {
             null -> viewBinding.runtimeTextView.visibility = View.GONE
             else -> {
                 viewBinding.runtimeTextView.text = getString(R.string.movie_detail_runtime, movie.runtime)
                 viewBinding.runtimeTextView.visibility = View.VISIBLE
-            }
-        }
-        when(movie.tagline) {
-            null, "" -> viewBinding.taglineTextView.visibility = View.GONE
-            else -> {
-                viewBinding.taglineTextView.text = "\"${movie.tagline}\""
-                viewBinding.taglineTextView.visibility = View.VISIBLE
             }
         }
         when(movie.overview) {
@@ -170,6 +171,11 @@ class MovieDetailsFragment: Fragment() {
 
                 override fun onError(e: Exception?) {}
             })
+
+
+        backdrops.clear()
+        backdrops.addAll(movie.backdrops)
+        backdropsRecyclerViewAdapter.notifyDataSetChanged()
     }
 
     private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {

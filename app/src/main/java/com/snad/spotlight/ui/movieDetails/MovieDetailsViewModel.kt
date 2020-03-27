@@ -24,7 +24,10 @@ class MovieDetailsViewModel(
             movieDetailsRepository.loadMovie(id).collect { movieDetailsResult ->
                 withContext(Dispatchers.Main) {
                     when(movieDetailsResult) {
-                        is MovieDetailsResult.Success -> state.value = MovieDetailsState.DoneState(movieDetailsResult.movie, movieDetailsResult.isInLibrary)
+                        is MovieDetailsResult.Success -> {
+                            val sortedBackdrops = movieDetailsResult.movie.backdrops.sortedByDescending { backdrop -> backdrop.vote_average }
+                            state.value = MovieDetailsState.DoneState(movieDetailsResult.movie.copy(backdrops = sortedBackdrops), movieDetailsResult.isInLibrary)
+                        }
                         is MovieDetailsResult.NetworkError -> state.value = MovieDetailsState.ErrorNetworkState
                         is MovieDetailsResult.ConnectionError -> state.value = MovieDetailsState.ErrorNetworkState
                         is MovieDetailsResult.AuthenticationError -> state.value = MovieDetailsState.ErrorAuthenticationState

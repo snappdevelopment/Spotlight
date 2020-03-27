@@ -9,11 +9,11 @@ import java.net.SocketTimeoutException
 class MovieApi(
     private val movieService: MovieService
 ) {
-    private val language = "en-US"
+    private val appendToResponse = "images"
 
     suspend fun loadMovie(id: Int): MovieApiResult {
         return try {
-            val movie = movieService.getMovie(id, language)
+            val movie = movieService.getMovie(id, appendToResponse)
             MovieApiResult.Success(movie)
         }
         catch (error: Exception) {

@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/backdropImageView"
@@ -118,7 +119,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toBottomOf="@+id/coverImageView"
             app:layout_constraintStart_toStartOf="@+id/coverImageView"
-            app:layout_constraintEnd_toStartOf="@id/averageVoteTextView"/>
+            app:layout_constraintEnd_toStartOf="@id/averageVoteTextView" />
 
         <TextView
             android:id="@+id/averageVoteTextView"
@@ -239,6 +240,20 @@
             app:layout_constraintEnd_toStartOf="@id/addOrRemoveMovieFAB"
             app:layout_constraintTop_toTopOf="@id/addOrRemoveMovieFAB"
             app:layout_constraintBottom_toBottomOf="@id/addOrRemoveMovieFAB"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/backdropsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/movie_detail_images_rv_margin_top"
+            android:layout_marginBottom="@dimen/movie_detail_images_rv_margin_bottom"
+            tools:listitem="@layout/recyclerview_item_movie_details_images"
+            tools:itemCount="5"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/overviewCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

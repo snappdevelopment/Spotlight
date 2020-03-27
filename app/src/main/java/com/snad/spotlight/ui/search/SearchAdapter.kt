@@ -36,7 +36,6 @@ class SearchAdapter(
             .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
-        //Todo: placeholder und error image mit app icon
         holder.titleTextView.text = item.title
         if(item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
         else holder.releaseDateTextView.text = item.release_date.substring(0, 4)
