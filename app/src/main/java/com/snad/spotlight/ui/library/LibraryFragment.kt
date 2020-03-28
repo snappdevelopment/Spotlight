@@ -1,10 +1,12 @@
 package com.snad.spotlight.ui.library
 
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,9 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.App
-import com.snad.spotlight.LibraryRepository
-import com.snad.spotlight.R
+import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentLibraryBinding
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
@@ -40,7 +40,12 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        activity?.transparentStatusBarEnabled(false)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, false)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, false)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
+
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
         loadingProgressBar = viewBinding.loadingProgressbar

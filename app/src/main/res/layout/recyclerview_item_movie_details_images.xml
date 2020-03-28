@@ -5,7 +5,6 @@
     android:layout_height="169dp"
     android:layout_marginTop="@dimen/movie_detail_images_rv_item_margin_top"
     android:layout_marginBottom="@dimen/movie_detail_images_rv_item_margin_bottom"
-    android:layout_marginStart="@dimen/movie_detail_images_rv_item_margin"
     android:layout_marginEnd="@dimen/movie_detail_images_rv_item_margin"
     android:layout_gravity="center">
 

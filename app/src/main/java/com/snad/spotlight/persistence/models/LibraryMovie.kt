@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.snad.spotlight.network.models.Backdrop
+import com.snad.spotlight.network.models.Video
 import com.snad.spotlight.persistence.DatabaseTypeConverter
 import java.util.Calendar
 
@@ -29,7 +30,8 @@ data class LibraryMovie(
     val runtime : Int?,
     val tagline : String?,
     val title : String,
+    val trailer: String?,
     val video : Boolean,
     val vote_average : Double,
     val vote_count : Int
-    )
+)

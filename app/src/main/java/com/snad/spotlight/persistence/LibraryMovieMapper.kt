@@ -11,6 +11,10 @@ fun Movie.toLibraryMovie(): LibraryMovie {
         character == ' ' || character == ','
     }
 
+    val trailer = this.videos.videos.firstOrNull { video ->
+        video.type == "Trailer" && video.site == "YouTube"
+    }
+
     return LibraryMovie(
         added_at = null,
         has_been_watched = false,
@@ -29,6 +33,7 @@ fun Movie.toLibraryMovie(): LibraryMovie {
         runtime = this.runtime,
         tagline = this.tagline,
         title = this.title,
+        trailer = trailer?.key,
         video = this.video,
         vote_average = this.vote_average,
         vote_count = this.vote_count)

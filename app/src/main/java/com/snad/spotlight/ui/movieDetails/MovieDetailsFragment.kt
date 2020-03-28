@@ -1,11 +1,16 @@
 package com.snad.spotlight.ui.movieDetails
 
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -15,9 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.snad.spotlight.App
-import com.snad.spotlight.MovieDetailsRepository
-import com.snad.spotlight.R
+import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.MovieApi
@@ -53,6 +56,21 @@ class MovieDetailsFragment: Fragment() {
     ): View? {
         val movieId = arguments?.getInt("id")
         movieId ?: throw NullPointerException("MovieId is null")
+
+//        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        requireActivity().window.attributes.flags = requireActivity().window.attributes.flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//        requireActivity().window.statusBarColor = Color.TRANSPARENT
+
+//        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+//        activity?.window?.statusBarColor = Color.TRANSPARENT
+
+//        activity?.transparentStatusBarEnabled(true)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, true)
+//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, true)
+//        activity?.window?.statusBarColor = Color.TRANSPARENT
 
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
@@ -119,6 +137,25 @@ class MovieDetailsFragment: Fragment() {
 
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {
         loadingProgressBar.hide()
+        Picasso.get()
+            .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
+            .resize(92, 138)
+            .centerCrop()
+            .placeholder(R.drawable.cover_image_placeholder)
+            .error(R.drawable.cover_image_error)
+            .transform(RoundedCornersTransformation(4, 1))
+            .into(viewBinding.coverImageView)
+        Picasso.get()
+            .load("https://image.tmdb.org/t/p/w780${movie.backdrop_path}")
+            .fit()
+            .transform(RoundedCornersTransformation(4, 1))
+            .into(viewBinding.backdropImageView, object: Callback {
+                override fun onSuccess() {
+                    setColorPalette(isInLibrary, movie.has_been_watched)
+                }
+
+                override fun onError(e: Exception?) {}
+            })
         viewBinding.titleTextView.text = movie.title
         viewBinding.averageVoteTextView.text = movie.vote_average.toString()
         viewBinding.runtimeDivider.visibility = if(movie.genres == "") View.INVISIBLE else View.VISIBLE
@@ -152,26 +189,22 @@ class MovieDetailsFragment: Fragment() {
                 viewBinding.hasBeenWatchedFAB.visibility = View.GONE
             }
         }
-        Picasso.get()
-            .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
-            .resize(92, 138)
-            .centerCrop()
-            .placeholder(R.drawable.cover_image_placeholder)
-            .error(R.drawable.cover_image_error)
-            .transform(RoundedCornersTransformation(4, 1))
-            .into(viewBinding.coverImageView)
-        Picasso.get()
-            .load("https://image.tmdb.org/t/p/w780${movie.backdrop_path}")
-            .fit()
-            .transform(RoundedCornersTransformation(4, 1))
-            .into(viewBinding.backdropImageView, object: Callback {
-                override fun onSuccess() {
-                    setColorPalette(isInLibrary, movie.has_been_watched)
+
+        when(movie.trailer) {
+            null -> viewBinding.trailerFAB.visibility = View.INVISIBLE
+            else -> {
+                viewBinding.trailerFAB.visibility = View.VISIBLE
+                viewBinding.trailerFAB.setOnClickListener { view ->
+                    try {
+                        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${movie.trailer}"))
+                        context?.startActivity(appIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=${movie.trailer}"))
+                        context?.startActivity(webIntent)
+                    }
                 }
-
-                override fun onError(e: Exception?) {}
-            })
-
+            }
+        }
 
         backdrops.clear()
         backdrops.addAll(movie.backdrops)
@@ -206,6 +239,8 @@ class MovieDetailsFragment: Fragment() {
                         viewBinding.overviewCardView.setCardBackgroundColor(accentSwatch.rgb)
                         viewBinding.overviewHeadlineTextView.setTextColor(accentSwatch.titleTextColor)
                         viewBinding.overviewTextView.setTextColor(accentSwatch.bodyTextColor)
+                        viewBinding.trailerFAB.backgroundTintList = ColorStateList.valueOf(accentSwatch.rgb)
+                        viewBinding.trailerFAB.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.movieDetailTrailerIconColorTinted, null))
 
                         viewBinding.addOrRemoveMovieFAB.backgroundTintList =
                             if(isInLibrary) ColorStateList.valueOf(accentSwatch.rgb) else ColorStateList.valueOf(resources.getColor(R.color.movieDetailFAB, null))

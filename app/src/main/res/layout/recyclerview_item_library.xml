@@ -110,7 +110,7 @@
             android:scaleType="center"
             app:maxImageSize="20dp"
             app:fabCustomSize="35dp"
-            app:backgroundTint="@drawable/add_movie_and_watched_fab_color_selector" />
+            app:backgroundTint="@drawable/fab_color_selector" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
