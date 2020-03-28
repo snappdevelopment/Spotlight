@@ -22,6 +22,8 @@
     <color name="movieDetailFABSelected">#3F51B5</color>
     <color name="movieDetailIconColor">#404040</color>
     <color name="movieDetailIconColorSelected">#FFFFFF</color>
+    <color name="movieDetailTrailerIconColor">#404040</color>
+    <color name="movieDetailTrailerIconColorTinted">#FFFFFF</color>
     <color name="movieDetailCardHeadline">#404040</color>
     <color name="movieDetailCardText">@android:color/darker_gray</color>
     <color name="movieDetailCardBackground">#FFFFFF</color>
