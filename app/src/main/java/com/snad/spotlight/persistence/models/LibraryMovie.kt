@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.snad.spotlight.network.models.Backdrop
+import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.network.models.Video
 import com.snad.spotlight.persistence.DatabaseTypeConverter
 import java.util.Calendar
@@ -14,13 +15,15 @@ data class LibraryMovie(
     @PrimaryKey
     val id : Int,
     val added_at: Calendar?,
-    val has_been_watched: Boolean,
     val adult : Boolean,
     val backdrop_path : String?,
     @TypeConverters(DatabaseTypeConverter::class)
     val backdrops: List<Backdrop>,
     val budget : Int,
+    @TypeConverters(DatabaseTypeConverter::class)
+    val cast: List<CastMember>,
     val genres : String,
+    val has_been_watched: Boolean,
     val imdb_id : String?,
     val overview : String?,
     val popularity : Double,

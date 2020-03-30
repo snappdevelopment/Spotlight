@@ -19,9 +19,6 @@ class BackdropsAdapter(
 
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
         val item = items[position]
-//        holder.imageImageView.setOnClickListener {
-//            clickListener()
-//        }
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w780${item.file_path}")

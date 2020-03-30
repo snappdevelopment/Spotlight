@@ -22,6 +22,7 @@ fun Movie.toLibraryMovie(): LibraryMovie {
         backdrop_path = this.backdrop_path,
         backdrops = this.images.backdrops,
         budget = this.budget,
+        cast = this.credits.cast,
         genres = genres,
         id = this.id,
         imdb_id = this.imdb_id,
