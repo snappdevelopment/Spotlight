@@ -4,13 +4,11 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
@@ -26,6 +24,7 @@ import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.MovieApi
 import com.snad.spotlight.network.MovieService
 import com.snad.spotlight.network.models.Backdrop
+import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Callback
@@ -47,7 +46,10 @@ class MovieDetailsFragment: Fragment() {
     private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private lateinit var backdropsRecyclerView: RecyclerView
     private lateinit var backdropsRecyclerViewAdapter: BackdropsAdapter
+    private lateinit var castRecyclerView: RecyclerView
+    private lateinit var castRecyclerViewAdapter: CastAdapter
     private val backdrops = mutableListOf<Backdrop>()
+    private val castMember = mutableListOf<CastMember>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,6 +81,9 @@ class MovieDetailsFragment: Fragment() {
         backdropsRecyclerView = viewBinding.backdropsRecyclerView
         backdropsRecyclerViewAdapter = BackdropsAdapter(backdrops)
         backdropsRecyclerView.adapter = backdropsRecyclerViewAdapter
+        castRecyclerView = viewBinding.castRecyclerView
+        castRecyclerViewAdapter = CastAdapter(castMember)
+        castRecyclerView.adapter = castRecyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -189,17 +194,20 @@ class MovieDetailsFragment: Fragment() {
                 viewBinding.hasBeenWatchedFAB.visibility = View.GONE
             }
         }
-
         when(movie.trailer) {
             null -> viewBinding.trailerFAB.visibility = View.INVISIBLE
             else -> {
                 viewBinding.trailerFAB.visibility = View.VISIBLE
                 viewBinding.trailerFAB.setOnClickListener { view ->
                     try {
-                        val appIntent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${movie.trailer}"))
+                        val appIntent =
+                            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${movie.trailer}"))
                         context?.startActivity(appIntent)
                     } catch (e: ActivityNotFoundException) {
-                        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=${movie.trailer}"))
+                        val webIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("http://www.youtube.com/watch?v=${movie.trailer}")
+                        )
                         context?.startActivity(webIntent)
                     }
                 }
@@ -209,6 +217,10 @@ class MovieDetailsFragment: Fragment() {
         backdrops.clear()
         backdrops.addAll(movie.backdrops)
         backdropsRecyclerViewAdapter.notifyDataSetChanged()
+
+        castMember.clear()
+        castMember.addAll(movie.cast)
+        castRecyclerViewAdapter.notifyDataSetChanged()
     }
 
     private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {
@@ -247,6 +259,10 @@ class MovieDetailsFragment: Fragment() {
 
                         viewBinding.hasBeenWatchedFAB.backgroundTintList =
                             if(hasBeenWatched) ColorStateList.valueOf(accentSwatch.rgb) else ColorStateList.valueOf(resources.getColor(R.color.movieDetailFAB, null))
+
+                        castRecyclerViewAdapter.nameTextColor = accentSwatch.titleTextColor
+                        castRecyclerViewAdapter.nameBackgroundColor = accentSwatch.rgb
+                        castRecyclerViewAdapter.notifyDataSetChanged()
 
                         activity?.window?.statusBarColor = primarySwatch.rgb
                     }

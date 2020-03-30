@@ -26,7 +26,11 @@ class MovieDetailsViewModel(
                     when(movieDetailsResult) {
                         is MovieDetailsResult.Success -> {
                             val sortedBackdrops = movieDetailsResult.movie.backdrops.sortedByDescending { backdrop -> backdrop.vote_average }
-                            state.value = MovieDetailsState.DoneState(movieDetailsResult.movie.copy(backdrops = sortedBackdrops), movieDetailsResult.isInLibrary)
+                            val sortedCast = movieDetailsResult.movie.cast.sortedBy { castMember -> castMember.order }
+                            state.value = MovieDetailsState.DoneState(
+                                movieDetailsResult.movie.copy(backdrops = sortedBackdrops, cast = sortedCast),
+                                movieDetailsResult.isInLibrary
+                            )
                         }
                         is MovieDetailsResult.NetworkError -> state.value = MovieDetailsState.ErrorNetworkState
                         is MovieDetailsResult.ConnectionError -> state.value = MovieDetailsState.ErrorNetworkState

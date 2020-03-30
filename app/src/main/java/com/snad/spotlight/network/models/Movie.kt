@@ -31,7 +31,8 @@ data class Movie (
 	val vote_count : Int,
 
 	val images: Images,
-	val videos: Videos
+	val videos: Videos,
+	val credits: Credits
 )
 
 @JsonClass(generateAdapter = true)

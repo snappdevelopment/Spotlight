@@ -86,16 +86,22 @@
     <dimen name="movie_detail_overview_headline_size">16sp</dimen>
     <dimen name="movie_detail_overview_card_margin_top">25dp</dimen>
     <dimen name="movie_detail_overview_card_margin_end">16dp</dimen>
+    <dimen name="movie_detail_overview_card_margin_bottom">8dp</dimen>
 
     <dimen name="movie_detail_add_movie_margin">16dp</dimen>
 
-    <dimen name="movie_detail_images_rv_margin_top">16dp</dimen>
-    <dimen name="movie_detail_images_rv_margin_bottom">16dp</dimen>
+    <dimen name="movie_detail_images_rv_margin_top">8dp</dimen>
+    <dimen name="movie_detail_images_rv_margin_bottom">8dp</dimen>
     <dimen name="movie_detail_images_rv_padding_start">16dp</dimen>
 
     <dimen name="movie_detail_images_rv_item_margin">8dp</dimen>
     <dimen name="movie_detail_images_rv_item_margin_top">8dp</dimen>
     <dimen name="movie_detail_images_rv_item_margin_bottom">8dp</dimen>
+
+    <dimen name="movie_detail_cast_rv_padding_start">16dp</dimen>
+    <dimen name="movie_detail_cast_rv_margin_top">8dp</dimen>
+    <dimen name="movie_detail_cast_rv_margin_bottom">8dp</dimen>
+
 
     <dimen name="movie_detail_trailer_fab_margin">16dp</dimen>
 

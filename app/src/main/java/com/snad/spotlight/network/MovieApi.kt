@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException
 class MovieApi(
     private val movieService: MovieService
 ) {
-    private val appendToResponse = "images,videos"
+    private val appendToResponse = "images,videos,credits"
 
     suspend fun loadMovie(id: Int): MovieApiResult {
         return try {

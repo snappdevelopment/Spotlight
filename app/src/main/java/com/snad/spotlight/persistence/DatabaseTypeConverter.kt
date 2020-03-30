@@ -2,6 +2,7 @@ package com.snad.spotlight.persistence
 
 import androidx.room.TypeConverter
 import com.snad.spotlight.network.models.Backdrop
+import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.network.models.Poster
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -45,5 +46,29 @@ class DatabaseTypeConverter {
         val backdropsAdapter: JsonAdapter<List<Backdrop>> = moshi.adapter(backdropType)
 
         return backdropsAdapter.fromJson(backdrops)
+    }
+
+    @TypeConverter
+    fun castToJson(cast: List<CastMember>): String {
+        val moshi = Moshi.Builder().build()
+        val castMemberType: Type = Types.newParameterizedType(
+            List::class.java,
+            CastMember::class.java
+        )
+        val castAdapter: JsonAdapter<List<CastMember>> = moshi.adapter(castMemberType)
+
+        return castAdapter.toJson(cast)
+    }
+
+    @TypeConverter
+    fun castFromJson(cast: String): List<CastMember>? {
+        val moshi = Moshi.Builder().build()
+        val castType: Type = Types.newParameterizedType(
+            List::class.java,
+            CastMember::class.java
+        )
+        val castAdapter: JsonAdapter<List<CastMember>> = moshi.adapter(castType)
+
+        return castAdapter.fromJson(cast)
     }
 }
