@@ -38,12 +38,6 @@ class SearchFragment : Fragment() {
     private val viewBinding: FragmentSearchBinding
         get() = binding!!
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: SearchAdapter
-    private lateinit var loadingProgressBar: ContentLoadingProgressBar
-    private lateinit var searchView: SearchView
-    private lateinit var statusTextView: TextView
-    private lateinit var statusIconImageView: ImageView
     private val movies = mutableListOf<ListMovie>()
 
     override fun onCreateView(
@@ -53,16 +47,10 @@ class SearchFragment : Fragment() {
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        loadingProgressBar = viewBinding.loadingProgressbar
-        searchView = viewBinding.searchView
-        statusTextView = viewBinding.statusTextView
-        statusIconImageView = viewBinding.statusIconImageView
-        recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = SearchAdapter(
+        viewBinding.recyclerView.adapter = SearchAdapter(
             movies,
             this::movieClickListener
         )
-        recyclerView.adapter = recyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -100,17 +88,17 @@ class SearchFragment : Fragment() {
             }
         })
 
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        viewBinding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if(query != null && query != "") searchViewModel.searchMovies(query)
-                searchView.clearFocus()
+                viewBinding.searchView.clearFocus()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {return true}
         })
 
-        searchView.requestFocus()
+        viewBinding.searchView.requestFocus()
         showKeyboard()
 
         return viewBinding.root
@@ -128,43 +116,43 @@ class SearchFragment : Fragment() {
     }
 
     private fun showDoneState(moviesList: List<ListMovie>) {
-        loadingProgressBar.hide()
-        statusTextView.visibility = View.GONE
-        statusIconImageView.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
+        viewBinding.loadingProgressbar.hide()
+        viewBinding.statusTextView.visibility = View.GONE
+        viewBinding.statusIconImageView.visibility = View.GONE
+        viewBinding.recyclerView.visibility = View.VISIBLE
 
         movies.clear()
         movies.addAll(moviesList)
-        recyclerViewAdapter.notifyDataSetChanged()
+        viewBinding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun showLoadingState() {
-        recyclerView.visibility = View.INVISIBLE
-        statusTextView.visibility = View.GONE
-        statusIconImageView.visibility = View.GONE
-        loadingProgressBar.show()
+        viewBinding.recyclerView.visibility = View.INVISIBLE
+        viewBinding.statusTextView.visibility = View.GONE
+        viewBinding.statusIconImageView.visibility = View.GONE
+        viewBinding.loadingProgressbar.show()
     }
 
     private fun showInitialState() {
-        loadingProgressBar.hide()
-        recyclerView.visibility = View.INVISIBLE
-        statusTextView.text = getString(R.string.search_initial_state)
-        statusTextView.visibility = View.VISIBLE
-        statusIconImageView.setImageResource(R.drawable.ic_video_vintage)
-        statusIconImageView.visibility = View.VISIBLE
+        viewBinding.loadingProgressbar.hide()
+        viewBinding.recyclerView.visibility = View.INVISIBLE
+        viewBinding.statusTextView.text = getString(R.string.search_initial_state)
+        viewBinding.statusTextView.visibility = View.VISIBLE
+        viewBinding.statusIconImageView.setImageResource(R.drawable.ic_video_vintage)
+        viewBinding.statusIconImageView.visibility = View.VISIBLE
     }
 
     private fun showNoResultsState() {
-        loadingProgressBar.hide()
-        recyclerView.visibility = View.INVISIBLE
-        statusTextView.text = getString(R.string.search_no_results_state)
-        statusTextView.visibility = View.VISIBLE
-        statusIconImageView.setImageResource(R.drawable.ic_emoticon_sad_outline)
-        statusIconImageView.visibility = View.VISIBLE
+        viewBinding.loadingProgressbar.hide()
+        viewBinding.recyclerView.visibility = View.INVISIBLE
+        viewBinding.statusTextView.text = getString(R.string.search_no_results_state)
+        viewBinding.statusTextView.visibility = View.VISIBLE
+        viewBinding.statusIconImageView.setImageResource(R.drawable.ic_emoticon_sad_outline)
+        viewBinding.statusIconImageView.visibility = View.VISIBLE
     }
 
     private fun showAuthenticationErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_authentication_title)
@@ -178,15 +166,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun showNetworkErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_network_title)
             .setMessage(R.string.dialog_error_network_message)
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
-                if(searchView.query != null && searchView.query != "") {
-                    searchViewModel.searchMovies(searchView.query.toString())
+                if(viewBinding.searchView.query != null && viewBinding.searchView.query != "") {
+                    searchViewModel.searchMovies(viewBinding.searchView.query.toString())
                 }
                 dialog.dismiss()
             }
@@ -195,7 +183,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_title)

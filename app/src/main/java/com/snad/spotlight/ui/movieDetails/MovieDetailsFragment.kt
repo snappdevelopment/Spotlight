@@ -31,6 +31,7 @@ import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import kotlinx.android.synthetic.main.fragment_movie_details.*
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -43,14 +44,6 @@ class MovieDetailsFragment: Fragment() {
     private val viewBinding: FragmentMovieDetailsBinding
         get() = binding!!
 
-    private lateinit var addOrRemoveMovieFAB: FloatingActionButton
-    private lateinit var loadingProgressBar: ContentLoadingProgressBar
-    private lateinit var backdropsRecyclerView: RecyclerView
-    private lateinit var backdropsRecyclerViewAdapter: BackdropsAdapter
-    private lateinit var castRecyclerView: RecyclerView
-    private lateinit var castRecyclerViewAdapter: CastAdapter
-    private lateinit var reviewsRecyclerView: RecyclerView
-    private lateinit var reviewsRecyclerViewAdapter: ReviewsAdapter
     private val backdrops = mutableListOf<Backdrop>()
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
@@ -80,17 +73,9 @@ class MovieDetailsFragment: Fragment() {
 
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
-        addOrRemoveMovieFAB = viewBinding.addOrRemoveMovieFAB
-        loadingProgressBar = viewBinding.loadingProgressbar
-        backdropsRecyclerView = viewBinding.backdropsRecyclerView
-        backdropsRecyclerViewAdapter = BackdropsAdapter(backdrops)
-        backdropsRecyclerView.adapter = backdropsRecyclerViewAdapter
-        castRecyclerView = viewBinding.castRecyclerView
-        castRecyclerViewAdapter = CastAdapter(castMember)
-        castRecyclerView.adapter = castRecyclerViewAdapter
-        reviewsRecyclerView = viewBinding.reviewsRecyclerView
-        reviewsRecyclerViewAdapter = ReviewsAdapter(reviews)
-        reviewsRecyclerView.adapter = reviewsRecyclerViewAdapter
+        viewBinding.backdropsRecyclerView.adapter = BackdropsAdapter(backdrops)
+        viewBinding.castRecyclerView.adapter = CastAdapter(castMember)
+        viewBinding.reviewsRecyclerView.adapter = ReviewsAdapter(reviews)
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -129,7 +114,7 @@ class MovieDetailsFragment: Fragment() {
             }
         })
 
-        addOrRemoveMovieFAB.setOnClickListener {
+        viewBinding.addOrRemoveMovieFAB.setOnClickListener {
             movieDetailsViewModel.addOrRemoveMovie()
         }
 
@@ -148,7 +133,7 @@ class MovieDetailsFragment: Fragment() {
     }
 
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
         Picasso.get()
             .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
             .resize(92, 138)
@@ -223,15 +208,15 @@ class MovieDetailsFragment: Fragment() {
 
         backdrops.clear()
         backdrops.addAll(movie.backdrops)
-        backdropsRecyclerViewAdapter.notifyDataSetChanged()
+        viewBinding.backdropsRecyclerView.adapter?.notifyDataSetChanged()
 
         castMember.clear()
         castMember.addAll(movie.cast)
-        castRecyclerViewAdapter.notifyDataSetChanged()
+        viewBinding.castRecyclerView.adapter?.notifyDataSetChanged()
 
         reviews.clear()
         reviews.addAll(movie.reviews)
-        reviewsRecyclerViewAdapter.notifyDataSetChanged()
+        viewBinding.reviewsRecyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {
@@ -271,14 +256,16 @@ class MovieDetailsFragment: Fragment() {
                         viewBinding.hasBeenWatchedFAB.backgroundTintList =
                             if(hasBeenWatched) ColorStateList.valueOf(accentSwatch.rgb) else ColorStateList.valueOf(resources.getColor(R.color.movieDetailFAB, null))
 
-                        castRecyclerViewAdapter.nameTextColor = accentSwatch.titleTextColor
-                        castRecyclerViewAdapter.nameBackgroundColor = accentSwatch.rgb
-                        castRecyclerViewAdapter.notifyDataSetChanged()
+                        val castAdapter = viewBinding.castRecyclerView.adapter as CastAdapter
+                        castAdapter.nameTextColor = accentSwatch.titleTextColor
+                        castAdapter.nameBackgroundColor = accentSwatch.rgb
+                        castAdapter.notifyDataSetChanged()
 
-                        reviewsRecyclerViewAdapter.cardColor = accentSwatch.rgb
-                        reviewsRecyclerViewAdapter.authorTextColor = accentSwatch.titleTextColor
-                        reviewsRecyclerViewAdapter.reviewTextColor = accentSwatch.bodyTextColor
-                        reviewsRecyclerViewAdapter.notifyDataSetChanged()
+                        val reviewsAdapter = viewBinding.reviewsRecyclerView.adapter as ReviewsAdapter
+                        reviewsAdapter.cardColor = accentSwatch.rgb
+                        reviewsAdapter.authorTextColor = accentSwatch.titleTextColor
+                        reviewsAdapter.reviewTextColor = accentSwatch.bodyTextColor
+                        reviewsAdapter.notifyDataSetChanged()
 
                         activity?.window?.statusBarColor = primarySwatch.rgb
                     }
@@ -287,11 +274,11 @@ class MovieDetailsFragment: Fragment() {
     }
 
     private fun showLoadingState() {
-        loadingProgressBar.show()
+        viewBinding.loadingProgressbar.show()
     }
 
     private fun showAuthenticationErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_authentication_title)
@@ -305,7 +292,7 @@ class MovieDetailsFragment: Fragment() {
     }
 
     private fun showNetworkErrorState(id: Int) {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_network_title)
@@ -320,7 +307,7 @@ class MovieDetailsFragment: Fragment() {
     }
 
     private fun showErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_title)

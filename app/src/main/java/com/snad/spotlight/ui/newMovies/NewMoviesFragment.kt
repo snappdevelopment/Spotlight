@@ -33,9 +33,6 @@ class NewMoviesFragment : Fragment() {
     private val viewBinding: FragmentNewMoviesBinding
         get() = binding!!
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: NewMoviesAdapter
-    private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private val movies = mutableListOf<ListMovie>()
 
     override fun onCreateView(
@@ -46,13 +43,10 @@ class NewMoviesFragment : Fragment() {
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
         binding = FragmentNewMoviesBinding.inflate(inflater, container, false)
 
-        loadingProgressBar = viewBinding.loadingProgressbar
-        recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = NewMoviesAdapter(
+        viewBinding.recyclerView.adapter = NewMoviesAdapter(
             movies,
             this::movieClickListener
         )
-        recyclerView.adapter = recyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -105,20 +99,19 @@ class NewMoviesFragment : Fragment() {
     }
 
     private fun showDoneState(newMovies: NewMovies) {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
-        val moviesList = newMovies.movies
         movies.clear()
-        movies.addAll(moviesList)
-        recyclerViewAdapter.notifyDataSetChanged()
+        movies.addAll(newMovies.movies)
+        viewBinding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun showLoadingState() {
-        loadingProgressBar.show()
+        viewBinding.loadingProgressbar.show()
     }
 
     private fun showAuthenticationErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_authentication_title)
@@ -132,7 +125,7 @@ class NewMoviesFragment : Fragment() {
     }
 
     private fun showNetworkErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_network_title)
@@ -147,7 +140,7 @@ class NewMoviesFragment : Fragment() {
     }
 
     private fun showErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_title)
