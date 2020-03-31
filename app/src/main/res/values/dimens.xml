@@ -102,6 +102,14 @@
     <dimen name="movie_detail_cast_rv_margin_top">8dp</dimen>
     <dimen name="movie_detail_cast_rv_margin_bottom">8dp</dimen>
 
+    <dimen name="movie_detail_reviews_rv_margin_top">8dp</dimen>
+    <dimen name="movie_detail_reviews_rv_margin_bottom">8dp</dimen>
+    <dimen name="movie_detail_reviews_rv_padding">16dp</dimen>
+
+    <dimen name="movie_detail_reviews_rv_item_margin">8dp</dimen>
+    <dimen name="movie_detail_reviews_rv_item_headline_size">16sp</dimen>
+    <dimen name="movie_detail_reviews_rv_item_author_margin_top">16dp</dimen>
+    <dimen name="movie_detail_reviews_rv_item_text_size">14sp</dimen>
 
     <dimen name="movie_detail_trailer_fab_margin">16dp</dimen>
 

@@ -30,9 +30,9 @@ class LibraryFragment : Fragment() {
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var recyclerViewAdapter: LibraryAdapter
-    private lateinit var loadingProgressBar: ContentLoadingProgressBar
+//    private lateinit var recyclerView: RecyclerView
+//    private lateinit var recyclerViewAdapter: LibraryAdapter
+//    private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private val movies = mutableListOf<LibraryMovie>()
 
     override fun onCreateView(
@@ -48,14 +48,14 @@ class LibraryFragment : Fragment() {
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-        loadingProgressBar = viewBinding.loadingProgressbar
-        recyclerView = viewBinding.recyclerView
-        recyclerViewAdapter = LibraryAdapter(
+//        loadingProgressBar = viewBinding.loadingProgressbar
+//        recyclerView = viewBinding.recyclerView
+        val recyclerViewAdapter = LibraryAdapter(
             movies,
             this::movieLongClickListener,
             this::movieClickListener,
             this::movieWatchedClickListener)
-        recyclerView.adapter = recyclerViewAdapter
+        viewBinding.recyclerView.adapter = recyclerViewAdapter
 
         val app = context!!.applicationContext as App
         val libraryDb = LibraryDb(app.appDb)
@@ -75,33 +75,7 @@ class LibraryFragment : Fragment() {
             }
         })
 
-//        val fakeMovie = LibraryMovie(
-//            1112,
-//            Calendar.getInstance(),
-//            false,
-//            false,
-//            "/pCUdYAaarKqY2AAUtV6xXYO8UGY.jpg",
-//            100000,
-//            "Drama, Comedy",
-//            null,
-//            "A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground \"fight clubs\" forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion.",
-//            5.2,
-//            "/4GpwvwDjgwiShr1UBJIn5fk1gwT.jpg",
-//            "2020.02.14",
-//            2000000,
-//            180,
-//            "How much can you know about yourself if you've never been in a fight?",
-//            "Fight Club",
-//            false,
-//            7.8,
-//            5)
-//        lifecycleScope.launch(Dispatchers.IO) {
-//            libraryDb.insertMovie(fakeMovie)
-//        }
-
         libraryViewModel.loadLibraryMovies()
-
-
 
         return viewBinding.root
     }
@@ -136,19 +110,19 @@ class LibraryFragment : Fragment() {
     }
 
     private fun showDoneState(libraryMovies: List<LibraryMovie>) {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         movies.clear()
         movies.addAll(libraryMovies)
-        recyclerViewAdapter.notifyDataSetChanged()
+        viewBinding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     private fun showLoadingState() {
-        loadingProgressBar.show()
+        viewBinding.loadingProgressbar.show()
     }
 
     private fun showErrorState() {
-        loadingProgressBar.hide()
+        viewBinding.loadingProgressbar.hide()
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_wrong_operation_title)

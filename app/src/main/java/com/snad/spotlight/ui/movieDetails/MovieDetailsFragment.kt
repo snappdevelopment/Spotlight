@@ -25,6 +25,7 @@ import com.snad.spotlight.network.MovieApi
 import com.snad.spotlight.network.MovieService
 import com.snad.spotlight.network.models.Backdrop
 import com.snad.spotlight.network.models.CastMember
+import com.snad.spotlight.network.models.Review
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Callback
@@ -48,8 +49,11 @@ class MovieDetailsFragment: Fragment() {
     private lateinit var backdropsRecyclerViewAdapter: BackdropsAdapter
     private lateinit var castRecyclerView: RecyclerView
     private lateinit var castRecyclerViewAdapter: CastAdapter
+    private lateinit var reviewsRecyclerView: RecyclerView
+    private lateinit var reviewsRecyclerViewAdapter: ReviewsAdapter
     private val backdrops = mutableListOf<Backdrop>()
     private val castMember = mutableListOf<CastMember>()
+    private val reviews = mutableListOf<Review>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,6 +88,9 @@ class MovieDetailsFragment: Fragment() {
         castRecyclerView = viewBinding.castRecyclerView
         castRecyclerViewAdapter = CastAdapter(castMember)
         castRecyclerView.adapter = castRecyclerViewAdapter
+        reviewsRecyclerView = viewBinding.reviewsRecyclerView
+        reviewsRecyclerViewAdapter = ReviewsAdapter(reviews)
+        reviewsRecyclerView.adapter = reviewsRecyclerViewAdapter
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
         val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
@@ -221,6 +228,10 @@ class MovieDetailsFragment: Fragment() {
         castMember.clear()
         castMember.addAll(movie.cast)
         castRecyclerViewAdapter.notifyDataSetChanged()
+
+        reviews.clear()
+        reviews.addAll(movie.reviews)
+        reviewsRecyclerViewAdapter.notifyDataSetChanged()
     }
 
     private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {
@@ -263,6 +274,11 @@ class MovieDetailsFragment: Fragment() {
                         castRecyclerViewAdapter.nameTextColor = accentSwatch.titleTextColor
                         castRecyclerViewAdapter.nameBackgroundColor = accentSwatch.rgb
                         castRecyclerViewAdapter.notifyDataSetChanged()
+
+                        reviewsRecyclerViewAdapter.cardColor = accentSwatch.rgb
+                        reviewsRecyclerViewAdapter.authorTextColor = accentSwatch.titleTextColor
+                        reviewsRecyclerViewAdapter.reviewTextColor = accentSwatch.bodyTextColor
+                        reviewsRecyclerViewAdapter.notifyDataSetChanged()
 
                         activity?.window?.statusBarColor = primarySwatch.rgb
                     }
