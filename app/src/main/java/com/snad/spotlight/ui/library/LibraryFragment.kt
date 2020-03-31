@@ -30,9 +30,6 @@ class LibraryFragment : Fragment() {
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
 
-//    private lateinit var recyclerView: RecyclerView
-//    private lateinit var recyclerViewAdapter: LibraryAdapter
-//    private lateinit var loadingProgressBar: ContentLoadingProgressBar
     private val movies = mutableListOf<LibraryMovie>()
 
     override fun onCreateView(
@@ -48,8 +45,6 @@ class LibraryFragment : Fragment() {
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-//        loadingProgressBar = viewBinding.loadingProgressbar
-//        recyclerView = viewBinding.recyclerView
         val recyclerViewAdapter = LibraryAdapter(
             movies,
             this::movieLongClickListener,
