@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/movie_detail_reviews_rv_item_margin"
-    android:layout_marginBottom="@dimen/movie_detail_reviews_rv_item_margin"
     android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/reviewCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/movie_detail_reviews_rv_item_margin"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+        app:cardElevation="4dp"
         app:cardCornerRadius="4dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/white"
         app:contentPadding="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/movieDetailCardHeadline"
+                android:textSize="@dimen/movie_detail_reviews_rv_item_headline_size"
                 android:maxLines="1"
                 android:ellipsize="end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:textSize="@dimen/movie_detail_reviews_rv_item_headline_size"
                 tools:text="Max Mustermann"/>
 
             <TextView

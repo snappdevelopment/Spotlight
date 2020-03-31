@@ -54,6 +54,9 @@
 
     <dimen name="library_rv_item_fab_margin">8dp</dimen>
 
+    <dimen name="library_empty_library_icon_margin_bottom">12dp</dimen>
+    <dimen name="library_empty_library_text_size">20sp</dimen>
+
     <!--MovieDetails-->
     <dimen name="movie_details_title_margin">16dp</dimen>
     <dimen name="movie_detail_title_size">24sp</dimen>
@@ -92,19 +95,19 @@
 
     <dimen name="movie_detail_images_rv_margin_top">8dp</dimen>
     <dimen name="movie_detail_images_rv_margin_bottom">8dp</dimen>
-    <dimen name="movie_detail_images_rv_padding_start">16dp</dimen>
+    <dimen name="movie_detail_images_rv_padding_start">8dp</dimen>
 
     <dimen name="movie_detail_images_rv_item_margin">8dp</dimen>
     <dimen name="movie_detail_images_rv_item_margin_top">8dp</dimen>
     <dimen name="movie_detail_images_rv_item_margin_bottom">8dp</dimen>
 
-    <dimen name="movie_detail_cast_rv_padding_start">16dp</dimen>
+    <dimen name="movie_detail_cast_rv_padding_start">8dp</dimen>
     <dimen name="movie_detail_cast_rv_margin_top">8dp</dimen>
     <dimen name="movie_detail_cast_rv_margin_bottom">8dp</dimen>
 
     <dimen name="movie_detail_reviews_rv_margin_top">8dp</dimen>
     <dimen name="movie_detail_reviews_rv_margin_bottom">8dp</dimen>
-    <dimen name="movie_detail_reviews_rv_padding">16dp</dimen>
+    <dimen name="movie_detail_reviews_rv_padding">8dp</dimen>
 
     <dimen name="movie_detail_reviews_rv_item_margin">8dp</dimen>
     <dimen name="movie_detail_reviews_rv_item_headline_size">16sp</dimen>

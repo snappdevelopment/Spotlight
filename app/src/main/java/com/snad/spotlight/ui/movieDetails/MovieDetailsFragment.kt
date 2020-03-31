@@ -192,8 +192,9 @@ class MovieDetailsFragment: Fragment() {
                 viewBinding.trailerFAB.visibility = View.VISIBLE
                 viewBinding.trailerFAB.setOnClickListener { view ->
                     try {
-                        val appIntent =
-                            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:${movie.trailer}"))
+                        val appIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("vnd.youtube:${movie.trailer}"))
                         context?.startActivity(appIntent)
                     } catch (e: ActivityNotFoundException) {
                         val webIntent = Intent(

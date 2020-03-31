@@ -165,6 +165,7 @@
                 app:layout_constraintStart_toStartOf="@id/coverImageView"
                 app:layout_constraintBottom_toTopOf="@+id/backdropsRecyclerView"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:cardElevation="4dp"
                 app:cardCornerRadius="4dp"
                 app:contentPadding="16dp">
 
@@ -238,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/movie_detail_images_rv_padding_start"
+                android:clipToPadding="false"
                 android:layout_marginTop="@dimen/movie_detail_images_rv_margin_top"
                 android:layout_marginBottom="@dimen/movie_detail_images_rv_margin_bottom"
                 tools:listitem="@layout/recyclerview_item_movie_details_images"
@@ -254,6 +256,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/movie_detail_cast_rv_padding_start"
+                android:clipToPadding="false"
                 android:layout_marginTop="@dimen/movie_detail_cast_rv_margin_top"
                 android:layout_marginBottom="@dimen/movie_detail_cast_rv_margin_bottom"
                 tools:listitem="@layout/recyclerview_item_movie_details_cast"
@@ -266,7 +269,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewsRecyclerView"
                 android:layout_width="0dp"
-                android:layout_height="500dp"
+                android:layout_height="400dp"
                 android:paddingStart="@dimen/movie_detail_reviews_rv_padding"
                 android:paddingEnd="@dimen/movie_detail_reviews_rv_padding"
                 android:layout_marginTop="@dimen/movie_detail_reviews_rv_margin_top"
