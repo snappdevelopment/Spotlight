@@ -1,15 +1,12 @@
 package com.snad.spotlight.ui.library
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.LibraryRepository
 import com.snad.spotlight.LibraryRepositoryResult
-import com.snad.spotlight.network.models.Movie
 import com.snad.spotlight.persistence.models.LibraryMovie
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,7 +23,14 @@ class LibraryViewModel(
             libraryRepository.loadLibraryMovies().collect {
                 withContext(Dispatchers.Main) {
                     when(it) {
-                        is LibraryRepositoryResult.Success -> state.value =LibraryState.DoneState(it.libraryMovies)
+                        is LibraryRepositoryResult.Success -> {
+                            if(it.libraryMovies.isEmpty()) {
+                                state.value = LibraryState.EmptyState
+                            }
+                            else {
+                                state.value = LibraryState.DoneState(it.libraryMovies)
+                            }
+                        }
                         is LibraryRepositoryResult.DbError -> state.value = LibraryState.ErrorState
                     }
                 }
@@ -50,6 +54,7 @@ class LibraryViewModel(
 
 sealed class LibraryState {
     class DoneState(val libraryMovies: List<LibraryMovie>): LibraryState()
+    object EmptyState: LibraryState()
     object LoadingState: LibraryState()
     object ErrorState: LibraryState()
 }

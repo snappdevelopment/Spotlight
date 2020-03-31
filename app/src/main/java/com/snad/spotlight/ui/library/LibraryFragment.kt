@@ -65,6 +65,7 @@ class LibraryFragment : Fragment() {
         libraryViewModel.state.observe(viewLifecycleOwner, Observer { state ->
             when(state) {
                 is LibraryState.DoneState -> showDoneState(state.libraryMovies)
+                is LibraryState.EmptyState -> showEmptyState()
                 is LibraryState.LoadingState -> showLoadingState()
                 is LibraryState.ErrorState -> showErrorState()
             }
@@ -106,18 +107,33 @@ class LibraryFragment : Fragment() {
 
     private fun showDoneState(libraryMovies: List<LibraryMovie>) {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
+        viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
         movies.clear()
         movies.addAll(libraryMovies)
         viewBinding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
+    private fun showEmptyState() {
+        viewBinding.loadingProgressbar.hide()
+        viewBinding.emptyLibraryIconImageView.visibility = View.VISIBLE
+        viewBinding.emptyLibraryTextView.visibility = View.VISIBLE
+
+        movies.clear()
+        viewBinding.recyclerView.adapter?.notifyDataSetChanged()
+    }
+
     private fun showLoadingState() {
         viewBinding.loadingProgressbar.show()
+        viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
+        viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
     }
 
     private fun showErrorState() {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
+        viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_wrong_operation_title)

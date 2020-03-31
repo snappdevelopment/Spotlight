@@ -30,4 +30,5 @@
     <string name="search_search_view_hint">Search for a movie</string>
     <string name="search_initial_state">Search Movies</string>
     <string name="search_no_results_state">No Movies Found</string>
+    <string name="empty_library">There are no movies in your library</string>
 </resources>
