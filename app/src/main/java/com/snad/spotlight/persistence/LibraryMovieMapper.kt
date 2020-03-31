@@ -31,11 +31,13 @@ fun Movie.toLibraryMovie(): LibraryMovie {
         poster_path = this.poster_path,
         release_date = this.release_date,
         revenue = this.revenue,
+        reviews = this.reviews.reviews,
         runtime = this.runtime,
         tagline = this.tagline,
         title = this.title,
         trailer = trailer?.key,
         video = this.video,
         vote_average = this.vote_average,
-        vote_count = this.vote_count)
+        vote_count = this.vote_count
+    )
 }

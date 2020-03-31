@@ -32,7 +32,8 @@ data class Movie (
 
 	val images: Images,
 	val videos: Videos,
-	val credits: Credits
+	val credits: Credits,
+	val reviews: Reviews
 )
 
 @JsonClass(generateAdapter = true)

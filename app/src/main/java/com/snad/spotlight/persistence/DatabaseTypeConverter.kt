@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.snad.spotlight.network.models.Backdrop
 import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.network.models.Poster
+import com.snad.spotlight.network.models.Review
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -70,5 +71,29 @@ class DatabaseTypeConverter {
         val castAdapter: JsonAdapter<List<CastMember>> = moshi.adapter(castType)
 
         return castAdapter.fromJson(cast)
+    }
+
+    @TypeConverter
+    fun reviewsToJson(reviews: List<Review>): String {
+        val moshi = Moshi.Builder().build()
+        val reviewType: Type = Types.newParameterizedType(
+            List::class.java,
+            Review::class.java
+        )
+        val reviewsAdapter: JsonAdapter<List<Review>> = moshi.adapter(reviewType)
+
+        return reviewsAdapter.toJson(reviews)
+    }
+
+    @TypeConverter
+    fun reviewsFromJson(reviews: String): List<Review>? {
+        val moshi = Moshi.Builder().build()
+        val reviewType: Type = Types.newParameterizedType(
+            List::class.java,
+            Review::class.java
+        )
+        val reviewsAdapter: JsonAdapter<List<Review>> = moshi.adapter(reviewType)
+
+        return reviewsAdapter.fromJson(reviews)
     }
 }

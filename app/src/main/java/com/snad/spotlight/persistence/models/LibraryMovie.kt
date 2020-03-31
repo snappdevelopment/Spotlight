@@ -6,6 +6,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.snad.spotlight.network.models.Backdrop
 import com.snad.spotlight.network.models.CastMember
+import com.snad.spotlight.network.models.Review
 import com.snad.spotlight.network.models.Video
 import com.snad.spotlight.persistence.DatabaseTypeConverter
 import java.util.Calendar
@@ -30,6 +31,8 @@ data class LibraryMovie(
     val poster_path : String?,
     val release_date : String,
     val revenue : Int,
+    @TypeConverters(DatabaseTypeConverter::class)
+    val reviews: List<Review>,
     val runtime : Int?,
     val tagline : String?,
     val title : String,

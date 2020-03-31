@@ -22,7 +22,10 @@ class NewMoviesViewModel(
             val result = newMoviesRepository.loadNewMovies()
             withContext(Dispatchers.Main) {
                 when(result) {
-                    is NewMoviesResult.Success -> state.value = NewMoviesState.DoneState(result.newMovies)
+                    is NewMoviesResult.Success -> {
+                        val sortedMovies = result.newMovies.movies.sortedByDescending { listMovie -> listMovie.popularity }
+                        state.value = NewMoviesState.DoneState(result.newMovies.copy(movies = sortedMovies))
+                    }
                     is NewMoviesResult.NetworkError -> state.value = NewMoviesState.NetworkErrorState
                     is NewMoviesResult.ConnectionError -> state.value = NewMoviesState.NetworkErrorState
                     is NewMoviesResult.AuthenticationError -> state.value = NewMoviesState.AuthenticationErrorState
