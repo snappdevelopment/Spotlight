@@ -25,7 +25,11 @@ class MovieDetailsViewModel(
                 withContext(Dispatchers.Main) {
                     when(movieDetailsResult) {
                         is MovieDetailsResult.Success -> {
-                            val sortedBackdrops = movieDetailsResult.movie.backdrops.sortedByDescending { backdrop -> backdrop.vote_average }
+                            val sortedBackdrops = movieDetailsResult.movie.backdrops.sortedByDescending { backdrop ->
+                                backdrop.vote_average
+                            }.filter { backdrop ->
+                                backdrop.file_path != movieDetailsResult.movie.backdrop_path
+                            }
                             val sortedCast = movieDetailsResult.movie.cast.sortedBy { castMember -> castMember.order }
                             state.value = MovieDetailsState.DoneState(
                                 movieDetailsResult.movie.copy(backdrops = sortedBackdrops, cast = sortedCast),

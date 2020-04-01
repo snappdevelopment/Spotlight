@@ -114,6 +114,9 @@
     <dimen name="movie_detail_reviews_rv_item_author_margin_top">16dp</dimen>
     <dimen name="movie_detail_reviews_rv_item_text_size">14sp</dimen>
 
+    <dimen name="movie_detail_headline_margin">16dp</dimen>
+    <dimen name="movie_detail_headline_text_size">24sp</dimen>
+
     <dimen name="movie_detail_trailer_fab_margin">16dp</dimen>
 
     <!--Search-->

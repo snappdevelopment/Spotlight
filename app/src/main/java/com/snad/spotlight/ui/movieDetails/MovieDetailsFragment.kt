@@ -207,17 +207,39 @@ class MovieDetailsFragment: Fragment() {
             }
         }
 
-        backdrops.clear()
-        backdrops.addAll(movie.backdrops)
-        viewBinding.backdropsRecyclerView.adapter?.notifyDataSetChanged()
+        if(movie.backdrops.isNotEmpty()) {
+            viewBinding.backdropsRecyclerView.visibility = View.VISIBLE
+            backdrops.clear()
+            backdrops.addAll(movie.backdrops)
+            viewBinding.backdropsRecyclerView.adapter?.notifyDataSetChanged()
+        }
+        else {
+            viewBinding.backdropsRecyclerView.visibility = View.GONE
+        }
 
-        castMember.clear()
-        castMember.addAll(movie.cast)
-        viewBinding.castRecyclerView.adapter?.notifyDataSetChanged()
+        if(movie.cast.isNotEmpty()) {
+            viewBinding.castRecyclerView.visibility = View.VISIBLE
+            viewBinding.castHeadline.visibility = View.VISIBLE
+            castMember.clear()
+            castMember.addAll(movie.cast)
+            viewBinding.castRecyclerView.adapter?.notifyDataSetChanged()
+        }
+        else {
+            viewBinding.castRecyclerView.visibility = View.GONE
+            viewBinding.castHeadline.visibility = View.GONE
+        }
 
-        reviews.clear()
-        reviews.addAll(movie.reviews)
-        viewBinding.reviewsRecyclerView.adapter?.notifyDataSetChanged()
+        if(movie.reviews.isNotEmpty()) {
+            viewBinding.reviewsRecyclerView.visibility = View.VISIBLE
+            viewBinding.reviewsHeadline.visibility = View.VISIBLE
+            reviews.clear()
+            reviews.addAll(movie.reviews)
+            viewBinding.reviewsRecyclerView.adapter?.notifyDataSetChanged()
+        }
+        else {
+            viewBinding.reviewsRecyclerView.visibility = View.GONE
+            viewBinding.reviewsHeadline.visibility = View.GONE
+        }
     }
 
     private fun setColorPalette(isInLibrary: Boolean, hasBeenWatched: Boolean) {
@@ -238,7 +260,7 @@ class MovieDetailsFragment: Fragment() {
 
                     if (primarySwatch != null && accentSwatch != null) {
                         viewBinding.scrollView.setBackgroundColor(primarySwatch.rgb)
-                        viewBinding.backdropFilter.setBackgroundColor(primarySwatch.rgb)
+//                        viewBinding.backdropFilter.setBackgroundColor(primarySwatch.rgb)
                         viewBinding.runtimeTextView.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.runtimeDivider.setBackgroundColor(primarySwatch.bodyTextColor)
                         viewBinding.genreTextView.setTextColor(primarySwatch.bodyTextColor)
@@ -248,6 +270,8 @@ class MovieDetailsFragment: Fragment() {
                         viewBinding.overviewCardView.setCardBackgroundColor(accentSwatch.rgb)
                         viewBinding.overviewHeadlineTextView.setTextColor(accentSwatch.titleTextColor)
                         viewBinding.overviewTextView.setTextColor(accentSwatch.bodyTextColor)
+                        viewBinding.castHeadline.setTextColor(primarySwatch.bodyTextColor)
+                        viewBinding.reviewsHeadline.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.trailerFAB.backgroundTintList = ColorStateList.valueOf(accentSwatch.rgb)
                         viewBinding.trailerFAB.imageTintList = ColorStateList.valueOf(resources.getColor(R.color.movieDetailTrailerIconColorTinted, null))
 

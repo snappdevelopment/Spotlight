@@ -29,5 +29,6 @@
     <color name="movieDetailCardBackground">#FFFFFF</color>
     <color name="movieDetailBackground">#FFFFFF</color>
     <color name="movieDetailText">@android:color/tertiary_text_dark</color>
+    <color name="movieDetailHeadline">#404040</color>
 
 </resources>
