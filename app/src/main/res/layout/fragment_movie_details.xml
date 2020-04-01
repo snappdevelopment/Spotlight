@@ -246,9 +246,20 @@
                 tools:itemCount="5"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/overviewCardView"
-                app:layout_constraintBottom_toTopOf="@+id/castRecyclerView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/castHeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/movie_detail_headline_margin"
+                android:layout_marginStart="@dimen/movie_detail_headline_margin"
+                android:textSize="@dimen/movie_detail_headline_text_size"
+                android:textColor="@color/movieDetailHeadline"
+                android:text="@string/movieDetailCast"
+                app:layout_constraintTop_toBottomOf="@+id/backdropsRecyclerView"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/castRecyclerView"
@@ -262,9 +273,21 @@
                 tools:listitem="@layout/recyclerview_item_movie_details_cast"
                 tools:itemCount="5"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/backdropsRecyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/castHeadline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/reviewsHeadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/movie_detail_headline_margin"
+                android:layout_marginStart="@dimen/movie_detail_headline_margin"
+                android:textSize="@dimen/movie_detail_headline_text_size"
+                android:textColor="@color/movieDetailHeadline"
+                android:text="@string/movieDetailReviews"
+                app:layout_constraintTop_toBottomOf="@+id/castRecyclerView"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewsRecyclerView"
@@ -277,7 +300,7 @@
                 tools:listitem="@layout/recyclerview_item_movie_details_reviews"
                 tools:itemCount="5"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/castRecyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/reviewsHeadline"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

@@ -28,7 +28,8 @@ class LibraryViewModel(
                                 state.value = LibraryState.EmptyState
                             }
                             else {
-                                state.value = LibraryState.DoneState(it.libraryMovies)
+                                val sortedLibraryMovies = it.libraryMovies.sortedByDescending { libraryMovie -> libraryMovie.added_at }
+                                state.value = LibraryState.DoneState(sortedLibraryMovies)
                             }
                         }
                         is LibraryRepositoryResult.DbError -> state.value = LibraryState.ErrorState

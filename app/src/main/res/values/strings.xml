@@ -21,14 +21,17 @@
     <string name="dialog_wrong_operation_message">An unknown error occurred. Please notify the maintainer of the app. The app will be closed now.</string>
     <string name="dialog_delete_movie_title">Remove Movie</string>
     <string name="dialog_delete_movie_message">Do you want to remove this movie from your library?</string>
+    <string name="empty_library">There are no movies in your library</string>
 
     <!--MovieDetail-->
     <string name="movie_detail_overview_headline">Story</string>
     <string name="movie_detail_runtime">%1$d min</string>
+    <string name="movieDetailCast">Cast</string>
+    <string name="movieDetailReviews">Reviews</string>
 
     <!--Search-->
     <string name="search_search_view_hint">Search for a movie</string>
     <string name="search_initial_state">Search Movies</string>
     <string name="search_no_results_state">No Movies Found</string>
-    <string name="empty_library">There are no movies in your library</string>
+
 </resources>
