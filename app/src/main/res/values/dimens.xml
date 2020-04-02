@@ -4,6 +4,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!--NewMovies-->
+    <dimen name="new_movies_header_margin_top">30dp</dimen>
+    <dimen name="new_movies_header_margin_start">16dp</dimen>
+    <dimen name="new_movies_header_text_size">34sp</dimen>
+    <dimen name="new_movies_rv_margin_top">30dp</dimen>
+
     <dimen name="new_movies_rv_item_padding">16dp</dimen>
     <dimen name="new_movies_rv_item_margin">8dp</dimen>
 
@@ -25,6 +30,11 @@
     <dimen name="new_movies_rv_item_overview_margin_top">12dp</dimen>
 
     <!--Library-->
+    <dimen name="library_header_text_size">34sp</dimen>
+    <dimen name="library_header_margin_start">16dp</dimen>
+    <dimen name="library_header_margin_top">30dp</dimen>
+
+    <dimen name="library_rv_margin_top">30dp</dimen>
     <dimen name="library_rv_item_padding">16dp</dimen>
     <dimen name="library_rv_item_margin">8dp</dimen>
 
@@ -122,6 +132,8 @@
     <!--Search-->
     <dimen name="search_search_view_margin">8dp</dimen>
     <dimen name="search_search_view_margin_bottom">16dp</dimen>
+    <dimen name="search_search_view_margin_top">30dp</dimen>
+
     <dimen name="search_status_text_size">24sp</dimen>
     <dimen name="search_status_icon_margin_bottom">12dp</dimen>
 

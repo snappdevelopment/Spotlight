@@ -6,11 +6,19 @@
     tools:background="#000000"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/tabs_header_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/search_search_view_margin"
+        android:layout_marginTop="@dimen/search_search_view_margin_top"
         android:layout_marginStart="@dimen/search_search_view_margin"
         android:layout_marginEnd="@dimen/search_search_view_margin"
         android:layout_marginBottom="@dimen/search_search_view_margin_bottom"
@@ -31,6 +39,8 @@
         android:orientation="vertical"
         tools:listitem="@layout/recyclerview_item_search"
         tools:itemCount="5"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintBottom_toBottomOf="parent"
