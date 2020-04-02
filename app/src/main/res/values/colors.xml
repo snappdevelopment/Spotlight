@@ -6,6 +6,7 @@
     <color name="bottomNavigationIconTintSelected">#3F51B5</color>
     <color name="bottomNavigationIconTint">#595959</color>
     <color name="statusBar">#FFFFFF</color>
+    <color name="tabsHeader">#FFFFFF</color>
 
     <color name="newMovieTitle">#404040</color>
     <color name="libraryTitle">#404040</color>
