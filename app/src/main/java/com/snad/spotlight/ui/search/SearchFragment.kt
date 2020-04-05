@@ -113,6 +113,8 @@ class SearchFragment : Fragment() {
 
     private fun showDoneState(moviesList: List<ListMovie>) {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 1f
         viewBinding.statusTextView.visibility = View.GONE
         viewBinding.statusIconImageView.visibility = View.GONE
         viewBinding.recyclerView.visibility = View.VISIBLE
@@ -123,6 +125,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoadingState() {
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 0.75f
         viewBinding.recyclerView.visibility = View.INVISIBLE
         viewBinding.statusTextView.visibility = View.GONE
         viewBinding.statusIconImageView.visibility = View.GONE
@@ -131,6 +135,8 @@ class SearchFragment : Fragment() {
 
     private fun showInitialState() {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 0.75f
         viewBinding.recyclerView.visibility = View.INVISIBLE
         viewBinding.statusTextView.text = getString(R.string.search_initial_state)
         viewBinding.statusTextView.visibility = View.VISIBLE
@@ -140,6 +146,8 @@ class SearchFragment : Fragment() {
 
     private fun showNoResultsState() {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 0.75f
         viewBinding.recyclerView.visibility = View.INVISIBLE
         viewBinding.statusTextView.text = getString(R.string.search_no_results_state)
         viewBinding.statusTextView.visibility = View.VISIBLE
