@@ -107,6 +107,8 @@ class LibraryFragment : Fragment() {
 
     private fun showDoneState(libraryMovies: List<LibraryMovie>) {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 1f
         viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
@@ -117,6 +119,8 @@ class LibraryFragment : Fragment() {
 
     private fun showEmptyState() {
         viewBinding.loadingProgressbar.hide()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 0.75f
         viewBinding.emptyLibraryIconImageView.visibility = View.VISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.VISIBLE
 
@@ -126,6 +130,8 @@ class LibraryFragment : Fragment() {
 
     private fun showLoadingState() {
         viewBinding.loadingProgressbar.show()
+        viewBinding.headerBackground.pivotY = 0f
+        viewBinding.headerBackground.scaleY = 0.75f
         viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
     }

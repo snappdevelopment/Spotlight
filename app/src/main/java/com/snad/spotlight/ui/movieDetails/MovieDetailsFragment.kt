@@ -6,18 +6,17 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
@@ -28,10 +27,10 @@ import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.network.models.Review
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.spotlight.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import kotlinx.android.synthetic.main.fragment_movie_details.*
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -177,13 +176,15 @@ class MovieDetailsFragment: Fragment() {
         }
         when(isInLibrary) {
             true -> {
-                viewBinding.addOrRemoveMovieFAB.isSelected = true
+                AnimationUtil.startMaterialFade(requireContext(), viewBinding.layoutRoot)
                 viewBinding.hasBeenWatchedFAB.visibility = View.VISIBLE
+                viewBinding.addOrRemoveMovieFAB.isSelected = true
                 viewBinding.hasBeenWatchedFAB.isSelected = movie.has_been_watched
             }
             false -> {
-                viewBinding.addOrRemoveMovieFAB.isSelected = false
+                AnimationUtil.startMaterialFade(requireContext(), viewBinding.layoutRoot, false)
                 viewBinding.hasBeenWatchedFAB.visibility = View.GONE
+                viewBinding.addOrRemoveMovieFAB.isSelected = false
             }
         }
         when(movie.trailer) {
