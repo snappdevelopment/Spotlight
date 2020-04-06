@@ -2,8 +2,13 @@ package com.snad.spotlight.persistence
 
 import com.snad.spotlight.network.models.Movie
 import com.snad.spotlight.persistence.models.LibraryMovie
+import java.util.*
 
-fun Movie.toLibraryMovie(): LibraryMovie {
+fun Movie.toLibraryMovie(
+    addedAt: Calendar? = null,
+    updatedAt: Calendar? = null,
+    hasBeenWatched: Boolean = false
+): LibraryMovie {
 
     val genres = this.genres.joinToString(separator = ", ", limit = 2, truncated = "") { genre ->
         genre.name
@@ -16,8 +21,9 @@ fun Movie.toLibraryMovie(): LibraryMovie {
     }
 
     return LibraryMovie(
-        added_at = null,
-        has_been_watched = false,
+        added_at = addedAt,
+        updated_at = updatedAt,
+        has_been_watched = hasBeenWatched,
         adult = this.adult,
         backdrop_path = this.backdrop_path,
         backdrops = this.images.backdrops,

@@ -43,6 +43,9 @@ class MovieDetailsViewModel(
                         is MovieDetailsResult.Error -> state.value = MovieDetailsState.ErrorState
                     }
                 }
+                if(movieDetailsResult is MovieDetailsResult.Success && movieDetailsResult.isInLibrary) {
+                    movieDetailsRepository.updateMovieData(movieDetailsResult.movie)
+                }
             }
         }
     }
@@ -57,7 +60,10 @@ class MovieDetailsViewModel(
             }
             else {
                 viewModelScope.launch(Dispatchers.IO) {
-                    val libraryMovie = currentState.movie.copy(added_at = Calendar.getInstance())
+                    val libraryMovie = currentState.movie.copy(
+                        added_at = Calendar.getInstance(),
+                        updated_at = Calendar.getInstance()
+                    )
                     movieDetailsRepository.addMovie(libraryMovie)
                 }
             }
