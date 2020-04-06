@@ -257,7 +257,7 @@
                 android:layout_marginStart="@dimen/movie_detail_headline_margin"
                 android:textSize="@dimen/movie_detail_headline_text_size"
                 android:textColor="@color/movieDetailHeadline"
-                android:text="@string/movieDetailCast"
+                android:text="@string/movie_detail_headline_cast"
                 app:layout_constraintTop_toBottomOf="@+id/backdropsRecyclerView"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -285,7 +285,7 @@
                 android:layout_marginStart="@dimen/movie_detail_headline_margin"
                 android:textSize="@dimen/movie_detail_headline_text_size"
                 android:textColor="@color/movieDetailHeadline"
-                android:text="@string/movieDetailReviews"
+                android:text="@string/movie_detail_headline_reviews"
                 app:layout_constraintTop_toBottomOf="@+id/castRecyclerView"
                 app:layout_constraintStart_toStartOf="parent" />
 
