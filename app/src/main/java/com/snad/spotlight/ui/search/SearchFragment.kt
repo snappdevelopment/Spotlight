@@ -8,15 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.SearchView
-import android.widget.TextView
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.R
 import com.snad.spotlight.SearchRepository
 import com.snad.spotlight.databinding.FragmentSearchBinding

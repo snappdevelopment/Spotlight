@@ -5,15 +5,40 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/tabs_header_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/library_header_margin_start"
+        android:layout_marginTop="@dimen/library_header_margin_top"
+        android:text="@string/header_library"
+        android:textColor="@color/tabsHeader"
+        android:textSize="@dimen/library_header_text_size"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/library_rv_margin_top"
         android:orientation="vertical"
         tools:listitem="@layout/recyclerview_item_library"
         tools:itemCount="5"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerTextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
