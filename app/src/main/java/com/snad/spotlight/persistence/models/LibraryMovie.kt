@@ -16,6 +16,7 @@ data class LibraryMovie(
     @PrimaryKey
     val id : Int,
     val added_at: Calendar?,
+    val updated_at: Calendar?,
     val adult : Boolean,
     val backdrop_path : String?,
     @TypeConverters(DatabaseTypeConverter::class)
