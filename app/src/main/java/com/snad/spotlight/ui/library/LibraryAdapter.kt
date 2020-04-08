@@ -3,7 +3,10 @@ package com.snad.spotlight.ui.library
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
 import com.snad.spotlight.persistence.models.LibraryMovie
@@ -13,7 +16,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 class LibraryAdapter(
     private val items: MutableList<LibraryMovie>,
     private val longClickListener: (LibraryMovie) -> Unit,
-    private val clickListener: (Int) -> Unit,
+    private val clickListener: (Int, ImageView) -> Unit,
     private val watchedClickListener: (LibraryMovie) -> Unit
 ): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
 
@@ -24,12 +27,18 @@ class LibraryAdapter(
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val item = items[position]
+
+        holder.coverImageView.transitionName = "cover${item.id}"
+
         holder.movieCard.setOnLongClickListener {
             longClickListener(item)
             true
         }
         holder.movieCard.setOnClickListener {
-            clickListener(item.id)
+            clickListener(
+                item.id,
+                holder.coverImageView
+            )
         }
         holder.hasBeenWatchedFAB.setOnClickListener {
             val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
@@ -45,6 +54,7 @@ class LibraryAdapter(
             .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
+
         holder.titleTextView.text = item.title
         if(item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
         else holder.releaseDateTextView.text = item.release_date.substring(0, 4)
