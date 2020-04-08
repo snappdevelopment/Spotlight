@@ -147,6 +147,7 @@ class MovieDetailsFragment: Fragment() {
 
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {
         viewBinding.loadingProgressbar.hide()
+        setViewsVisibility(View.VISIBLE)
         Picasso.get()
             .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
             .resize(92, 138)
@@ -315,10 +316,12 @@ class MovieDetailsFragment: Fragment() {
 
     private fun showLoadingState() {
         viewBinding.loadingProgressbar.show()
+        setViewsVisibility(View.INVISIBLE)
     }
 
     private fun showAuthenticationErrorState() {
         viewBinding.loadingProgressbar.hide()
+        setViewsVisibility(View.INVISIBLE)
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_authentication_title)
@@ -333,6 +336,7 @@ class MovieDetailsFragment: Fragment() {
 
     private fun showNetworkErrorState(id: Int) {
         viewBinding.loadingProgressbar.hide()
+        setViewsVisibility(View.INVISIBLE)
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_network_title)
@@ -348,6 +352,7 @@ class MovieDetailsFragment: Fragment() {
 
     private fun showErrorState() {
         viewBinding.loadingProgressbar.hide()
+        setViewsVisibility(View.INVISIBLE)
 
         AlertDialog.Builder(context)
             .setTitle(R.string.dialog_error_title)
@@ -358,5 +363,21 @@ class MovieDetailsFragment: Fragment() {
             }
             .create()
             .show()
+    }
+
+    private fun setViewsVisibility(visibility: Int) {
+        viewBinding.releaseDateTextView.visibility = visibility
+        viewBinding.runtimeTextView.visibility = visibility
+        viewBinding.runtimeDivider.visibility = visibility
+        viewBinding.genreTextView.visibility = visibility
+        viewBinding.hasBeenWatchedFAB.visibility = visibility
+        viewBinding.addOrRemoveMovieFAB.visibility = visibility
+        viewBinding.reviewsHeadline.visibility = visibility
+        viewBinding.castHeadline.visibility = visibility
+        viewBinding.trailerFAB.visibility = visibility
+        viewBinding.backdropFilter.visibility = visibility
+        viewBinding.averageVoteImageView.visibility = visibility
+        viewBinding.averageVoteTextView.visibility = visibility
+        viewBinding.overviewCardView.visibility = visibility
     }
 }
