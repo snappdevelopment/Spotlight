@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,13 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavArgs
+import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
+import androidx.transition.TransitionInflater
+import com.google.android.material.transition.MaterialArcMotion
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialContainerTransformSharedElementCallback
 import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
@@ -47,13 +54,18 @@ class MovieDetailsFragment: Fragment() {
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val movieId = arguments?.getInt("id")
-        movieId ?: throw NullPointerException("MovieId is null")
+        val arguments: MovieDetailsFragmentArgs by navArgs()
+        val movieId = arguments.id
 
 //        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 //        requireActivity().window.attributes.flags = requireActivity().window.attributes.flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -71,6 +83,8 @@ class MovieDetailsFragment: Fragment() {
 //        activity?.window?.statusBarColor = Color.TRANSPARENT
 
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+
+        viewBinding.coverImageView.transitionName = "cover${movieId}"
 
         viewBinding.backdropsRecyclerView.adapter = BackdropsAdapter(backdrops)
         viewBinding.castRecyclerView.adapter = CastAdapter(castMember)
