@@ -3,6 +3,7 @@ package com.snad.spotlight.ui.newMovies
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemNewMoviesBinding
@@ -12,7 +13,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class NewMoviesAdapter(
     private val items: MutableList<ListMovie>,
-    private val clickListener: (Int) -> Unit
+    private val clickListener: (Int, ImageView) -> Unit
 ): RecyclerView.Adapter<NewMoviesAdapter.NewMoviesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewMoviesViewHolder {
@@ -22,8 +23,11 @@ class NewMoviesAdapter(
 
     override fun onBindViewHolder(holder: NewMoviesViewHolder, position: Int) {
         val item = items[position]
+
+        holder.coverImageView.transitionName = "cover${item.id}"
+
         holder.movieCard.setOnClickListener {
-            clickListener(item.id)
+            clickListener(item.id, holder.coverImageView)
         }
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)

@@ -3,6 +3,7 @@ package com.snad.spotlight.ui.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.R
@@ -14,7 +15,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class SearchAdapter(
     private val items: MutableList<ListMovie>,
-    private val clickListener: (Int) -> Unit
+    private val clickListener: (Int, ImageView) -> Unit
 ): RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -24,8 +25,11 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val item = items[position]
+
+        holder.coverImageView.transitionName = "cover${item.id}"
+
         holder.movieCard.setOnClickListener {
-            clickListener(item.id)
+            clickListener(item.id, holder.coverImageView)
         }
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)

@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.widget.ContentLoadingProgressBar
+import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.NewMoviesRepository
@@ -92,10 +95,12 @@ class NewMoviesFragment : Fragment() {
         binding = null
     }
 
-    private fun movieClickListener(id: Int) {
-        val bundle = Bundle()
-        bundle.putInt("id", id)
-        findNavController().navigate(R.id.action_navigation_new_movies_to_navigation_movie_details, bundle)
+    private fun movieClickListener(id: Int, coverImageView: ImageView) {
+        val extras = FragmentNavigatorExtras(
+            coverImageView to "cover${id}"
+        )
+        val action = NewMoviesFragmentDirections.actionNavigationNewMoviesToNavigationMovieDetails(id)
+        findNavController().navigate(action, extras)
     }
 
     private fun showDoneState(newMovies: NewMovies) {
