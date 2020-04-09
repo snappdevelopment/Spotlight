@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.R
@@ -16,7 +17,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 class LibraryAdapter(
     private val items: MutableList<LibraryMovie>,
     private val longClickListener: (LibraryMovie) -> Unit,
-    private val clickListener: (Int, ImageView) -> Unit,
+    private val clickListener: (Int, CardView) -> Unit,
     private val watchedClickListener: (LibraryMovie) -> Unit
 ): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
 
@@ -28,7 +29,7 @@ class LibraryAdapter(
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val item = items[position]
 
-        holder.coverImageView.transitionName = "cover${item.id}"
+        holder.coverCardView.transitionName = "cover${item.id}"
 
         holder.movieCard.setOnLongClickListener {
             longClickListener(item)
@@ -37,7 +38,7 @@ class LibraryAdapter(
         holder.movieCard.setOnClickListener {
             clickListener(
                 item.id,
-                holder.coverImageView
+                holder.coverCardView
             )
         }
         holder.hasBeenWatchedFAB.setOnClickListener {
@@ -70,6 +71,7 @@ class LibraryAdapter(
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val movieCard = viewBinding.movieCard
         val coverImageView = viewBinding.coverImageView
+        val coverCardView = viewBinding.coverCardView
         val titleTextView = viewBinding.titleTextView
         val releaseDateTextView = viewBinding.releaseDateTextView
         val runtimeTextView = viewBinding.runtimeTextView
