@@ -149,8 +149,8 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.loadingProgressbar.hide()
         setViewsVisibility(View.VISIBLE)
         Picasso.get()
-            .load("https://image.tmdb.org/t/p/w92${movie.poster_path}")
-            .resize(92, 138)
+            .load("https://image.tmdb.org/t/p/w154${movie.poster_path}")
+            .resize(154, 231)
             .centerCrop()
             .placeholder(R.drawable.cover_image_placeholder)
             .error(R.drawable.cover_image_error)
@@ -158,7 +158,8 @@ class MovieDetailsFragment: Fragment() {
             .into(viewBinding.coverImageView)
         Picasso.get()
             .load("https://image.tmdb.org/t/p/w780${movie.backdrop_path}")
-            .fit()
+            .resize(780, 439)
+            .centerCrop()
             .transform(RoundedCornersTransformation(4, 1))
             .into(viewBinding.backdropImageView, object: Callback {
                 override fun onSuccess() {

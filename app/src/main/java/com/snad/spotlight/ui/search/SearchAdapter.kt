@@ -33,8 +33,8 @@ class SearchAdapter(
         }
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
-        picasso.load("https://image.tmdb.org/t/p/w92${item.poster_path}")
-            .resize(92, 138)
+        picasso.load("https://image.tmdb.org/t/p/w154${item.poster_path}")
+            .resize(154, 231)
             .centerCrop()
             .placeholder(R.drawable.cover_image_placeholder)
             .error(R.drawable.cover_image_error)
