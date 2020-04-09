@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.SearchView
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -107,9 +108,9 @@ class SearchFragment : Fragment() {
         binding = null
     }
 
-    private fun movieClickListener(id: Int, coverImageView: ImageView) {
+    private fun movieClickListener(id: Int, coverCardView: CardView) {
         val extras = FragmentNavigatorExtras(
-            coverImageView to "cover${id}"
+            coverCardView to "cover${id}"
         )
         val action = SearchFragmentDirections.actionNavigationSearchToNavigationMovieDetails(id)
         findNavController().navigate(action, extras)

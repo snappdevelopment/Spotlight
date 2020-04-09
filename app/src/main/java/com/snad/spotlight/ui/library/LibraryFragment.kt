@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -90,9 +91,9 @@ class LibraryFragment : Fragment() {
             .show()
     }
 
-    private fun movieClickListener(id: Int, coverImageView: ImageView) {
+    private fun movieClickListener(id: Int, coverCardView: CardView) {
         val extras = FragmentNavigatorExtras(
-            coverImageView to "cover${id}"
+            coverCardView to "cover${id}"
         )
         val action = LibraryFragmentDirections.actionNavigationLibraryToNavigationMovieDetails(id)
         findNavController().navigate(action, extras)

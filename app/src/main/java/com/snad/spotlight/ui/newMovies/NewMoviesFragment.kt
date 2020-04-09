@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
@@ -95,9 +96,9 @@ class NewMoviesFragment : Fragment() {
         binding = null
     }
 
-    private fun movieClickListener(id: Int, coverImageView: ImageView) {
+    private fun movieClickListener(id: Int, coverCardView: CardView) {
         val extras = FragmentNavigatorExtras(
-            coverImageView to "cover${id}"
+            coverCardView to "cover${id}"
         )
         val action = NewMoviesFragmentDirections.actionNavigationNewMoviesToNavigationMovieDetails(id)
         findNavController().navigate(action, extras)
