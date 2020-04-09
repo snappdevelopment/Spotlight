@@ -13,14 +13,24 @@
     android:elevation="4dp"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/coverImageView"
-        android:layout_width="92dp"
-        android:layout_height="138dp"
-        android:elevation="2dp"
-        android:outlineProvider="bounds"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/coverCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/coverImageView"
+            android:layout_width="92dp"
+            android:layout_height="138dp"
+            android:scaleType="centerCrop"/>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/titleTextView"
@@ -32,8 +42,9 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:includeFontPadding="false"
-        app:layout_constraintTop_toTopOf="@id/coverImageView"
-        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/coverCardView"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Fast and the Furious 9: Final Race"/>
 
@@ -45,7 +56,7 @@
         android:layout_marginStart="@dimen/search_rv_item_release_date_margin"
         android:textSize="@dimen/search_rv_item_release_date_size"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
-        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        app:layout_constraintStart_toEndOf="@id/coverCardView"
         tools:text="2020"/>
 
     <ImageView
@@ -72,15 +83,17 @@
     <TextView
         android:id="@+id/overviewTextView"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="@dimen/search_rv_item_overview_margin_left"
         android:layout_marginTop="@dimen/search_rv_item_overview_margin_top"
         android:maxLines="5"
         android:ellipsize="end"
         android:textSize="@dimen/search_rv_item_overview_size"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/coverImageView"
+        app:layout_constraintStart_toEndOf="@id/coverCardView"
         app:layout_constraintTop_toBottomOf="@id/averageVoteTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="This is a very long description. Lorem ipsum my akdj aksd fkas dkas fdkas dkae skkd fe skd j eks fk ek sjd fka sdk fj aks dkf ek ak dkfe  ak  ksdkfaksdjf aksd fkejf ksdjf kwejfksdjf kejskdjfekfj ksdjf ek" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
@@ -43,9 +42,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-//    override fun onSupportNavigateUp(): Boolean {
-//        findNavController(R.id.nav_host_fragment).navigateUp()
-//        return true
-//    }
 }
