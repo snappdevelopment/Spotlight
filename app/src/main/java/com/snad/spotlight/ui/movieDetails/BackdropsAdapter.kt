@@ -22,7 +22,7 @@ class BackdropsAdapter(
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w780${item.file_path}")
-            .resize(300, 169)
+            .resize(780, 439)
             .centerCrop()
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.imageImageView)

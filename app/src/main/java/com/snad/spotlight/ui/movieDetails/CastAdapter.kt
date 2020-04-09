@@ -28,7 +28,7 @@ class CastAdapter(
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w185${item.profile_path}")
-            .resize(135, 228)
+            .resize(185, 278)
             .centerCrop()
             .placeholder(R.drawable.cover_image_placeholder)
             .error(R.drawable.cover_image_error)
