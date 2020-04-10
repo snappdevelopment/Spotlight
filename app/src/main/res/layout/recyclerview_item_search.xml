@@ -11,6 +11,7 @@
     android:focusable="true"
     android:background="@drawable/card_background"
     android:elevation="4dp"
+    android:animateLayoutChanges="true"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
