@@ -1,5 +1,5 @@
 .DS_Store
-app/src/main/java/com/snad/spotlight/Credentials.kt
+#app/src/main/java/com/snad/spotlight/Credentials.kt
 # Built application files
 *.apk
 *.aar
