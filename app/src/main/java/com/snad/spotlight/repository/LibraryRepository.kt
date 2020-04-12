@@ -1,4 +1,4 @@
-package com.snad.spotlight
+package com.snad.spotlight.repository
 
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.LibraryDbResult
@@ -12,7 +12,9 @@ class LibraryRepository(
     suspend fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
         return libraryDb.getAllMovies().map { result ->
             when(result) {
-                is LibraryDbResult.SuccessAllMovies -> LibraryRepositoryResult.Success(result.libraryMovies)
+                is LibraryDbResult.SuccessAllMovies -> LibraryRepositoryResult.Success(
+                    result.libraryMovies
+                )
                 else -> LibraryRepositoryResult.DbError
             }
         }

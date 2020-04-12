@@ -5,18 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.cardview.widget.CardView
-import androidx.core.widget.ContentLoadingProgressBar
-import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.NewMoviesRepository
+import com.snad.spotlight.repository.NewMoviesRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentNewMoviesBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
@@ -68,7 +64,8 @@ class NewMoviesFragment : Fragment() {
 
         val service = retrofit.create<NewMoviesService>(NewMoviesService::class.java)
         val newMoviesApi = NewMoviesApi(service)
-        val newMoviesRepository = NewMoviesRepository(newMoviesApi)
+        val newMoviesRepository =
+            NewMoviesRepository(newMoviesApi)
 
         newMoviesViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

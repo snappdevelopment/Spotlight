@@ -3,8 +3,8 @@ package com.snad.spotlight.ui.library
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.LibraryRepository
-import com.snad.spotlight.LibraryRepositoryResult
+import com.snad.spotlight.repository.LibraryRepository
+import com.snad.spotlight.repository.LibraryRepositoryResult
 import com.snad.spotlight.persistence.models.LibraryMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect

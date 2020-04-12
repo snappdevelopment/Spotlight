@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.SearchView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
@@ -17,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.snad.spotlight.R
-import com.snad.spotlight.SearchRepository
+import com.snad.spotlight.repository.SearchRepository
 import com.snad.spotlight.databinding.FragmentSearchBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.MovieSearchApi
@@ -67,7 +66,8 @@ class SearchFragment : Fragment() {
 
         val service = retrofit.create<SearchService>(SearchService::class.java)
         val movieSearchApi = MovieSearchApi(service)
-        val searchRepository = SearchRepository(movieSearchApi)
+        val searchRepository =
+            SearchRepository(movieSearchApi)
 
         searchViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
