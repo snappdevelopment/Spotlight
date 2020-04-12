@@ -1,4 +1,4 @@
-package com.snad.spotlight
+package com.snad.spotlight.repository
 
 import com.snad.spotlight.network.MovieSearchApi
 import com.snad.spotlight.network.MovieSearchApiResult
@@ -10,7 +10,9 @@ class SearchRepository(
     suspend fun searchMovies(title: String): SearchRepositoryResult {
         val result = movieSearchApi.searchMovie(title)
         return when(result) {
-            is MovieSearchApiResult.Success -> SearchRepositoryResult.Success(result.searchResults)
+            is MovieSearchApiResult.Success -> SearchRepositoryResult.Success(
+                result.searchResults
+            )
             is MovieSearchApiResult.NetworkError -> SearchRepositoryResult.NetworkError
             is MovieSearchApiResult.ConnectionError -> SearchRepositoryResult.ConnectionError
             is MovieSearchApiResult.AuthenticationError -> SearchRepositoryResult.AuthenticationError

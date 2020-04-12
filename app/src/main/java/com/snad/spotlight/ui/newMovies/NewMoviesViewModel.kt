@@ -3,8 +3,8 @@ package com.snad.spotlight.ui.newMovies
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.NewMoviesRepository
-import com.snad.spotlight.NewMoviesResult
+import com.snad.spotlight.repository.NewMoviesRepository
+import com.snad.spotlight.repository.NewMoviesResult
 import com.snad.spotlight.network.models.NewMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

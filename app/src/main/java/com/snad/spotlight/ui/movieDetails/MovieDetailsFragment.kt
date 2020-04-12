@@ -6,24 +6,17 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
-import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
-import com.google.android.material.transition.MaterialArcMotion
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialContainerTransformSharedElementCallback
 import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
@@ -34,6 +27,7 @@ import com.snad.spotlight.network.models.CastMember
 import com.snad.spotlight.network.models.Review
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.spotlight.repository.MovieDetailsRepository
 import com.snad.spotlight.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -109,7 +103,11 @@ class MovieDetailsFragment: Fragment() {
         val app = context!!.applicationContext as App
         val libraryDb = LibraryDb(app.appDb)
         val movieApi = MovieApi(movieService)
-        val movieDetailsRepository = MovieDetailsRepository(libraryDb, movieApi)
+        val movieDetailsRepository =
+            MovieDetailsRepository(
+                libraryDb,
+                movieApi
+            )
 
         movieDetailsViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

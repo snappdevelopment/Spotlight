@@ -3,12 +3,9 @@ package com.snad.spotlight.ui.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.NewMoviesRepository
-import com.snad.spotlight.NewMoviesResult
-import com.snad.spotlight.SearchRepository
-import com.snad.spotlight.SearchRepositoryResult
+import com.snad.spotlight.repository.SearchRepository
+import com.snad.spotlight.repository.SearchRepositoryResult
 import com.snad.spotlight.network.models.ListMovie
-import com.snad.spotlight.network.models.NewMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

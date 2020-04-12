@@ -1,4 +1,4 @@
-package com.snad.spotlight
+package com.snad.spotlight.repository
 
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesApiResult
@@ -10,7 +10,9 @@ class NewMoviesRepository(
     suspend fun loadNewMovies(): NewMoviesResult {
         val result = newMoviesApi.loadNewMovies()
         return when(result) {
-            is NewMoviesApiResult.Success -> NewMoviesResult.Success(result.newMovies)
+            is NewMoviesApiResult.Success -> NewMoviesResult.Success(
+                result.newMovies
+            )
             is NewMoviesApiResult.NetworkError -> NewMoviesResult.NetworkError
             is NewMoviesApiResult.ConnectionError -> NewMoviesResult.ConnectionError
             is NewMoviesApiResult.AuthenticationError -> NewMoviesResult.AuthenticationError

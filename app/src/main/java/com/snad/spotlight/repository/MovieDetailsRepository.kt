@@ -1,6 +1,5 @@
-package com.snad.spotlight
+package com.snad.spotlight.repository
 
-import android.util.Log
 import com.snad.spotlight.network.MovieApi
 import com.snad.spotlight.network.MovieApiResult
 import com.snad.spotlight.persistence.LibraryDb
@@ -19,7 +18,10 @@ class MovieDetailsRepository(
         val result = libraryDb.getMovieById(id)
         return result.map { libraryDbResult ->
             when(libraryDbResult) {
-                is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(libraryDbResult.libraryMovie, true)
+                is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(
+                    libraryDbResult.libraryMovie,
+                    true
+                )
                 is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
                 else -> MovieDetailsResult.Error
             }
@@ -62,7 +64,10 @@ class MovieDetailsRepository(
     private suspend fun loadMovieFromApi(id: Int): MovieDetailsResult {
         val result = movieApi.loadMovie(id)
         return when(result) {
-            is MovieApiResult.Success -> MovieDetailsResult.Success(result.movie.toLibraryMovie(), false)
+            is MovieApiResult.Success -> MovieDetailsResult.Success(
+                result.movie.toLibraryMovie(),
+                false
+            )
             is MovieApiResult.NetworkError -> MovieDetailsResult.NetworkError
             is MovieApiResult.ConnectionError -> MovieDetailsResult.ConnectionError
             is MovieApiResult.AuthenticationError -> MovieDetailsResult.AuthenticationError
