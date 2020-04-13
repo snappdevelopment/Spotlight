@@ -2,13 +2,13 @@
 
 ![](https://img.shields.io/badge/Platform-Android-brightgreen) ![](https://img.shields.io/badge/Version-1.0-brightgreen) ![](https://img.shields.io/badge/License-GNU_v3.0-blue)
 <br /><br />
-Spotlight is a app to look up movies and save them to a personal watch-list.
+Spotlight is an app to look up movies and save them to a personal watch-list.
 <br /><br />
 
 <p float="left">
-<img src="screenshots/library.png" height="500">
-<img src="screenshots/search.png" height="500">
-<img src="screenshots/movieDetails.gif" height="500">
+<kbd><img src="screenshots/library.png" height="500"></kbd>
+<kbd><img src="screenshots/search.png" height="500"></kbd>
+<kbd><img src="screenshots/movieDetails.gif" height="500"></kbd>
 </p>
 
 ## About
@@ -20,6 +20,7 @@ Spotlight shows details about a movie like the storyline, images, cast and revie
 ## Uses
 
 - Navigation Component (navigation between fragments)
+- Viewbinding
 - Viewmodel + LiveData
 - Coroutines + Flow (async data flow)
 - Repository Pattern
