@@ -6,9 +6,9 @@ Spotlight is an app to look up movies and save them to a personal watch-list.
 <br /><br />
 
 <p float="left">
-<kbd><img src="screenshots/library.png" height="500"></kbd>
-<kbd><img src="screenshots/search.png" height="500"></kbd>
-<kbd><img src="screenshots/movieDetails.gif" height="500"></kbd>
+<img src="screenshots/library.png" height="500">
+<img src="screenshots/search.png" height="500">
+<img src="screenshots/movieDetails.gif" height="500">
 </p>
 
 ## About
