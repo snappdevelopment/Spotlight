@@ -32,10 +32,6 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        activity?.transparentStatusBarEnabled(false)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, false)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, false)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)

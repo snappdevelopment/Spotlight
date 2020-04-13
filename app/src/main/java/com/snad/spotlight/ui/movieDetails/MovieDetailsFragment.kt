@@ -61,21 +61,6 @@ class MovieDetailsFragment: Fragment() {
         val arguments: MovieDetailsFragmentArgs by navArgs()
         val movieId = arguments.id
 
-//        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        requireActivity().window.attributes.flags = requireActivity().window.attributes.flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//        requireActivity().window.statusBarColor = Color.TRANSPARENT
-
-//        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-//        activity?.window?.statusBarColor = Color.TRANSPARENT
-
-//        activity?.transparentStatusBarEnabled(true)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS, true)
-//        activity?.setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, true)
-//        activity?.window?.statusBarColor = Color.TRANSPARENT
-
         binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
         viewBinding.coverImageView.transitionName = "cover${movieId}"
