@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -259,7 +260,11 @@ class MovieDetailsFragment: Fragment() {
                     }
 
                     if (primarySwatch != null && accentSwatch != null) {
-                        viewBinding.scrollView.setBackgroundColor(primarySwatch.rgb)
+//                        viewBinding.scrollView.setBackgroundColor(primarySwatch.rgb)
+
+                        AnimationUtil.circularRevealAnimation(viewBinding.background) {
+                            viewBinding.background.setBackgroundColor(primarySwatch.rgb)
+                        }
 //                        viewBinding.backdropFilter.setBackgroundColor(primarySwatch.rgb)
                         viewBinding.runtimeTextView.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.runtimeDivider.setBackgroundColor(primarySwatch.bodyTextColor)
@@ -267,9 +272,12 @@ class MovieDetailsFragment: Fragment() {
                         viewBinding.averageVoteTextView.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.averageVoteImageView.setColorFilter(primarySwatch.bodyTextColor)
                         viewBinding.taglineTextView.setTextColor(primarySwatch.bodyTextColor)
-                        viewBinding.overviewCardView.setCardBackgroundColor(accentSwatch.rgb)
-                        viewBinding.overviewHeadlineTextView.setTextColor(accentSwatch.titleTextColor)
-                        viewBinding.overviewTextView.setTextColor(accentSwatch.bodyTextColor)
+                        AnimationUtil.circularRevealAnimation(viewBinding.overviewBackground) {
+                            viewBinding.overviewBackground.setBackgroundColor(accentSwatch.rgb)
+//                            viewBinding.overviewCardView.setCardBackgroundColor(accentSwatch.rgb)
+                            viewBinding.overviewHeadlineTextView.setTextColor(accentSwatch.titleTextColor)
+                            viewBinding.overviewTextView.setTextColor(accentSwatch.bodyTextColor)
+                        }
                         viewBinding.castHeadline.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.reviewsHeadline.setTextColor(primarySwatch.bodyTextColor)
                         viewBinding.trailerFAB.backgroundTintList = ColorStateList.valueOf(accentSwatch.rgb)
