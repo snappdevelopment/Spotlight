@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutRoot"
+    android:animateLayoutChanges="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/castDetailBackground"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profileCardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/cast_detail_profile_margin_top"
+                android:layout_marginStart="@dimen/cast_detail_profile_margin_start"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="4dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profileImageView"
+                    android:layout_width="122dp"
+                    android:layout_height="168dp"
+                    android:scaleType="centerCrop"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cast_detail_name_margin"
+                android:layout_marginEnd="@dimen/cast_detail_name_margin"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textSize="@dimen/cast_detail_name_size"
+                android:textColor="@color/castDetailName"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                app:layout_constraintTop_toTopOf="@id/profileCardView"
+                tools:text="Arnold Schwarzenegger" />
+
+            <TextView
+                android:id="@+id/birthdayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBirthday"
+                android:layout_marginTop="@dimen/cast_detail_birthday_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_birthday_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_birthday_margin_start"
+                android:textSize="@dimen/cast_detail_birthday_size"
+                app:layout_constraintTop_toBottomOf="@id/nameTextView"
+                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                tools:text="1983-04-12"/>
+
+            <View
+                android:id="@+id/birthdayDashView"
+                android:layout_width="5dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="@dimen/cast_detail_birthday_dash_margin"
+                android:background="@color/castDetailBirthdayDash"
+                app:layout_constraintTop_toTopOf="@+id/birthdayTextView"
+                app:layout_constraintBottom_toBottomOf="@id/birthdayTextView"
+                app:layout_constraintStart_toEndOf="@id/birthdayTextView"/>
+
+            <TextView
+                android:id="@+id/deathdayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBirthday"
+                android:layout_marginTop="@dimen/cast_detail_birthday_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_birthday_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_deathday_margin_start"
+                android:textSize="@dimen/cast_detail_birthday_size"
+                app:layout_constraintTop_toBottomOf="@id/nameTextView"
+                app:layout_constraintStart_toEndOf="@id/birthdayDashView"
+                tools:text="2012-11-02"/>
+
+            <TextView
+                android:id="@+id/birthplaceHeaderTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBirthplace"
+                android:layout_marginTop="@dimen/cast_detail_birthplace_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_birthplace_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_birthplace_header_margin_start"
+                android:textSize="@dimen/cast_detail_birthplace_size"
+                app:layout_constraintTop_toBottomOf="@id/birthdayTextView"
+                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                android:text="@string/cast_detail_birthplace"/>
+
+            <TextView
+                android:id="@+id/birthplaceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBirthplace"
+                android:layout_marginTop="@dimen/cast_detail_birthplace_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_birthplace_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_birthplace_margin_start"
+                android:textSize="@dimen/cast_detail_birthplace_size"
+                app:layout_constraintTop_toBottomOf="@id/birthdayTextView"
+                app:layout_constraintStart_toEndOf="@id/birthplaceHeaderTextView"
+                tools:text="Vienna, Austria"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/knownForHeaderTextView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/castDetailBirthplace"-->
+<!--                android:layout_marginTop="@dimen/cast_detail_known_for_margin_vertical"-->
+<!--                android:layout_marginBottom="@dimen/cast_detail_known_for_margin_vertical"-->
+<!--                android:layout_marginStart="@dimen/cast_detail_known_for_header_margin_start"-->
+<!--                android:textSize="@dimen/cast_detail_known_for_size"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/birthplaceHeaderTextView"-->
+<!--                app:layout_constraintStart_toEndOf="@id/profileCardView"-->
+<!--                android:text="@string/cast_detail_known_for"/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/knownForTextView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/castDetailKnownFor"-->
+<!--                android:layout_marginTop="@dimen/cast_detail_known_for_margin_vertical"-->
+<!--                android:layout_marginBottom="@dimen/cast_detail_known_for_margin_vertical"-->
+<!--                android:layout_marginStart="@dimen/cast_detail_known_for_margin_start"-->
+<!--                android:textSize="@dimen/cast_detail_known_for_size"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/birthplaceHeaderTextView"-->
+<!--                app:layout_constraintStart_toEndOf="@id/knownForHeaderTextView"-->
+<!--                tools:text="Acting"/>-->
+
+            <TextView
+                android:id="@+id/bioHeadlineTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBioHeadline"
+                android:layout_marginTop="@dimen/cast_detail_bio_headline_margin_top"
+                app:layout_constraintTop_toBottomOf="@id/profileCardView"
+                app:layout_constraintStart_toStartOf="@id/profileCardView"
+                android:textSize="@dimen/cast_detail_bio_headline_size"
+                android:text="@string/cast_detail_bio_headline"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bioCardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/cast_detail_bio_card_margin_top"
+                android:layout_marginEnd="@dimen/cast_detail_bio_card_margin_end"
+                android:layout_marginBottom="@dimen/cast_detail_bio_card_margin_bottom"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toBottomOf="@id/bioHeadlineTextView"
+                app:layout_constraintStart_toStartOf="@id/profileCardView"
+                app:layout_constraintBottom_toTopOf="@+id/backdropsRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="4dp"
+                app:contentPadding="16dp">
+
+                <TextView
+                    android:id="@+id/bioTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/castDetailBioText"
+                    android:textSize="@dimen/cast_detail_bio_size"
+                    tools:text="This is a very long description. Lorem ipsum my akdj aksd fkas dkas fdkas dkae skkd fe skd j eks fk ek sjd fka sdk fj aks dkf ek ak dkfe  ak  ksdkfaksdjf aksd fkejf ksdjf kwejfksdjf kejskdjfekfj ksdjf ek" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/knownForHeadlineTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailKnownForHeadline"
+                android:layout_marginTop="@dimen/cast_detail_known_for_headline_margin_top"
+                app:layout_constraintTop_toBottomOf="@id/bioCardView"
+                app:layout_constraintStart_toStartOf="@id/profileCardView"
+                android:textSize="@dimen/cast_detail_known_for_headline_size"
+                android:text="@string/cast_detail_known_for_headline"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/knownForRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/cast_detail_known_for_rv_padding_start"
+                android:clipToPadding="false"
+                android:layout_marginTop="@dimen/cast_detail_known_for_rv_margin_top"
+                android:layout_marginBottom="@dimen/cast_detail_known_for_rv_margin_bottom"
+                tools:listitem="@layout/recyclerview_item_cast_details_known_for"
+                tools:itemCount="5"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/knownForHeadlineTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.core.widget.ContentLoadingProgressBar
+                android:id="@+id/loadingProgressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                style="?android:attr/progressBarStyle"
+                android:indeterminate="true"
+                android:layout_gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

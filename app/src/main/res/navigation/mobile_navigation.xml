@@ -39,6 +39,9 @@
         <argument
             android:name="id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_navigation_movie_details_to_navigation_cast_details"
+            app:destination="@id/navigation_cast_details" />
     </fragment>
 
     <fragment
@@ -52,6 +55,16 @@
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/navigation_search" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cast_details"
+        android:name="com.snad.spotlight.ui.castDetails.CastDetailsFragment"
+        android:label="fragment_cast_details"
+        tools:layout="@layout/fragment_cast_details">
+        <argument
+            android:name="id"
+            app:argType="integer" />
     </fragment>
 
 </navigation>
