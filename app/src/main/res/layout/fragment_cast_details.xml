@@ -32,8 +32,8 @@
 
                 <ImageView
                     android:id="@+id/profileImageView"
-                    android:layout_width="122dp"
-                    android:layout_height="168dp"
+                    android:layout_width="105dp"
+                    android:layout_height="158dp"
                     android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
 
@@ -54,6 +54,19 @@
                 tools:text="Arnold Schwarzenegger" />
 
             <TextView
+                android:id="@+id/birthdayHeaderTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailBirthdayHeader"
+                android:layout_marginTop="@dimen/cast_detail_birthday_header_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_birthday_header_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_birthday_header_margin_start"
+                android:textSize="@dimen/cast_detail_birthday_size"
+                app:layout_constraintTop_toBottomOf="@id/nameTextView"
+                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                android:text="@string/cast_detail_birthday" />
+
+            <TextView
                 android:id="@+id/birthdayTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,18 +76,21 @@
                 android:layout_marginStart="@dimen/cast_detail_birthday_margin_start"
                 android:textSize="@dimen/cast_detail_birthday_size"
                 app:layout_constraintTop_toBottomOf="@id/nameTextView"
-                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                app:layout_constraintStart_toEndOf="@id/birthdayHeaderTextView"
                 tools:text="1983-04-12"/>
 
-            <View
-                android:id="@+id/birthdayDashView"
-                android:layout_width="5dp"
-                android:layout_height="2dp"
-                android:layout_marginStart="@dimen/cast_detail_birthday_dash_margin"
-                android:background="@color/castDetailBirthdayDash"
-                app:layout_constraintTop_toTopOf="@+id/birthdayTextView"
-                app:layout_constraintBottom_toBottomOf="@id/birthdayTextView"
-                app:layout_constraintStart_toEndOf="@id/birthdayTextView"/>
+            <TextView
+                android:id="@+id/deathdayHeaderTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/castDetailDeathdayHeader"
+                android:layout_marginTop="@dimen/cast_detail_deathday_header_margin_vertical"
+                android:layout_marginBottom="@dimen/cast_detail_deathday_header_margin_vertical"
+                android:layout_marginStart="@dimen/cast_detail_deathday_header_margin_start"
+                android:textSize="@dimen/cast_detail_deathday_size"
+                app:layout_constraintTop_toBottomOf="@id/birthdayHeaderTextView"
+                app:layout_constraintStart_toEndOf="@id/profileCardView"
+                android:text="@string/cast_detail_deathday" />
 
             <TextView
                 android:id="@+id/deathdayTextView"
@@ -85,8 +101,8 @@
                 android:layout_marginBottom="@dimen/cast_detail_birthday_margin_vertical"
                 android:layout_marginStart="@dimen/cast_detail_deathday_margin_start"
                 android:textSize="@dimen/cast_detail_birthday_size"
-                app:layout_constraintTop_toBottomOf="@id/nameTextView"
-                app:layout_constraintStart_toEndOf="@id/birthdayDashView"
+                app:layout_constraintTop_toBottomOf="@id/birthdayHeaderTextView"
+                app:layout_constraintStart_toEndOf="@id/deathdayHeaderTextView"
                 tools:text="2012-11-02"/>
 
             <TextView
@@ -98,21 +114,25 @@
                 android:layout_marginBottom="@dimen/cast_detail_birthplace_margin_vertical"
                 android:layout_marginStart="@dimen/cast_detail_birthplace_header_margin_start"
                 android:textSize="@dimen/cast_detail_birthplace_size"
-                app:layout_constraintTop_toBottomOf="@id/birthdayTextView"
+                app:layout_constraintTop_toBottomOf="@id/deathdayHeaderTextView"
                 app:layout_constraintStart_toEndOf="@id/profileCardView"
                 android:text="@string/cast_detail_birthplace"/>
 
             <TextView
                 android:id="@+id/birthplaceTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/castDetailBirthplace"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:layout_marginTop="@dimen/cast_detail_birthplace_margin_vertical"
                 android:layout_marginBottom="@dimen/cast_detail_birthplace_margin_vertical"
                 android:layout_marginStart="@dimen/cast_detail_birthplace_margin_start"
+                android:layout_marginEnd="@dimen/cast_detail_birthplace_margin_end"
                 android:textSize="@dimen/cast_detail_birthplace_size"
-                app:layout_constraintTop_toBottomOf="@id/birthdayTextView"
+                app:layout_constraintTop_toBottomOf="@id/deathdayHeaderTextView"
                 app:layout_constraintStart_toEndOf="@id/birthplaceHeaderTextView"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Vienna, Austria"/>
 
 <!--            <TextView-->

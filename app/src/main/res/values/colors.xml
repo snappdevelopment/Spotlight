@@ -36,6 +36,8 @@
     <color name="castDetailBackground">#FFFFFF</color>
     <color name="castDetailName">#404040</color>
     <color name="castDetailBirthday">#404040</color>
+    <color name="castDetailBirthdayHeader">#404040</color>
+    <color name="castDetailDeathdayHeader">#404040</color>
     <color name="castDetailBirthdayDash">#404040</color>
     <color name="castDetailBirthplace">#404040</color>
 <!--    <color name="castDetailKnownFor">#404040</color>-->

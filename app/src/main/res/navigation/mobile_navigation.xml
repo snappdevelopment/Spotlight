@@ -65,6 +65,21 @@
         <argument
             android:name="id"
             app:argType="integer" />
+        <argument
+            android:name="backgroundColor"
+            app:argType="integer" />
+        <argument
+            android:name="titleColor"
+            app:argType="integer" />
+        <argument
+            android:name="bodyColor"
+            app:argType="integer" />
+        <argument
+            android:name="accentColor"
+            app:argType="integer" />
+        <argument
+            android:name="accentBodyColor"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

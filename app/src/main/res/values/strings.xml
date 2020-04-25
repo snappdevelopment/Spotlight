@@ -42,5 +42,7 @@
     <string name="cast_detail_bio_headline">Biography</string>
     <string name="cast_detail_known_for_headline">Known For</string>
     <string name="cast_detail_known_for_character">as %1$s</string>
+    <string name="cast_detail_birthday">Born:</string>
+    <string name="cast_detail_deathday">Died:</string>
 
 </resources>
