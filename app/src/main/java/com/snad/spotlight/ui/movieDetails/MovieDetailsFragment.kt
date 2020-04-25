@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -130,7 +131,14 @@ class MovieDetailsFragment: Fragment() {
     }
 
     private fun castClickListener(id: Int) {
-        val action = MovieDetailsFragmentDirections.actionNavigationMovieDetailsToNavigationCastDetails(id)
+        val action = MovieDetailsFragmentDirections.actionNavigationMovieDetailsToNavigationCastDetails(
+            id = id,
+            backgroundColor = (viewBinding.scrollView.background as ColorDrawable).color,
+            titleColor = viewBinding.castHeadline.currentTextColor,
+            bodyColor = viewBinding.runtimeTextView.currentTextColor,
+            accentColor = viewBinding.overviewCardView.cardBackgroundColor.defaultColor,
+            accentBodyColor = viewBinding.overviewTextView.currentTextColor
+        )
         findNavController().navigate(action)
     }
 

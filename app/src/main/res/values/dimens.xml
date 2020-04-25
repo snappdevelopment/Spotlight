@@ -164,17 +164,24 @@
     <dimen name="cast_detail_name_margin">16dp</dimen>
     <dimen name="cast_detail_name_size">24sp</dimen>
 
-    <dimen name="cast_detail_birthday_margin_start">16dp</dimen>
+    <dimen name="cast_detail_birthday_header_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_birthday_header_margin_start">16dp</dimen>
+
+    <dimen name="cast_detail_birthday_margin_start">8dp</dimen>
     <dimen name="cast_detail_birthday_margin_vertical">8dp</dimen>
     <dimen name="cast_detail_birthday_size">16sp</dimen>
     <dimen name="cast_detail_birthday_dash_margin">5dp</dimen>
 
-    <dimen name="cast_detail_deathday_margin_start">5dp</dimen>
+    <dimen name="cast_detail_deathday_header_margin_start">16dp</dimen>
+    <dimen name="cast_detail_deathday_header_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_deathday_size">16sp</dimen>
+    <dimen name="cast_detail_deathday_margin_start">8dp</dimen>
 
-    <dimen name="cast_detail_birthplace_margin_vertical">8dp</dimen>
     <dimen name="cast_detail_birthplace_header_margin_start">16dp</dimen>
+    <dimen name="cast_detail_birthplace_margin_vertical">8dp</dimen>
     <dimen name="cast_detail_birthplace_size">16sp</dimen>
     <dimen name="cast_detail_birthplace_margin_start">8dp</dimen>
+    <dimen name="cast_detail_birthplace_margin_end">16dp</dimen>
 
 <!--    <dimen name="cast_detail_known_for_margin_vertical">8dp</dimen>-->
 <!--    <dimen name="cast_detail_known_for_margin_start">8dp</dimen>-->

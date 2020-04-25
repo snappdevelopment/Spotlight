@@ -12,7 +12,7 @@ data class PersonCredits(
 data class Cast(
     val character: String,
     val credit_id: String,
-    val release_date: String,
+    val release_date: String?,
     val vote_count: Int,
     val video: Boolean,
     val adult: Boolean,
@@ -45,6 +45,6 @@ data class Crew(
     val genre_ids: List<Int>,
     val vote_average: Double,
     val adult: Boolean,
-    val release_date: String,
+    val release_date: String?,
     val credit_id: String
 )

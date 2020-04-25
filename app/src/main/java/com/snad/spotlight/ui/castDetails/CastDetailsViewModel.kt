@@ -9,6 +9,9 @@ import com.snad.spotlight.repository.PersonResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DateFormat.getDateInstance
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CastDetailsViewModel(
     private val personRepository: PersonRepository
@@ -23,7 +26,13 @@ class CastDetailsViewModel(
             withContext(Dispatchers.Main) {
                 when(result) {
                     is PersonResult.Success -> {
-                        val sortedMovies = result.person.person_credits.cast.sortedByDescending { cast -> cast.release_date }
+                        val sortedMovies = result.person.person_credits.cast.sortedByDescending { cast -> cast.release_date }.dropWhile { cast ->
+                            val releaseDate = SimpleDateFormat("yyyy-MM-dd").parse(cast.release_date)
+                            if(releaseDate != null)
+                                releaseDate.after(Date()) && cast.poster_path == null
+                            else
+                                false
+                        }
                         state.value = CastDetailsState.DoneState(result.person.copy(person_credits = result.person.person_credits.copy(cast = sortedMovies)))
                     }
                     is PersonResult.NetworkError -> state.value = CastDetailsState.NetworkErrorState
