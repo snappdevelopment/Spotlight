@@ -40,8 +40,10 @@ class CastAdapter(
             .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.castImageView)
-        holder.nameTextView.text = "${item.name}\nas ${item.character}"
+        holder.nameTextView.text = item.name
         holder.nameTextView.setTextColor(nameTextColor)
+        holder.characterTextView.text = holder.itemView.context.getString(R.string.movie_detail_cast_character, item.character)
+        holder.characterTextView.setTextColor(nameTextColor)
         holder.nameBackgroundView.backgroundTintList = ColorStateList.valueOf(nameBackgroundColor)
     }
 
@@ -53,6 +55,7 @@ class CastAdapter(
         val castCardView = viewBinding.castCardView
         val castImageView = viewBinding.castImageView
         val nameTextView = viewBinding.nameTextView
+        val characterTextView = viewBinding.characterTextView
         val nameBackgroundView = viewBinding.nameBackgroundView
     }
 }

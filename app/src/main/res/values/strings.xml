@@ -29,6 +29,7 @@
     <string name="movie_detail_runtime">%1$d min</string>
     <string name="movie_detail_headline_cast">Cast</string>
     <string name="movie_detail_headline_reviews">Reviews</string>
+    <string name="movie_detail_cast_character">as %1$s</string>
 
     <!--Search-->
     <string name="search_search_view_hint">Search for a movie</string>
