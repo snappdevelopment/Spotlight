@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/movieCard"
-    android:layout_width="350dp"
     android:layout_height="wrap_content"
+    android:layout_width="320dp"
     android:padding="@dimen/cast_detail_known_for_rv_item_padding"
     android:layout_margin="@dimen/cast_detail_known_for_rv_item_margin"
     android:foreground="?android:attr/selectableItemBackground"
@@ -83,13 +83,16 @@
 
     <TextView
         android:id="@+id/characterTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/cast_detail_known_for_rv_item_character_text_margin"
         android:layout_marginTop="@dimen/cast_detail_known_for_rv_item_character_text_margin_top"
         android:textSize="@dimen/cast_detail_known_for_rv_item_character_text_size"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintTop_toBottomOf="@id/releaseDateTextView"
         app:layout_constraintStart_toEndOf="@+id/coverCardView"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:text="as Terminator"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -113,14 +113,10 @@ class CastDetailsFragment : Fragment() {
             .transform(RoundedCornersTransformation(4, 1))
             .into(viewBinding.profileImageView)
         viewBinding.nameTextView.text = person.name
-        if(person.birthday != null && person.birthday.isNotEmpty()) {
-            val birthdayDate = SimpleDateFormat("yyyy-MM-dd").parse(person.birthday)
-            val localBirthdayDate = DateFormat.getDateInstance(SimpleDateFormat.SHORT).format(birthdayDate!!)
-            viewBinding.birthdayTextView.text = localBirthdayDate
-            if(person.deathday != null && person.deathday.isNotEmpty()) {
-                val deathdayDate = SimpleDateFormat("yyyy-MM-dd").parse(person.deathday)
-                val localDeathdayDate = DateFormat.getDateInstance(SimpleDateFormat.SHORT).format(deathdayDate!!)
-                viewBinding.deathdayTextView.text = localDeathdayDate
+        if(person.birthday != null) {
+            viewBinding.birthdayTextView.text = person.birthday
+            if(person.deathday != null) {
+                viewBinding.deathdayTextView.text = person.deathday
             }
             else {
                 viewBinding.deathdayHeaderTextView.visibility = View.GONE

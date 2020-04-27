@@ -201,11 +201,11 @@
     <dimen name="cast_detail_known_for_rv_item_padding">16dp</dimen>
     <dimen name="cast_detail_known_for_rv_item_margin">8dp</dimen>
 
-    <dimen name="cast_detail_known_for_rv_item_title_margin">8dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_title_margin">16dp</dimen>
     <dimen name="cast_detail_known_for_rv_item_title_size">20sp</dimen>
 
     <dimen name="cast_detail_known_for_rv_item_release_date_size">14sp</dimen>
-    <dimen name="cast_detail_known_for_rv_item_release_date_margin">8dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_release_date_margin">16dp</dimen>
     <dimen name="cast_detail_known_for_rv_item_release_date_top_margin">5dp</dimen>
 
     <dimen name="cast_detail_known_for_rv_item_average_vote_icon_margin_start">12dp</dimen>
@@ -215,7 +215,7 @@
     <dimen name="cast_detail_known_for_rv_item_average_vote_text_margin_top">5dp</dimen>
 
     <dimen name="cast_detail_known_for_rv_item_character_text_size">16sp</dimen>
-    <dimen name="cast_detail_known_for_rv_item_character_text_margin">8dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_character_text_margin">16dp</dimen>
     <dimen name="cast_detail_known_for_rv_item_character_text_margin_top">18dp</dimen>
 
     <dimen name="cast_detail_known_for_rv_margin_top">8dp</dimen>
