@@ -45,6 +45,7 @@ class KnownForAdapter(
         }
         holder.averageVoteTextView.text = item.vote_average.toString()
         holder.averageVoteTextView.setTextColor(textColor)
+        holder.averageVoteImageView.setColorFilter(textColor)
         if(item.character == "") holder.characterTextView.visibility = View.GONE
         else {
             holder.characterTextView.text = holder.itemView.context.getString(R.string.cast_detail_known_for_character, item.character)
@@ -63,6 +64,7 @@ class KnownForAdapter(
         val titleTextView = viewBinding.titleTextView
         val releaseDateTextView = viewBinding.releaseDateTextView
         val averageVoteTextView = viewBinding.averageVoteTextView
+        val averageVoteImageView = viewBinding.averageVoteImageView
         val characterTextView = viewBinding.characterTextView
     }
 }
