@@ -41,7 +41,10 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_navigation_movie_details_to_navigation_cast_details"
-            app:destination="@id/navigation_cast_details" />
+            app:destination="@id/navigation_cast_details"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popUpTo="@+id/navigation_movie_details"/>
     </fragment>
 
     <fragment
