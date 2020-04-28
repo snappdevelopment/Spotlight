@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.navigation_movie_details) {
+            if(destination.id == R.id.navigation_movie_details ||
+                destination.id == R.id.navigation_cast_details) {
                 navView.visibility = View.GONE
             } else {
                 navView.visibility = View.VISIBLE

@@ -14,6 +14,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class CastAdapter(
     private val items: MutableList<CastMember>,
+    var clickListener: (Int) -> Unit,
     var nameBackgroundColor: Int = Color.WHITE,
     var nameTextColor: Int = Color.DKGRAY
 ): RecyclerView.Adapter<CastAdapter.CastViewHolder>() {
@@ -25,6 +26,11 @@ class CastAdapter(
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
         val item = items[position]
+
+        holder.castCardView.setOnClickListener {
+            clickListener(item.id)
+        }
+
         val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
         picasso.load("https://image.tmdb.org/t/p/w185${item.profile_path}")
@@ -34,8 +40,10 @@ class CastAdapter(
             .error(R.drawable.cover_image_error)
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.castImageView)
-        holder.nameTextView.text = "${item.name}\nas ${item.character}"
+        holder.nameTextView.text = item.name
         holder.nameTextView.setTextColor(nameTextColor)
+        holder.characterTextView.text = holder.itemView.context.getString(R.string.movie_detail_cast_character, item.character)
+        holder.characterTextView.setTextColor(nameTextColor)
         holder.nameBackgroundView.backgroundTintList = ColorStateList.valueOf(nameBackgroundColor)
     }
 
@@ -44,8 +52,10 @@ class CastAdapter(
     class CastViewHolder(
         viewBinding: RecyclerviewItemMovieDetailsCastBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
+        val castCardView = viewBinding.castCardView
         val castImageView = viewBinding.castImageView
         val nameTextView = viewBinding.nameTextView
+        val characterTextView = viewBinding.characterTextView
         val nameBackgroundView = viewBinding.nameBackgroundView
     }
 }

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
@@ -67,7 +68,7 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.coverImageView.transitionName = "cover${movieId}"
 
         viewBinding.backdropsRecyclerView.adapter = BackdropsAdapter(backdrops)
-        viewBinding.castRecyclerView.adapter = CastAdapter(castMember)
+        viewBinding.castRecyclerView.adapter = CastAdapter(castMember, this::castClickListener)
         viewBinding.reviewsRecyclerView.adapter = ReviewsAdapter(reviews)
 
         val cacheSize = 10 * 1024 * 1024 // 10 MB
@@ -127,6 +128,18 @@ class MovieDetailsFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    private fun castClickListener(id: Int) {
+        val action = MovieDetailsFragmentDirections.actionNavigationMovieDetailsToNavigationCastDetails(
+            id = id,
+            backgroundColor = (viewBinding.scrollView.background as ColorDrawable).color,
+            titleColor = viewBinding.castHeadline.currentTextColor,
+            bodyColor = viewBinding.runtimeTextView.currentTextColor,
+            accentColor = viewBinding.overviewCardView.cardBackgroundColor.defaultColor,
+            accentBodyColor = viewBinding.overviewTextView.currentTextColor
+        )
+        findNavController().navigate(action)
     }
 
     private fun showDoneState(movie: LibraryMovie, isInLibrary: Boolean) {

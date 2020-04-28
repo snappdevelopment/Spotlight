@@ -3,6 +3,7 @@ package com.snad.spotlight
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDexApplication
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.snad.spotlight.persistence.AppDatabase
 import com.snad.spotlight.persistence.DatabaseSingleton
 
@@ -13,6 +14,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        AndroidThreeTen.init(this)
 
         appDb = DatabaseSingleton.instance!!
     }
