@@ -157,4 +157,68 @@
     <dimen name="search_rv_item_overview_margin_left">12dp</dimen>
     <dimen name="search_rv_item_overview_margin_top">12dp</dimen>
 
+    <!--CastDetail-->
+    <dimen name="cast_detail_profile_margin_top">32dp</dimen>
+    <dimen name="cast_detail_profile_margin_start">16dp</dimen>
+
+    <dimen name="cast_detail_name_margin">16dp</dimen>
+    <dimen name="cast_detail_name_size">24sp</dimen>
+
+    <dimen name="cast_detail_birthday_header_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_birthday_header_margin_start">16dp</dimen>
+
+    <dimen name="cast_detail_birthday_margin_start">8dp</dimen>
+    <dimen name="cast_detail_birthday_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_birthday_size">16sp</dimen>
+    <dimen name="cast_detail_birthday_dash_margin">5dp</dimen>
+
+    <dimen name="cast_detail_deathday_header_margin_start">16dp</dimen>
+    <dimen name="cast_detail_deathday_header_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_deathday_size">16sp</dimen>
+    <dimen name="cast_detail_deathday_margin_start">8dp</dimen>
+
+    <dimen name="cast_detail_birthplace_header_margin_start">16dp</dimen>
+    <dimen name="cast_detail_birthplace_margin_vertical">8dp</dimen>
+    <dimen name="cast_detail_birthplace_size">16sp</dimen>
+    <dimen name="cast_detail_birthplace_margin_start">8dp</dimen>
+    <dimen name="cast_detail_birthplace_margin_end">16dp</dimen>
+
+<!--    <dimen name="cast_detail_known_for_margin_vertical">8dp</dimen>-->
+<!--    <dimen name="cast_detail_known_for_margin_start">8dp</dimen>-->
+<!--    <dimen name="cast_detail_known_for_header_margin_start">16dp</dimen>-->
+<!--    <dimen name="cast_detail_known_for_size">16sp</dimen>-->
+
+    <dimen name="cast_detail_bio_card_margin_top">16dp</dimen>
+    <dimen name="cast_detail_bio_card_margin_end">16dp</dimen>
+    <dimen name="cast_detail_bio_card_margin_bottom">16dp</dimen>
+    <dimen name="cast_detail_bio_size">14sp</dimen>
+    <dimen name="cast_detail_bio_headline_size">24sp</dimen>
+    <dimen name="cast_detail_bio_headline_margin_top">32dp</dimen>
+
+    <dimen name="cast_detail_known_for_headline_size">24sp</dimen>
+    <dimen name="cast_detail_known_for_headline_margin_top">16dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_padding">16dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_margin">8dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_title_margin">16dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_title_size">20sp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_release_date_size">14sp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_release_date_margin">16dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_release_date_top_margin">5dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_average_vote_icon_margin_start">12dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_average_vote_text_size">14sp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_average_vote_text_margin">2dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_average_vote_text_margin_top">5dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_item_character_text_size">16sp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_character_text_margin">16dp</dimen>
+    <dimen name="cast_detail_known_for_rv_item_character_text_margin_top">18dp</dimen>
+
+    <dimen name="cast_detail_known_for_rv_margin_top">8dp</dimen>
+    <dimen name="cast_detail_known_for_rv_margin_bottom">8dp</dimen>
+    <dimen name="cast_detail_known_for_rv_padding_start">8dp</dimen>
 </resources>

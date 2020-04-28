@@ -32,4 +32,18 @@
     <color name="movieDetailText">@android:color/tertiary_text_dark</color>
     <color name="movieDetailHeadline">#404040</color>
 
+    <!--CastDetail-->
+    <color name="castDetailBackground">#FFFFFF</color>
+    <color name="castDetailName">#404040</color>
+    <color name="castDetailBirthday">#404040</color>
+    <color name="castDetailBirthdayHeader">#404040</color>
+    <color name="castDetailDeathdayHeader">#404040</color>
+    <color name="castDetailBirthdayDash">#404040</color>
+    <color name="castDetailBirthplace">#404040</color>
+<!--    <color name="castDetailKnownFor">#404040</color>-->
+    <color name="castDetailBioText">@android:color/tertiary_text_dark</color>
+    <color name="castDetailBioHeadline">#404040</color>
+    <color name="castDetailKnownForHeadline">#404040</color>
+    <color name="castDetailKnownForMovieTitle">#404040</color>
+
 </resources>
