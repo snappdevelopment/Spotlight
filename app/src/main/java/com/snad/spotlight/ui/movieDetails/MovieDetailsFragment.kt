@@ -134,7 +134,7 @@ class MovieDetailsFragment: Fragment() {
     private fun castClickListener(id: Int) {
         val action = MovieDetailsFragmentDirections.actionNavigationMovieDetailsToNavigationCastDetails(
             id = id,
-            backgroundColor = (viewBinding.scrollView.background as ColorDrawable).color,
+            backgroundColor = (viewBinding.background.background as ColorDrawable).color,
             titleColor = viewBinding.castHeadline.currentTextColor,
             bodyColor = viewBinding.runtimeTextView.currentTextColor,
             accentColor = viewBinding.overviewCardView.cardBackgroundColor.defaultColor,

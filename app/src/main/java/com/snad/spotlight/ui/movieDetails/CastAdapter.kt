@@ -42,7 +42,18 @@ class CastAdapter(
             .into(holder.castImageView)
         holder.nameTextView.text = item.name
         holder.nameTextView.setTextColor(nameTextColor)
-        holder.characterTextView.text = holder.itemView.context.getString(R.string.movie_detail_cast_character, item.character)
+        if (item.character == "") {
+            holder.characterTextView.text = holder.itemView.context.getString(
+                R.string.movie_detail_cast_character,
+                holder.itemView.context.getString(R.string.movie_detail_cast_character_unknown)
+            )
+        }
+        else {
+            holder.characterTextView.text = holder.itemView.context.getString(
+                R.string.movie_detail_cast_character,
+                item.character
+            )
+        }
         holder.characterTextView.setTextColor(nameTextColor)
         holder.nameBackgroundView.backgroundTintList = ColorStateList.valueOf(nameBackgroundColor)
     }
