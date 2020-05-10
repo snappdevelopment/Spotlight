@@ -12,10 +12,7 @@
         tools:layout="@layout/fragment_new_movies" >
         <action
             android:id="@+id/action_navigation_new_movies_to_navigation_movie_details"
-            app:destination="@id/navigation_movie_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popUpTo="@id/navigation_new_movies" />
+            app:destination="@id/navigation_movie_details" />
     </fragment>
 
     <fragment
@@ -25,10 +22,7 @@
         tools:layout="@layout/fragment_library" >
         <action
             android:id="@+id/action_navigation_library_to_navigation_movie_details"
-            app:destination="@id/navigation_movie_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popUpTo="@id/navigation_library" />
+            app:destination="@id/navigation_movie_details" />
     </fragment>
 
     <fragment
@@ -41,10 +35,7 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_navigation_movie_details_to_navigation_cast_details"
-            app:destination="@id/navigation_cast_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popUpTo="@+id/navigation_movie_details"/>
+            app:destination="@id/navigation_cast_details" />
     </fragment>
 
     <fragment
@@ -54,10 +45,7 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_navigation_search_to_navigation_movie_details"
-            app:destination="@id/navigation_movie_details"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit"
-            app:popUpTo="@id/navigation_search" />
+            app:destination="@id/navigation_movie_details" />
     </fragment>
 
     <fragment

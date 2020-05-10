@@ -17,5 +17,5 @@ data class ListMovie(
     val title : String,
     val vote_average : Double,
     val overview : String,
-    val release_date : String
+    val release_date : String?
 )

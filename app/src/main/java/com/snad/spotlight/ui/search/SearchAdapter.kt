@@ -42,7 +42,7 @@ class SearchAdapter(
             .transform(RoundedCornersTransformation(4, 1))
             .into(holder.coverImageView)
         holder.titleTextView.text = item.title
-        if(item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
+        if(item.release_date == null || item.release_date == "") holder.releaseDateTextView.visibility = View.GONE
         else holder.releaseDateTextView.text = item.release_date.substring(0, 4)
         holder.overviewTextView.text = item.overview
         holder.averageVoteTextView.text = item.vote_average.toString()
