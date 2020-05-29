@@ -72,23 +72,10 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.castRecyclerView.adapter = CastAdapter(castMember, this::castClickListener)
         viewBinding.reviewsRecyclerView.adapter = ReviewsAdapter(reviews)
 
-        val cacheSize = 10 * 1024 * 1024 // 10 MB
-        val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
-
-        val httpClient = OkHttpClient.Builder()
-            .cache(cache)
-            .addInterceptor(ApiKeyInterceptor())
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .client(httpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-
+        val app = context!!.applicationContext as App
+        val retrofit = app.retrofit
         val movieService = retrofit.create<MovieService>(MovieService::class.java)
 
-        val app = context!!.applicationContext as App
         val libraryDb = LibraryDb(app.appDb)
         val movieApi = MovieApi(movieService)
         val movieDetailsRepository =
@@ -137,7 +124,7 @@ class MovieDetailsFragment: Fragment() {
             backgroundColor = (viewBinding.background.background as ColorDrawable).color,
             titleColor = viewBinding.castHeadline.currentTextColor,
             bodyColor = viewBinding.runtimeTextView.currentTextColor,
-            accentColor = viewBinding.overviewCardView.cardBackgroundColor.defaultColor,
+            accentColor = (viewBinding.overviewBackground.background as ColorDrawable).color,
             accentBodyColor = viewBinding.overviewTextView.currentTextColor
         )
         findNavController().navigate(action)
