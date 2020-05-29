@@ -21,17 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
 
         val navView: BottomNavigationView = viewBinding.navView
-
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_new_movies, R.id.navigation_library
-            )
-        )
 
-//        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->

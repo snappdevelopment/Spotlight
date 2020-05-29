@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.snad.spotlight.App
 import com.snad.spotlight.repository.NewMoviesRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentNewMoviesBinding
@@ -48,19 +49,8 @@ class NewMoviesFragment : Fragment() {
             this::movieClickListener
         )
 
-        val cacheSize = 10 * 1024 * 1024 // 10 MB
-        val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
-
-        val httpClient = OkHttpClient.Builder()
-            .cache(cache)
-            .addInterceptor(ApiKeyInterceptor())
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .client(httpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+        val app = context!!.applicationContext as App
+        val retrofit = app.retrofit
 
         val service = retrofit.create<NewMoviesService>(NewMoviesService::class.java)
         val newMoviesApi = NewMoviesApi(service)

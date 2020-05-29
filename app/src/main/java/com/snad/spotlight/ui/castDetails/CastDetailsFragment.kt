@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
+import com.snad.spotlight.App
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentCastDetailsBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
@@ -57,19 +58,8 @@ class CastDetailsFragment : Fragment() {
 
         setColorPalette(arguments.backgroundColor, arguments.titleColor, arguments.bodyColor, arguments.accentColor, arguments.accentBodyColor)
 
-        val cacheSize = 10 * 1024 * 1024 // 10 MB
-        val cache = Cache(activity!!.cacheDir, cacheSize.toLong())
-
-        val httpClient = OkHttpClient.Builder()
-            .cache(cache)
-            .addInterceptor(ApiKeyInterceptor())
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
-            .client(httpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
+        val app = context!!.applicationContext as App
+        val retrofit = app.retrofit
 
         val personService = retrofit.create<PersonService>(PersonService::class.java)
         val personApi = PersonApi(personService)
