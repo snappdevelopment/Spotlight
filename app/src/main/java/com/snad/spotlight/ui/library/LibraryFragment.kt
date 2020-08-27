@@ -2,7 +2,6 @@ package com.snad.spotlight.ui.library
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DiffUtil
 import com.snad.spotlight.*
 import com.snad.spotlight.databinding.FragmentLibraryBinding
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.snad.spotlight.repository.LibraryRepository
-import com.snad.spotlight.util.LibraryMovieDiffCallback
-import kotlinx.android.synthetic.main.fragment_movie_details.*
 
 class LibraryFragment : Fragment() {
 
@@ -28,8 +24,11 @@ class LibraryFragment : Fragment() {
     private var binding: FragmentLibraryBinding? = null
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
-
-    private val movies = mutableListOf<LibraryMovie>()
+    private val recyclerViewAdapter = LibraryAdapter(
+        this::movieLongClickListener,
+        this::movieClickListener,
+        this::movieWatchedClickListener
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,11 +39,6 @@ class LibraryFragment : Fragment() {
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-        val recyclerViewAdapter = LibraryAdapter(
-            movies,
-            this::movieLongClickListener,
-            this::movieClickListener,
-            this::movieWatchedClickListener)
         viewBinding.recyclerView.adapter = recyclerViewAdapter
 
         val app = context!!.applicationContext as App
@@ -109,11 +103,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
-        val diffCallback = LibraryMovieDiffCallback(movies, libraryMovies)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        diffResult.dispatchUpdatesTo(viewBinding.recyclerView.adapter!!)
-        movies.clear()
-        movies.addAll(libraryMovies)
+        recyclerViewAdapter.submitList(libraryMovies)
     }
 
     private fun showEmptyState() {
@@ -123,8 +113,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.VISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.VISIBLE
 
-        movies.clear()
-        viewBinding.recyclerView.adapter?.notifyDataSetChanged()
+        recyclerViewAdapter.submitList(emptyList())
     }
 
     private fun showLoadingState() {
