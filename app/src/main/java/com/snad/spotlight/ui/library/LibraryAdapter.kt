@@ -3,11 +3,10 @@ package com.snad.spotlight.ui.library
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
 import com.snad.spotlight.persistence.models.LibraryMovie
@@ -15,11 +14,10 @@ import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class LibraryAdapter(
-    private val items: MutableList<LibraryMovie>,
     private val longClickListener: (LibraryMovie) -> Unit,
     private val clickListener: (Int, CardView) -> Unit,
     private val watchedClickListener: (LibraryMovie) -> Unit
-): RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>() {
+): ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
         val viewBinding = RecyclerviewItemLibraryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,7 +25,7 @@ class LibraryAdapter(
     }
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
-        val item = items[position]
+        val item = getItem(position)
 
         holder.coverCardView.transitionName = "cover${item.id}"
 
@@ -64,7 +62,7 @@ class LibraryAdapter(
         holder.genreTextView.text = item.genres
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = currentList.size
 
     class LibraryViewHolder(
         viewBinding: RecyclerviewItemLibraryBinding
@@ -78,5 +76,15 @@ class LibraryAdapter(
         val averageVoteTextView = viewBinding.averageVoteTextView
         val genreTextView = viewBinding.genreTextView
         val hasBeenWatchedFAB = viewBinding.hasBeenWatchedFAB
+    }
+
+    object LibraryMovieDiffCallback: DiffUtil.ItemCallback<LibraryMovie>() {
+        override fun areItemsTheSame(oldItem: LibraryMovie, newItem: LibraryMovie): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: LibraryMovie, newItem: LibraryMovie): Boolean {
+            return oldItem == newItem
+        }
     }
 }
