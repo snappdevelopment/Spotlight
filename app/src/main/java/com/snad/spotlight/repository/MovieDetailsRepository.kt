@@ -9,8 +9,9 @@ import com.snad.spotlight.persistence.toLibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.*
+import javax.inject.Inject
 
-class MovieDetailsRepository(
+class MovieDetailsRepository @Inject constructor(
     private val libraryDb: LibraryDb,
     private val movieApi: MovieApi
 ) {

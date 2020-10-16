@@ -19,12 +19,14 @@ import com.snad.spotlight.databinding.FragmentNewMoviesBinding
 import com.snad.spotlight.network.ApiKeyInterceptor
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesService
+import com.snad.spotlight.network.RetrofitClient
 import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.network.models.NewMovies
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
 
 class NewMoviesFragment : Fragment() {
@@ -35,6 +37,9 @@ class NewMoviesFragment : Fragment() {
         get() = binding!!
 
     private val movies = mutableListOf<ListMovie>()
+
+    @Inject
+    lateinit var newMoviesRepository: NewMoviesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,13 +54,7 @@ class NewMoviesFragment : Fragment() {
             this::movieClickListener
         )
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
-
-        val service = retrofit.create<NewMoviesService>(NewMoviesService::class.java)
-        val newMoviesApi = NewMoviesApi(service)
-        val newMoviesRepository =
-            NewMoviesRepository(newMoviesApi)
+        inject()
 
         newMoviesViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

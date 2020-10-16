@@ -3,8 +3,9 @@ package com.snad.spotlight.repository
 import com.snad.spotlight.network.PersonApi
 import com.snad.spotlight.network.PersonApiResult
 import com.snad.spotlight.network.models.Person
+import javax.inject.Inject
 
-class PersonRepository(
+class PersonRepository @Inject constructor(
     private val personApi: PersonApi
 ) {
     suspend fun loadPerson(id: Int): PersonResult {

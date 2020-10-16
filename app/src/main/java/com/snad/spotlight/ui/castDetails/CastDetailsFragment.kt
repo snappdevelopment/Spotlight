@@ -33,6 +33,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class CastDetailsFragment : Fragment() {
 
@@ -42,6 +43,9 @@ class CastDetailsFragment : Fragment() {
         get() = binding!!
 
     private val knownFor = mutableListOf<Cast>()
+
+    @Inject
+    lateinit var personRepository: PersonRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,12 +62,7 @@ class CastDetailsFragment : Fragment() {
 
         setColorPalette(arguments.backgroundColor, arguments.titleColor, arguments.bodyColor, arguments.accentColor, arguments.accentBodyColor)
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
-
-        val personService = retrofit.create<PersonService>(PersonService::class.java)
-        val personApi = PersonApi(personService)
-        val personRepository = PersonRepository(personApi)
+        inject()
 
         castDetailsViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

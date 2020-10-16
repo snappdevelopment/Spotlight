@@ -17,6 +17,7 @@ import com.snad.spotlight.databinding.FragmentLibraryBinding
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.snad.spotlight.repository.LibraryRepository
+import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
 
@@ -30,6 +31,9 @@ class LibraryFragment : Fragment() {
         this::movieWatchedClickListener
     )
 
+    @Inject
+    lateinit var libraryRepository: LibraryRepository
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,9 +45,11 @@ class LibraryFragment : Fragment() {
 
         viewBinding.recyclerView.adapter = recyclerViewAdapter
 
-        val app = context!!.applicationContext as App
-        val libraryDb = LibraryDb(app.appDb)
-        val libraryRepository = LibraryRepository(libraryDb)
+        inject()
+
+//        val app = context!!.applicationContext as App
+//        val libraryDb = LibraryDb(app.appDb)
+//        val libraryRepository = LibraryRepository(libraryDb)
 
         libraryViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

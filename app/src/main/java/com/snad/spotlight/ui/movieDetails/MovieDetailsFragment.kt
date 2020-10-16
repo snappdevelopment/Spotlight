@@ -39,6 +39,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
 class MovieDetailsFragment: Fragment() {
 
@@ -50,6 +51,9 @@ class MovieDetailsFragment: Fragment() {
     private val backdrops = mutableListOf<Backdrop>()
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
+
+    @Inject
+    lateinit var movieDetailsRepository: MovieDetailsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,17 +76,7 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.castRecyclerView.adapter = CastAdapter(castMember, this::castClickListener)
         viewBinding.reviewsRecyclerView.adapter = ReviewsAdapter(reviews)
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
-        val movieService = retrofit.create<MovieService>(MovieService::class.java)
-
-        val libraryDb = LibraryDb(app.appDb)
-        val movieApi = MovieApi(movieService)
-        val movieDetailsRepository =
-            MovieDetailsRepository(
-                libraryDb,
-                movieApi
-            )
+        inject()
 
         movieDetailsViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

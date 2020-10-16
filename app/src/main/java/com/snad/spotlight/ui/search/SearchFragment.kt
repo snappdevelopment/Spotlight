@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
+import javax.inject.Inject
 
 
 class SearchFragment : Fragment() {
@@ -38,6 +39,9 @@ class SearchFragment : Fragment() {
         get() = binding!!
 
     private val movies = mutableListOf<ListMovie>()
+
+    @Inject
+    lateinit var searchRepository: SearchRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,13 +55,7 @@ class SearchFragment : Fragment() {
             this::movieClickListener
         )
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
-
-        val service = retrofit.create<SearchService>(SearchService::class.java)
-        val movieSearchApi = MovieSearchApi(service)
-        val searchRepository =
-            SearchRepository(movieSearchApi)
+        inject()
 
         searchViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

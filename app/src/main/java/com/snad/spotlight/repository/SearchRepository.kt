@@ -3,8 +3,9 @@ package com.snad.spotlight.repository
 import com.snad.spotlight.network.MovieSearchApi
 import com.snad.spotlight.network.MovieSearchApiResult
 import com.snad.spotlight.network.models.MovieSearchResults
+import javax.inject.Inject
 
-class SearchRepository(
+class SearchRepository @Inject constructor(
     private val movieSearchApi: MovieSearchApi
 ) {
     suspend fun searchMovies(title: String): SearchRepositoryResult {

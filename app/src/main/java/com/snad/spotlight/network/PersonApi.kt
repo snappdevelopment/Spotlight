@@ -3,18 +3,21 @@ package com.snad.spotlight.network
 import com.snad.spotlight.network.models.Person
 import android.util.Log
 import retrofit2.HttpException
+import retrofit2.Retrofit
 import java.io.IOException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class PersonApi(
-    private val personService: PersonService
+class PersonApi @Inject constructor(
+    private val retrofit: Retrofit
 ) {
 
     private val appendToResponse = "movie_credits"
+    private val service = retrofit.create(PersonService::class.java)
 
     suspend fun loadPerson(id: Int): PersonApiResult {
         return try {
-            val person = personService.getPerson(id, appendToResponse)
+            val person = service.getPerson(id, appendToResponse)
             PersonApiResult.Success(person)
         }
         catch (error: Exception) {

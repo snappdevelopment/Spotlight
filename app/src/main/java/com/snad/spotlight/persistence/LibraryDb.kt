@@ -3,8 +3,9 @@ package com.snad.spotlight.persistence
 import com.snad.spotlight.persistence.models.LibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class LibraryDb(
+class LibraryDb @Inject constructor(
     private val db: AppDatabase
 ) {
     private val dao = db.libraryMovieDao()

@@ -79,6 +79,8 @@ dependencies {
     implementation "androidx.palette:palette-ktx:1.0.0" //palette to extract image colors
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4' //JSR-310 Backport for java.time.* below API 26
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2' //catching memory leaks
+    implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
+    kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
