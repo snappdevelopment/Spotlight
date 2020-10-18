@@ -1,6 +1,5 @@
 package com.snad.spotlight
 
-import android.app.Application
 import com.snad.spotlight.network.RetrofitClient
 import com.snad.spotlight.persistence.AppDatabase
 import com.snad.spotlight.persistence.DatabaseSingleton
@@ -13,6 +12,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Singleton
 
@@ -40,7 +40,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(cacheDir: File) = RetrofitClient(cacheDir).get()
+    fun provideRetrofit(cacheDir: File): Retrofit = RetrofitClient(cacheDir).get()
 
     @Singleton
     @Provides

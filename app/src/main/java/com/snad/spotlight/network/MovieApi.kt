@@ -4,6 +4,9 @@ import android.util.Log
 import com.snad.spotlight.network.models.Movie
 import retrofit2.HttpException
 import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -45,6 +48,14 @@ class MovieApi @Inject constructor(
             }
         }
     }
+}
+
+interface MovieService {
+    @GET("movie/{movie_id}")
+    suspend fun getMovie(
+        @Path("movie_id") id: Int,
+        @Query("append_to_response") appendToResponse: String
+    ): Movie
 }
 
 sealed class MovieApiResult {

@@ -4,6 +4,9 @@ import com.snad.spotlight.network.models.Person
 import android.util.Log
 import retrofit2.HttpException
 import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -46,6 +49,14 @@ class PersonApi @Inject constructor(
             }
         }
     }
+}
+
+interface PersonService {
+    @GET("person/{person_id}")
+    suspend fun getPerson(
+        @Path("person_id") id: Int,
+        @Query("append_to_response") appendToResponse: String
+    ): Person
 }
 
 sealed class PersonApiResult {

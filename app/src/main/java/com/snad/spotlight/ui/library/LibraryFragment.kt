@@ -47,10 +47,6 @@ class LibraryFragment : Fragment() {
 
         inject()
 
-//        val app = context!!.applicationContext as App
-//        val libraryDb = LibraryDb(app.appDb)
-//        val libraryRepository = LibraryRepository(libraryDb)
-
         libraryViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return LibraryViewModel(libraryRepository) as T
