@@ -1,8 +1,9 @@
 package com.snad.spotlight
 
+import android.content.Context
+import androidx.room.Room
 import com.snad.spotlight.network.RetrofitClient
 import com.snad.spotlight.persistence.AppDatabase
-import com.snad.spotlight.persistence.DatabaseSingleton
 import com.snad.spotlight.ui.castDetails.CastDetailsFragment
 import com.snad.spotlight.ui.library.LibraryFragment
 import com.snad.spotlight.ui.movieDetails.MovieDetailsFragment
@@ -48,5 +49,15 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDatabaseInstance(): AppDatabase = DatabaseSingleton.instance!!
+    fun provideAppContext(app: App): Context = app.applicationContext
+
+    @Singleton
+    @Provides
+    fun provideDatabaseInstance(appContext: Context): AppDatabase =
+        Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            "app_database"
+        )
+        .build()
 }
