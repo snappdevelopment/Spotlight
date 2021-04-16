@@ -3,6 +3,7 @@ package com.snad.spotlight.network
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 import javax.inject.Inject
@@ -23,6 +24,7 @@ class RetrofitClient @Inject constructor(
             .baseUrl("https://api.themoviedb.org/3/")
             .client(httpClient)
             .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 }

@@ -39,7 +39,13 @@ class NewMoviesFragment : Fragment() {
     private val movies = mutableListOf<ListMovie>()
 
     @Inject
-    lateinit var newMoviesRepository: NewMoviesRepository
+    lateinit var viewModelFactory: NewMoviesViewModel.Factory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        inject()
+        newMoviesViewModel = ViewModelProvider(this, viewModelFactory)[NewMoviesViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,25 +60,15 @@ class NewMoviesFragment : Fragment() {
             this::movieClickListener
         )
 
-        inject()
-
-        newMoviesViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return NewMoviesViewModel(newMoviesRepository) as T
-            }
-        }).get(NewMoviesViewModel::class.java)
-
-        newMoviesViewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            when(state) {
-                is NewMoviesState.DoneState -> showDoneState(state.newMovies)
+        newMoviesViewModel.state.observe(viewLifecycleOwner) {
+            when(it) {
+                is NewMoviesState.DoneState -> showDoneState(it.newMovies)
                 is NewMoviesState.LoadingState -> showLoadingState()
                 is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
                 is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
                 is NewMoviesState.ErrorState -> showErrorState()
             }
-        })
-
-        newMoviesViewModel.loadNewMovies()
+        }
 
         return viewBinding.root
     }

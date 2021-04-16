@@ -13,6 +13,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Singleton
@@ -60,4 +61,8 @@ class AppModule {
             "app_database"
         )
         .build()
+
+    @Singleton
+    @Provides
+    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 }
