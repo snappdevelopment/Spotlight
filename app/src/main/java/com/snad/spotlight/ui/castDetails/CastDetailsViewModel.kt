@@ -2,11 +2,14 @@ package com.snad.spotlight.ui.castDetails
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.R
 import com.snad.spotlight.network.models.Person
+import com.snad.spotlight.repository.LibraryRepository
 import com.snad.spotlight.repository.PersonRepository
 import com.snad.spotlight.repository.PersonResult
+import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,6 +20,7 @@ import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import java.util.*
+import javax.inject.Inject
 
 class CastDetailsViewModel(
     private val personRepository: PersonRepository
@@ -78,6 +82,14 @@ class CastDetailsViewModel(
             birthday = birthdayString,
             deathday = deathdayString
         ))
+    }
+
+    class Factory @Inject constructor(
+        private  val personRepository: PersonRepository
+    ): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return CastDetailsViewModel(personRepository) as T
+        }
     }
 }
 

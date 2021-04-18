@@ -2,13 +2,17 @@ package com.snad.spotlight.ui.newMovies
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.repository.NewMoviesRepository
 import com.snad.spotlight.repository.NewMoviesResult
 import com.snad.spotlight.network.models.NewMovies
+import com.snad.spotlight.repository.LibraryRepository
+import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class NewMoviesViewModel(
     private val newMoviesRepository: NewMoviesRepository
@@ -33,6 +37,14 @@ class NewMoviesViewModel(
                     is NewMoviesResult.Error -> state.value = NewMoviesState.ErrorState
                 }
             }
+        }
+    }
+
+    class Factory @Inject constructor(
+        private  val newMoviesRepository: NewMoviesRepository
+    ): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return NewMoviesViewModel(newMoviesRepository) as T
         }
     }
 }

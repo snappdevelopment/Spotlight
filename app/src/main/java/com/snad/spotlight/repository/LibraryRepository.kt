@@ -5,8 +5,9 @@ import com.snad.spotlight.persistence.LibraryDbResult
 import com.snad.spotlight.persistence.models.LibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class LibraryRepository(
+class LibraryRepository @Inject constructor(
     private val libraryDb: LibraryDb
 ) {
     suspend fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {

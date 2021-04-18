@@ -3,8 +3,9 @@ package com.snad.spotlight.repository
 import com.snad.spotlight.network.NewMoviesApi
 import com.snad.spotlight.network.NewMoviesApiResult
 import com.snad.spotlight.network.models.NewMovies
+import javax.inject.Inject
 
-class NewMoviesRepository(
+class NewMoviesRepository @Inject constructor(
     private val newMoviesApi: NewMoviesApi
 ) {
     suspend fun loadNewMovies(): NewMoviesResult {

@@ -39,6 +39,7 @@ import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
 class MovieDetailsFragment: Fragment() {
 
@@ -50,6 +51,12 @@ class MovieDetailsFragment: Fragment() {
     private val backdrops = mutableListOf<Backdrop>()
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
+
+    @Inject
+    lateinit var movieDetailsRepository: MovieDetailsRepository
+
+    @Inject
+    lateinit var viewModelFactory: MovieDetailsViewModel.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,25 +79,11 @@ class MovieDetailsFragment: Fragment() {
         viewBinding.castRecyclerView.adapter = CastAdapter(castMember, this::castClickListener)
         viewBinding.reviewsRecyclerView.adapter = ReviewsAdapter(reviews)
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
-        val movieService = retrofit.create<MovieService>(MovieService::class.java)
+        inject()
 
-        val libraryDb = LibraryDb(app.appDb)
-        val movieApi = MovieApi(movieService)
-        val movieDetailsRepository =
-            MovieDetailsRepository(
-                libraryDb,
-                movieApi
-            )
+        movieDetailsViewModel = ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
 
-        movieDetailsViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return MovieDetailsViewModel(movieDetailsRepository) as T
-            }
-        }).get(MovieDetailsViewModel::class.java)
-
-        movieDetailsViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        movieDetailsViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
                 is MovieDetailsState.LoadingState -> showLoadingState()
@@ -98,7 +91,7 @@ class MovieDetailsFragment: Fragment() {
                 is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
                 is MovieDetailsState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         viewBinding.addOrRemoveMovieFAB.setOnClickListener {
             movieDetailsViewModel.addOrRemoveMovie()

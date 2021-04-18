@@ -1,21 +1,25 @@
 package com.snad.spotlight.network
 
 import android.util.Log
-import com.snad.spotlight.apiKey
 import com.snad.spotlight.network.models.NewMovies
 import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.io.IOException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class NewMoviesApi(
-    private val newMoviesService: NewMoviesService
+class NewMoviesApi @Inject constructor(
+    private val retrofit: Retrofit
 ) {
     private val language = "en-US"
     private val page = 1
+    private val service = retrofit.create(NewMoviesService::class.java)
 
     suspend fun loadNewMovies(): NewMoviesApiResult {
         return try {
-            val newMovies = newMoviesService.getNewMovies(language, page)
+            val newMovies = service.getNewMovies(language, page)
             NewMoviesApiResult.Success(newMovies)
         }
         catch (error: Exception) {
@@ -43,6 +47,14 @@ class NewMoviesApi(
             }
         }
     }
+}
+
+interface NewMoviesService {
+    @GET("movie/now_playing")
+    suspend fun getNewMovies(
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): NewMovies
 }
 
 sealed class NewMoviesApiResult {

@@ -5,8 +5,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
+import javax.inject.Inject
 
-class RetrofitClient(
+class RetrofitClient @Inject constructor(
     private val cacheDir: File
 ) {
     fun get(): Retrofit {

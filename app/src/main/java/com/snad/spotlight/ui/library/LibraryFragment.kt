@@ -17,6 +17,7 @@ import com.snad.spotlight.databinding.FragmentLibraryBinding
 import com.snad.spotlight.persistence.LibraryDb
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.snad.spotlight.repository.LibraryRepository
+import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
 
@@ -24,11 +25,15 @@ class LibraryFragment : Fragment() {
     private var binding: FragmentLibraryBinding? = null
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
-    private val recyclerViewAdapter = LibraryAdapter(
-        this::movieLongClickListener,
-        this::movieClickListener,
-        this::movieWatchedClickListener
-    )
+
+    @Inject
+    lateinit var libraryRepository: LibraryRepository
+
+    @Inject
+    lateinit var viewModelFactory: LibraryViewModel.Factory
+
+    @Inject
+    lateinit var libraryAdapter: LibraryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,26 +44,23 @@ class LibraryFragment : Fragment() {
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-        viewBinding.recyclerView.adapter = recyclerViewAdapter
+        inject()
 
-        val app = context!!.applicationContext as App
-        val libraryDb = LibraryDb(app.appDb)
-        val libraryRepository = LibraryRepository(libraryDb)
+        libraryAdapter.clickListener = this::movieClickListener
+        libraryAdapter.longClickListener = this::movieLongClickListener
+        libraryAdapter.watchedClickListener = this::movieWatchedClickListener
+        viewBinding.recyclerView.adapter = libraryAdapter
 
-        libraryViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return LibraryViewModel(libraryRepository) as T
-            }
-        }).get(LibraryViewModel::class.java)
+        libraryViewModel = ViewModelProvider(this, viewModelFactory)[LibraryViewModel::class.java]
 
-        libraryViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        libraryViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is LibraryState.DoneState -> showDoneState(state.libraryMovies)
                 is LibraryState.EmptyState -> showEmptyState()
                 is LibraryState.LoadingState -> showLoadingState()
                 is LibraryState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         libraryViewModel.loadLibraryMovies()
 
@@ -103,7 +105,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
-        recyclerViewAdapter.submitList(libraryMovies)
+        libraryAdapter.submitList(libraryMovies)
     }
 
     private fun showEmptyState() {
@@ -113,7 +115,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.VISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.VISIBLE
 
-        recyclerViewAdapter.submitList(emptyList())
+        libraryAdapter.submitList(emptyList())
     }
 
     private fun showLoadingState() {

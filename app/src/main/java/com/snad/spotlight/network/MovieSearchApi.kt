@@ -3,17 +3,22 @@ package com.snad.spotlight.network
 import android.util.Log
 import com.snad.spotlight.network.models.MovieSearchResults
 import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.io.IOException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class MovieSearchApi(
-    private val searchService: SearchService
+class MovieSearchApi @Inject constructor(
+    private val retrofit: Retrofit
 ) {
     private val page = 1
+    private val service = retrofit.create(SearchService::class.java)
 
     suspend fun searchMovie(title: String): MovieSearchApiResult {
         return try {
-            val searchResults = searchService.searchMovie(title, page)
+            val searchResults = service.searchMovie(title, page)
             MovieSearchApiResult.Success(searchResults)
         }
         catch (error: Exception) {
@@ -42,6 +47,14 @@ class MovieSearchApi(
             }
         }
     }
+}
+
+interface SearchService {
+    @GET("search/movie")
+    suspend fun searchMovie(
+        @Query("query") title: String,
+        @Query("page") page: Int
+    ): MovieSearchResults
 }
 
 sealed class MovieSearchApiResult {

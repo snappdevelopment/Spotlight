@@ -3,17 +3,23 @@ package com.snad.spotlight.network
 import android.util.Log
 import com.snad.spotlight.network.models.Movie
 import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.io.IOException
 import java.net.SocketTimeoutException
+import javax.inject.Inject
 
-class MovieApi(
-    private val movieService: MovieService
+class MovieApi @Inject constructor(
+    private val retrofit: Retrofit
 ) {
     private val appendToResponse = "images,videos,credits,reviews"
+    private val service = retrofit.create(MovieService::class.java)
 
     suspend fun loadMovie(id: Int): MovieApiResult {
         return try {
-            val movie = movieService.getMovie(id, appendToResponse)
+            val movie = service.getMovie(id, appendToResponse)
             MovieApiResult.Success(movie)
         }
         catch (error: Exception) {
@@ -42,6 +48,14 @@ class MovieApi(
             }
         }
     }
+}
+
+interface MovieService {
+    @GET("movie/{movie_id}")
+    suspend fun getMovie(
+        @Path("movie_id") id: Int,
+        @Query("append_to_response") appendToResponse: String
+    ): Movie
 }
 
 sealed class MovieApiResult {

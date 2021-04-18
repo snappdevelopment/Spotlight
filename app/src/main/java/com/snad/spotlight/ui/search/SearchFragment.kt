@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
+import javax.inject.Inject
 
 
 class SearchFragment : Fragment() {
@@ -38,6 +39,12 @@ class SearchFragment : Fragment() {
         get() = binding!!
 
     private val movies = mutableListOf<ListMovie>()
+
+    @Inject
+    lateinit var searchRepository: SearchRepository
+
+    @Inject
+    lateinit var viewModelFactory: SearchViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,21 +58,11 @@ class SearchFragment : Fragment() {
             this::movieClickListener
         )
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
+        inject()
 
-        val service = retrofit.create<SearchService>(SearchService::class.java)
-        val movieSearchApi = MovieSearchApi(service)
-        val searchRepository =
-            SearchRepository(movieSearchApi)
+        searchViewModel = ViewModelProvider(this, viewModelFactory)[SearchViewModel::class.java]
 
-        searchViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(searchRepository) as T
-            }
-        }).get(SearchViewModel::class.java)
-
-        searchViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        searchViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is SearchState.DoneState -> showDoneState(state.searchResults)
                 is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
@@ -75,7 +72,7 @@ class SearchFragment : Fragment() {
                 is SearchState.NetworkErrorState -> showNetworkErrorState()
                 is SearchState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         viewBinding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

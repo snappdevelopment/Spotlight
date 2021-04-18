@@ -33,6 +33,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 class CastDetailsFragment : Fragment() {
 
@@ -42,6 +43,12 @@ class CastDetailsFragment : Fragment() {
         get() = binding!!
 
     private val knownFor = mutableListOf<Cast>()
+
+    @Inject
+    lateinit var personRepository: PersonRepository
+
+    @Inject
+    lateinit var viewModelFactory: CastDetailsViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,20 +65,11 @@ class CastDetailsFragment : Fragment() {
 
         setColorPalette(arguments.backgroundColor, arguments.titleColor, arguments.bodyColor, arguments.accentColor, arguments.accentBodyColor)
 
-        val app = context!!.applicationContext as App
-        val retrofit = app.retrofit
+        inject()
 
-        val personService = retrofit.create<PersonService>(PersonService::class.java)
-        val personApi = PersonApi(personService)
-        val personRepository = PersonRepository(personApi)
+        castDetailsViewModel = ViewModelProvider(this, viewModelFactory)[CastDetailsViewModel::class.java]
 
-        castDetailsViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return CastDetailsViewModel(personRepository) as T
-            }
-        }).get(CastDetailsViewModel::class.java)
-
-        castDetailsViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        castDetailsViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is CastDetailsState.DoneState -> showDoneState(state.person)
                 is CastDetailsState.LoadingState -> showLoadingState()
@@ -79,7 +77,7 @@ class CastDetailsFragment : Fragment() {
                 is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
                 is CastDetailsState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         castDetailsViewModel.loadCastDetails(castId)
 
