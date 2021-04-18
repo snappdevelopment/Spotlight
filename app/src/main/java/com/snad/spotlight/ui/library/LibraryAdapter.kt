@@ -12,12 +12,14 @@ import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
 import com.snad.spotlight.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import javax.inject.Inject
 
-class LibraryAdapter(
-    private val longClickListener: (LibraryMovie) -> Unit,
-    private val clickListener: (Int, CardView) -> Unit,
-    private val watchedClickListener: (LibraryMovie) -> Unit
-): ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
+class LibraryAdapter @Inject constructor()
+    : ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
+
+    var longClickListener: ((LibraryMovie) -> Unit)? = null
+    var clickListener: ((Int, CardView) -> Unit)? = null
+    var watchedClickListener: ((LibraryMovie) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
         val binding = RecyclerviewItemLibraryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,8 +31,6 @@ class LibraryAdapter(
         holder.bind(item)
     }
 
-    override fun getItemCount(): Int = currentList.size
-
     inner class LibraryViewHolder(
         private val binding: RecyclerviewItemLibraryBinding
     ): RecyclerView.ViewHolder(binding.root) {
@@ -38,15 +38,15 @@ class LibraryAdapter(
         fun bind(item: LibraryMovie) {
             binding.coverCardView.transitionName = "cover${item.id}"
             binding.movieCard.setOnLongClickListener {
-                longClickListener(item)
+                longClickListener?.invoke(item)
                 true
             }
             binding.movieCard.setOnClickListener {
-                clickListener(item.id, binding.coverCardView)
+                clickListener?.invoke(item.id, binding.coverCardView)
             }
             binding.hasBeenWatchedFAB.setOnClickListener {
                 val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
-                watchedClickListener(watchedItem)
+                watchedClickListener?.invoke(watchedItem)
             }
             binding.hasBeenWatchedFAB.isSelected = item.has_been_watched
             val picasso = Picasso.get()

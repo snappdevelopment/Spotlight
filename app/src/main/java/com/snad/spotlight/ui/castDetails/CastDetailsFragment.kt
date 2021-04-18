@@ -47,6 +47,9 @@ class CastDetailsFragment : Fragment() {
     @Inject
     lateinit var personRepository: PersonRepository
 
+    @Inject
+    lateinit var viewModelFactory: CastDetailsViewModel.Factory
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,13 +67,9 @@ class CastDetailsFragment : Fragment() {
 
         inject()
 
-        castDetailsViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return CastDetailsViewModel(personRepository) as T
-            }
-        }).get(CastDetailsViewModel::class.java)
+        castDetailsViewModel = ViewModelProvider(this, viewModelFactory)[CastDetailsViewModel::class.java]
 
-        castDetailsViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        castDetailsViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is CastDetailsState.DoneState -> showDoneState(state.person)
                 is CastDetailsState.LoadingState -> showLoadingState()
@@ -78,7 +77,7 @@ class CastDetailsFragment : Fragment() {
                 is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
                 is CastDetailsState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         castDetailsViewModel.loadCastDetails(castId)
 

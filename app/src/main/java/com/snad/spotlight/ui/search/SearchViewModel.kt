@@ -2,13 +2,17 @@ package com.snad.spotlight.ui.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.repository.SearchRepository
 import com.snad.spotlight.repository.SearchRepositoryResult
 import com.snad.spotlight.network.models.ListMovie
+import com.snad.spotlight.repository.LibraryRepository
+import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class SearchViewModel(
     private val searchRepository: SearchRepository
@@ -38,6 +42,14 @@ class SearchViewModel(
                     is SearchRepositoryResult.Error -> state.value = SearchState.ErrorState
                 }
             }
+        }
+    }
+
+    class Factory @Inject constructor(
+        private  val searchRepository: SearchRepository
+    ): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return SearchViewModel(searchRepository) as T
         }
     }
 }

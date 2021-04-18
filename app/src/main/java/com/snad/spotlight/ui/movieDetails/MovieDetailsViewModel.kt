@@ -2,15 +2,19 @@ package com.snad.spotlight.ui.movieDetails
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.repository.MovieDetailsRepository
 import com.snad.spotlight.repository.MovieDetailsResult
 import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.spotlight.repository.LibraryRepository
+import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import javax.inject.Inject
 
 class MovieDetailsViewModel(
     private val movieDetailsRepository: MovieDetailsRepository
@@ -77,6 +81,14 @@ class MovieDetailsViewModel(
                 val updatedMovie = currentState.movie.copy(has_been_watched = !currentState.movie.has_been_watched)
                 movieDetailsRepository.updateMovie(updatedMovie)
             }
+        }
+    }
+
+    class Factory @Inject constructor(
+        private  val movieDetailsRepository: MovieDetailsRepository
+    ): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return MovieDetailsViewModel(movieDetailsRepository) as T
         }
     }
 }

@@ -41,6 +41,9 @@ class NewMoviesFragment : Fragment() {
     @Inject
     lateinit var newMoviesRepository: NewMoviesRepository
 
+    @Inject
+    lateinit var viewModelFactory: NewMoviesViewModel.Factory
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,13 +59,9 @@ class NewMoviesFragment : Fragment() {
 
         inject()
 
-        newMoviesViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return NewMoviesViewModel(newMoviesRepository) as T
-            }
-        }).get(NewMoviesViewModel::class.java)
+        newMoviesViewModel = ViewModelProvider(this, viewModelFactory)[NewMoviesViewModel::class.java]
 
-        newMoviesViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        newMoviesViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is NewMoviesState.DoneState -> showDoneState(state.newMovies)
                 is NewMoviesState.LoadingState -> showLoadingState()
@@ -70,7 +69,7 @@ class NewMoviesFragment : Fragment() {
                 is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
                 is NewMoviesState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         newMoviesViewModel.loadNewMovies()
 

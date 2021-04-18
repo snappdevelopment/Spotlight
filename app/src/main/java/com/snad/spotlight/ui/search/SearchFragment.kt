@@ -43,6 +43,9 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var searchRepository: SearchRepository
 
+    @Inject
+    lateinit var viewModelFactory: SearchViewModel.Factory
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,13 +60,9 @@ class SearchFragment : Fragment() {
 
         inject()
 
-        searchViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return SearchViewModel(searchRepository) as T
-            }
-        }).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this, viewModelFactory)[SearchViewModel::class.java]
 
-        searchViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+        searchViewModel.state.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is SearchState.DoneState -> showDoneState(state.searchResults)
                 is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
@@ -73,7 +72,7 @@ class SearchFragment : Fragment() {
                 is SearchState.NetworkErrorState -> showNetworkErrorState()
                 is SearchState.ErrorState -> showErrorState()
             }
-        })
+        }
 
         viewBinding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

@@ -2,6 +2,7 @@ package com.snad.spotlight.ui.library
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.repository.LibraryRepository
 import com.snad.spotlight.repository.LibraryRepositoryResult
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 class LibraryViewModel(
     private val libraryRepository: LibraryRepository
@@ -51,6 +53,13 @@ class LibraryViewModel(
         }
     }
 
+    class Factory @Inject constructor(
+        private  val libraryRepository: LibraryRepository
+    ): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return LibraryViewModel(libraryRepository) as T
+        }
+    }
 }
 
 sealed class LibraryState {
