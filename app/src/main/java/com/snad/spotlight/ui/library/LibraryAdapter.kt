@@ -26,28 +26,40 @@ class LibraryAdapter @Inject constructor()
         return LibraryViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LibraryViewHolder, position: Int, payloads: MutableList<Any>) {
         val item = getItem(position)
-        holder.bind(item)
+        val payload = payloads.firstOrNull() as? Boolean
+
+        holder.binding.movieCard.setOnLongClickListener {
+            longClickListener?.invoke(item)
+            true
+        }
+        holder.binding.movieCard.setOnClickListener {
+            clickListener?.invoke(item.id, holder.binding.coverCardView)
+        }
+        holder.binding.hasBeenWatchedFAB.setOnClickListener {
+            val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
+            watchedClickListener?.invoke(watchedItem)
+        }
+
+        if(payload != null) holder.update(item)
+        else holder.bind(item)
+    }
+
+    override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
+        onBindViewHolder(holder, position, mutableListOf())
     }
 
     inner class LibraryViewHolder(
-        private val binding: RecyclerviewItemLibraryBinding
+        val binding: RecyclerviewItemLibraryBinding
     ): RecyclerView.ViewHolder(binding.root) {
+
+        fun update(item: LibraryMovie) {
+            binding.hasBeenWatchedFAB.isSelected = item.has_been_watched
+        }
 
         fun bind(item: LibraryMovie) {
             binding.coverCardView.transitionName = "cover${item.id}"
-            binding.movieCard.setOnLongClickListener {
-                longClickListener?.invoke(item)
-                true
-            }
-            binding.movieCard.setOnClickListener {
-                clickListener?.invoke(item.id, binding.coverCardView)
-            }
-            binding.hasBeenWatchedFAB.setOnClickListener {
-                val watchedItem = item.copy(has_been_watched = !item.has_been_watched)
-                watchedClickListener?.invoke(watchedItem)
-            }
             binding.hasBeenWatchedFAB.isSelected = item.has_been_watched
             val picasso = Picasso.get()
 //        picasso.setIndicatorsEnabled(true)
@@ -75,6 +87,10 @@ class LibraryAdapter @Inject constructor()
 
         override fun areContentsTheSame(oldItem: LibraryMovie, newItem: LibraryMovie): Boolean {
             return oldItem == newItem
+        }
+
+        override fun getChangePayload(oldItem: LibraryMovie, newItem: LibraryMovie): Any? {
+            return newItem.has_been_watched
         }
     }
 }
