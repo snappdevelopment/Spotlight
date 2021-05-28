@@ -1,2 +1,7 @@
-include ':app'
 rootProject.name='Spotlight'
+include ':app'
+include ':feature:library'
+include ':core:persistence'
+include ':core:ui'
+include ':feature:library:nav'
+include ':core:navigation'

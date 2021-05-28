@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_library"
-        android:name="com.snad.spotlight.ui.library.LibraryFragment"
+        android:name="com.snad.feature.library.LibraryFragment"
         android:label="@string/title_library"
         tools:layout="@layout/fragment_library" >
         <action

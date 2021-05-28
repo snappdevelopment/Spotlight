@@ -6,33 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.App
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentCastDetailsBinding
-import com.snad.spotlight.network.ApiKeyInterceptor
-import com.snad.spotlight.network.MovieService
-import com.snad.spotlight.network.PersonApi
-import com.snad.spotlight.network.PersonService
 import com.snad.spotlight.network.models.Cast
 import com.snad.spotlight.network.models.Person
 import com.snad.spotlight.repository.PersonRepository
-import com.snad.spotlight.ui.library.LibraryViewModel
-import com.snad.spotlight.ui.movieDetails.MovieDetailsFragmentArgs
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import kotlinx.android.synthetic.main.fragment_cast_details.*
-import okhttp3.Cache
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class CastDetailsFragment : Fragment() {

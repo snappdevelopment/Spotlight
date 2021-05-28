@@ -2,13 +2,13 @@ package com.snad.spotlight.repository
 
 import com.snad.spotlight.network.MovieApi
 import com.snad.spotlight.network.MovieApiResult
-import com.snad.spotlight.persistence.LibraryDb
-import com.snad.spotlight.persistence.LibraryDbResult
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.LibraryDb
+import com.snad.core.persistence.LibraryDbResult
+import com.snad.core.persistence.models.LibraryMovie
 import com.snad.spotlight.persistence.toLibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 class MovieDetailsRepository @Inject constructor(
@@ -43,7 +43,7 @@ class MovieDetailsRepository @Inject constructor(
 
     suspend fun updateMovieData(movie: LibraryMovie) {
         if(movie.updated_at != null) {
-            var daysDifference = Calendar.getInstance().timeInMillis - movie.updated_at.timeInMillis
+            var daysDifference = Calendar.getInstance().timeInMillis - movie.updated_at!!.timeInMillis
             daysDifference = daysDifference / (1000 * 60 * 60 * 24)
 
             if(daysDifference >= 2) {

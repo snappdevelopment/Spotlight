@@ -1,13 +1,13 @@
-package com.snad.spotlight.repository
+package com.snad.feature.library
 
-import com.snad.spotlight.persistence.LibraryDb
-import com.snad.spotlight.persistence.LibraryDbResult
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.LibraryDb
+import com.snad.core.persistence.LibraryDbResult
+import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LibraryRepository @Inject constructor(
+internal class LibraryRepository @Inject constructor(
     private val libraryDb: LibraryDb
 ) {
     suspend fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
@@ -30,7 +30,7 @@ class LibraryRepository @Inject constructor(
     }
 }
 
-sealed class LibraryRepositoryResult {
+internal sealed class LibraryRepositoryResult {
     data class Success(val libraryMovies: List<LibraryMovie>): LibraryRepositoryResult()
     object DbError: LibraryRepositoryResult()
 }

@@ -5,10 +5,9 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.snad.core.persistence.models.CastMember
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsCastBinding
-import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsImagesBinding
-import com.snad.spotlight.network.models.CastMember
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 

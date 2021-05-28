@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.spotlight.repository.MovieDetailsRepository
 import com.snad.spotlight.repository.MovieDetailsResult
-import com.snad.spotlight.persistence.models.LibraryMovie
-import com.snad.spotlight.repository.LibraryRepository
-import com.snad.spotlight.ui.library.LibraryViewModel
+import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

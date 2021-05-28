@@ -9,18 +9,17 @@ import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import androidx.core.animation.addListener
 import com.google.android.material.transition.MaterialFade
-import com.google.android.material.transition.Scale
+import com.google.android.material.transition.ScaleProvider
 import kotlin.math.max
 
 
 object AnimationUtil {
 
     fun startMaterialFade(context: Context, sceneRoot: ViewGroup, toVisible: Boolean = true, duration: Long = 200) {
-        MaterialFade
-            .create(context)
-            .setDuration(duration)
-            .addTransition(Scale(toVisible))
-            .start(sceneRoot)
+        MaterialFade()
+            //.setDuration(duration)
+            //.addTransition(ScaleProvider(toVisible))
+            //.start(sceneRoot)
     }
 
     fun circularRevealAnimation(view: View, onStartListener: (Animator) -> Unit) {

@@ -1,16 +1,11 @@
 package com.snad.spotlight.ui.movieDetails
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsCastBinding
+import com.snad.core.persistence.models.Review
 import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsReviewsBinding
-import com.snad.spotlight.network.models.Review
-import com.squareup.picasso.Picasso
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class ReviewsAdapter(
     private val items: MutableList<Review>,

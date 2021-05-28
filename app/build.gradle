@@ -1,11 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
@@ -44,8 +40,8 @@ android {
         targetCompatibility = "8"
         sourceCompatibility = "8"
     }
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -65,8 +61,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
     implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.2' //is needed for kotlin annotation support
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2' //kotlin annotation support
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828' //async image loading
     implementation 'jp.wasabeef:picasso-transformations:2.2.1' //rounded corners for images
     implementation "androidx.room:room-runtime:2.2.6" //database for persistence
@@ -78,6 +74,11 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5' //catching memory leaks
     implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
     kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
+
+    implementation project(":feature:library")
+    implementation project(":core:persistence")
+    implementation project(":core:ui")
+    implementation project(":core:navigation")
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

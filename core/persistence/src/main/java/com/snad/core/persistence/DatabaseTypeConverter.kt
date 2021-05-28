@@ -1,10 +1,9 @@
-package com.snad.spotlight.persistence
+package com.snad.core.persistence
 
 import androidx.room.TypeConverter
-import com.snad.spotlight.network.models.Backdrop
-import com.snad.spotlight.network.models.CastMember
-import com.snad.spotlight.network.models.Poster
-import com.snad.spotlight.network.models.Review
+import com.snad.core.persistence.models.CastMember
+import com.snad.core.persistence.models.Image
+import com.snad.core.persistence.models.Review
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -26,25 +25,25 @@ class DatabaseTypeConverter {
     }
 
     @TypeConverter
-    fun backdropsToJson(backdrops: List<Backdrop>): String {
+    fun backdropsToJson(backdrops: List<Image>): String {
         val moshi = Moshi.Builder().build()
         val posterType: Type = Types.newParameterizedType(
             List::class.java,
-            Backdrop::class.java
+            Image::class.java
         )
-        val backdropsAdapter: JsonAdapter<List<Backdrop>> = moshi.adapter(posterType)
+        val backdropsAdapter: JsonAdapter<List<Image>> = moshi.adapter(posterType)
 
         return backdropsAdapter.toJson(backdrops)
     }
 
     @TypeConverter
-    fun backdropsFromJson(backdrops: String): List<Backdrop>? {
+    fun backdropsFromJson(backdrops: String): List<Image>? {
         val moshi = Moshi.Builder().build()
         val backdropType: Type = Types.newParameterizedType(
             List::class.java,
-            Backdrop::class.java
+            Image::class.java
         )
-        val backdropsAdapter: JsonAdapter<List<Backdrop>> = moshi.adapter(backdropType)
+        val backdropsAdapter: JsonAdapter<List<Image>> = moshi.adapter(backdropType)
 
         return backdropsAdapter.fromJson(backdrops)
     }

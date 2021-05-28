@@ -4,11 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.repository.SearchRepository
 import com.snad.spotlight.repository.SearchRepositoryResult
-import com.snad.spotlight.network.models.ListMovie
-import com.snad.spotlight.repository.LibraryRepository
-import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,6 +1,6 @@
-package com.snad.spotlight.persistence
+package com.snad.core.persistence
 
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -13,32 +13,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
-import com.snad.spotlight.*
+import com.snad.core.persistence.models.CastMember
+import com.snad.core.persistence.models.Image
+import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
-import com.snad.spotlight.network.ApiKeyInterceptor
-import com.snad.spotlight.network.MovieApi
-import com.snad.spotlight.network.MovieService
 import com.snad.spotlight.network.models.Backdrop
-import com.snad.spotlight.network.models.CastMember
-import com.snad.spotlight.network.models.Review
-import com.snad.spotlight.persistence.LibraryDb
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.Review
 import com.snad.spotlight.repository.MovieDetailsRepository
 import com.snad.spotlight.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import okhttp3.Cache
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 class MovieDetailsFragment: Fragment() {
@@ -48,7 +39,7 @@ class MovieDetailsFragment: Fragment() {
     private val viewBinding: FragmentMovieDetailsBinding
         get() = binding!!
 
-    private val backdrops = mutableListOf<Backdrop>()
+    private val backdrops = mutableListOf<Image>()
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
 

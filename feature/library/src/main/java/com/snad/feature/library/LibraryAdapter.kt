@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.library
+package com.snad.feature.library
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,14 +7,13 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.RecyclerviewItemLibraryBinding
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.feature.library.databinding.RecyclerviewItemLibraryBinding
+import com.snad.core.persistence.models.LibraryMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import javax.inject.Inject
 
-class LibraryAdapter @Inject constructor()
+internal class LibraryAdapter @Inject constructor()
     : ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
 
     var longClickListener: ((LibraryMovie) -> Unit)? = null

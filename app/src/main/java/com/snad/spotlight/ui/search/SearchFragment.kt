@@ -10,23 +10,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.spotlight.App
 import com.snad.spotlight.R
+import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.repository.SearchRepository
 import com.snad.spotlight.databinding.FragmentSearchBinding
-import com.snad.spotlight.network.ApiKeyInterceptor
-import com.snad.spotlight.network.MovieSearchApi
-import com.snad.spotlight.network.SearchService
-import com.snad.spotlight.network.models.ListMovie
-import okhttp3.Cache
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 import javax.inject.Inject
 
@@ -49,7 +39,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 

@@ -3,13 +3,14 @@ package com.snad.spotlight.ui.movieDetails
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.snad.core.persistence.models.Image
 import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsImagesBinding
 import com.snad.spotlight.network.models.Backdrop
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 class BackdropsAdapter(
-    private val items: MutableList<Backdrop>
+    private val items: MutableList<Image>
 ): RecyclerView.Adapter<BackdropsAdapter.ImagesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {

@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.library
+package com.snad.feature.library
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -7,16 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.spotlight.*
-import com.snad.spotlight.databinding.FragmentLibraryBinding
-import com.snad.spotlight.persistence.LibraryDb
-import com.snad.spotlight.persistence.models.LibraryMovie
-import com.snad.spotlight.repository.LibraryRepository
+import com.snad.feature.library.databinding.FragmentLibraryBinding
+import com.snad.core.persistence.models.LibraryMovie
 import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
@@ -26,20 +21,22 @@ class LibraryFragment : Fragment() {
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
 
-    @Inject
-    lateinit var libraryRepository: LibraryRepository
+    lateinit var libraryComponent: LibraryComponent
 
     @Inject
-    lateinit var viewModelFactory: LibraryViewModel.Factory
+    internal lateinit var libraryRepository: LibraryRepository
 
     @Inject
-    lateinit var libraryAdapter: LibraryAdapter
+    internal lateinit var viewModelFactory: LibraryViewModel.Factory
+
+    @Inject
+    internal lateinit var libraryAdapter: LibraryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
 
         binding = FragmentLibraryBinding.inflate(inflater, container, false)

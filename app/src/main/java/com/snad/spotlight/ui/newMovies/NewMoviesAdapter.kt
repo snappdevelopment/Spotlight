@@ -3,7 +3,6 @@ package com.snad.spotlight.ui.newMovies
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.spotlight.R

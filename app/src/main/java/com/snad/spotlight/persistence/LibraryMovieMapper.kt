@@ -1,7 +1,13 @@
 package com.snad.spotlight.persistence
 
+import com.snad.core.persistence.models.CastMember
+import com.snad.core.persistence.models.Image
 import com.snad.spotlight.network.models.Movie
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.Review
+import com.snad.spotlight.network.models.Backdrop
+import com.snad.spotlight.network.models.Review as ApiReview
+import com.snad.spotlight.network.models.CastMember as ApiCastMember
 import java.util.*
 
 fun Movie.toLibraryMovie(
@@ -26,9 +32,9 @@ fun Movie.toLibraryMovie(
         has_been_watched = hasBeenWatched,
         adult = this.adult,
         backdrop_path = this.backdrop_path,
-        backdrops = this.images.backdrops,
+        backdrops = this.images.backdrops.map { it.toImage() },
         budget = this.budget,
-        cast = this.credits.cast,
+        cast = this.credits.cast.map { it.toCastMember() },
         genres = genres,
         id = this.id,
         imdb_id = this.imdb_id,
@@ -37,7 +43,7 @@ fun Movie.toLibraryMovie(
         poster_path = this.poster_path,
         release_date = this.release_date,
         revenue = this.revenue,
-        reviews = this.reviews.reviews,
+        reviews = this.reviews.reviews.map { it.toReview() },
         runtime = this.runtime,
         tagline = this.tagline,
         title = this.title,
@@ -45,5 +51,39 @@ fun Movie.toLibraryMovie(
         video = this.video,
         vote_average = this.vote_average,
         vote_count = this.vote_count
+    )
+}
+
+private fun Backdrop.toImage(): Image {
+    return Image(
+        aspect_ratio = this.aspect_ratio,
+        file_path = this.file_path,
+        height = this.height,
+        width = this.width,
+        iso_639_1 = this.iso_639_1,
+        vote_average = this.vote_average,
+        vote_count = this.vote_count
+    )
+}
+
+private fun ApiCastMember.toCastMember(): CastMember {
+    return CastMember(
+        id = this.id,
+        cast_id = this.cast_id,
+        credit_id = this.credit_id,
+        name = this.name,
+        gender = this.gender,
+        character = this.character,
+        order = this.order,
+        profile_path = this.profile_path
+    )
+}
+
+private fun ApiReview.toReview(): Review {
+    return Review(
+        id = this.id,
+        author = this.author,
+        content = this.content,
+        url = this.url
     )
 }

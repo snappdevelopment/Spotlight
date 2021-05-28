@@ -7,25 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.spotlight.App
 import com.snad.spotlight.repository.NewMoviesRepository
 import com.snad.spotlight.R
 import com.snad.spotlight.databinding.FragmentNewMoviesBinding
-import com.snad.spotlight.network.ApiKeyInterceptor
-import com.snad.spotlight.network.NewMoviesApi
-import com.snad.spotlight.network.NewMoviesService
-import com.snad.spotlight.network.RetrofitClient
-import com.snad.spotlight.network.models.ListMovie
 import com.snad.spotlight.network.models.NewMovies
-import okhttp3.Cache
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import com.snad.spotlight.network.models.ListMovie
 import javax.inject.Inject
 
 
@@ -48,7 +37,7 @@ class NewMoviesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         activity?.window?.statusBarColor = resources.getColor(R.color.colorPrimaryDark, null)
         binding = FragmentNewMoviesBinding.inflate(inflater, container, false)
 

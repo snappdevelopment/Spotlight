@@ -1,11 +1,10 @@
 package com.snad.spotlight
 
 import android.content.Context
-import androidx.room.Room
 import com.snad.spotlight.network.RetrofitClient
-import com.snad.spotlight.persistence.AppDatabase
+import com.snad.core.persistence.PersistenceModule
+import com.snad.feature.library.LibraryComponent
 import com.snad.spotlight.ui.castDetails.CastDetailsFragment
-import com.snad.spotlight.ui.library.LibraryFragment
 import com.snad.spotlight.ui.movieDetails.MovieDetailsFragment
 import com.snad.spotlight.ui.newMovies.NewMoviesFragment
 import com.snad.spotlight.ui.search.SearchFragment
@@ -19,7 +18,11 @@ import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [AppModule::class])
+@Component(modules = [
+    AppModule::class,
+    FeaturesModule::class,
+    PersistenceModule::class
+])
 interface AppComponent {
 
     @Component.Builder
@@ -29,9 +32,10 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
+    fun libraryComponent(): LibraryComponent.Factory
+
     fun inject(newMoviesFragment: NewMoviesFragment)
     fun inject(searchFragment: SearchFragment)
-    fun inject(libraryFragment: LibraryFragment)
     fun inject(movieDetailsFragment: MovieDetailsFragment)
     fun inject(castDetailsFragment: CastDetailsFragment)
 }
@@ -50,14 +54,9 @@ class AppModule {
     @Singleton
     @Provides
     fun provideAppContext(app: App): Context = app.applicationContext
-
-    @Singleton
-    @Provides
-    fun provideDatabaseInstance(appContext: Context): AppDatabase =
-        Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "app_database"
-        )
-        .build()
 }
+
+@Module(subcomponents = [
+    LibraryComponent::class
+])
+class FeaturesModule

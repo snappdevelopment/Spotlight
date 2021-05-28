@@ -4,22 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.R
 import com.snad.spotlight.network.models.Person
-import com.snad.spotlight.repository.LibraryRepository
 import com.snad.spotlight.repository.PersonRepository
 import com.snad.spotlight.repository.PersonResult
-import com.snad.spotlight.ui.library.LibraryViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.DateFormat.getDateInstance
-import java.text.SimpleDateFormat
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Period
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
-import java.util.*
 import javax.inject.Inject
 
 class CastDetailsViewModel(

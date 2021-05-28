@@ -1,9 +1,9 @@
-package com.snad.spotlight.persistence
+package com.snad.core.persistence
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.snad.spotlight.persistence.models.LibraryMovie
+import com.snad.core.persistence.models.LibraryMovie
 
 @Database(entities = [LibraryMovie::class], version = 1)
 @TypeConverters(DatabaseTypeConverter::class)
