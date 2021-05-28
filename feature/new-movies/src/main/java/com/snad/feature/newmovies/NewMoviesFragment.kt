@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.newMovies
+package com.snad.feature.newmovies
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -10,11 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.spotlight.repository.NewMoviesRepository
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.FragmentNewMoviesBinding
-import com.snad.spotlight.network.models.NewMovies
-import com.snad.spotlight.network.models.ListMovie
+import com.snad.feature.newmovies.repository.NewMoviesRepository
+import com.snad.feature.newmovies.databinding.FragmentNewMoviesBinding
+import com.snad.feature.newmovies.model.ListMovie
+import com.snad.feature.newmovies.model.NewMovies
 import javax.inject.Inject
 
 
@@ -27,11 +26,13 @@ class NewMoviesFragment : Fragment() {
 
     private val movies = mutableListOf<ListMovie>()
 
-    @Inject
-    lateinit var newMoviesRepository: NewMoviesRepository
+    internal lateinit var newMoviesComponent: NewMoviesComponent
 
     @Inject
-    lateinit var viewModelFactory: NewMoviesViewModel.Factory
+    internal lateinit var newMoviesRepository: NewMoviesRepository
+
+    @Inject
+    internal lateinit var viewModelFactory: NewMoviesViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater,

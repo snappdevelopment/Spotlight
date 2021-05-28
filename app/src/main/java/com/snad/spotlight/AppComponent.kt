@@ -4,9 +4,10 @@ import android.content.Context
 import com.snad.spotlight.network.RetrofitClient
 import com.snad.core.persistence.PersistenceModule
 import com.snad.feature.library.LibraryComponent
+import com.snad.feature.newmovies.NewMoviesComponent
 import com.snad.spotlight.ui.castDetails.CastDetailsFragment
 import com.snad.spotlight.ui.movieDetails.MovieDetailsFragment
-import com.snad.spotlight.ui.newMovies.NewMoviesFragment
+import com.snad.feature.newmovies.NewMoviesFragment
 import com.snad.spotlight.ui.search.SearchFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -33,8 +34,8 @@ interface AppComponent {
     }
 
     fun libraryComponent(): LibraryComponent.Factory
+    fun newMoviesComponent(): NewMoviesComponent.Factory
 
-    fun inject(newMoviesFragment: NewMoviesFragment)
     fun inject(searchFragment: SearchFragment)
     fun inject(movieDetailsFragment: MovieDetailsFragment)
     fun inject(castDetailsFragment: CastDetailsFragment)
@@ -57,6 +58,7 @@ class AppModule {
 }
 
 @Module(subcomponents = [
-    LibraryComponent::class
+    LibraryComponent::class,
+    NewMoviesComponent::class
 ])
 class FeaturesModule

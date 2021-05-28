@@ -12,6 +12,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.snad.feature.library.databinding.FragmentLibraryBinding
 import com.snad.core.persistence.models.LibraryMovie
+import com.snad.feature.library.repository.LibraryRepository
 import javax.inject.Inject
 
 class LibraryFragment : Fragment() {

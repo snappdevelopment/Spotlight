@@ -1,17 +1,16 @@
-package com.snad.spotlight.ui.newMovies
+package com.snad.feature.newmovies
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.RecyclerviewItemNewMoviesBinding
-import com.snad.spotlight.network.models.ListMovie
+import com.snad.feature.newmovies.databinding.RecyclerviewItemNewMoviesBinding
+import com.snad.feature.newmovies.model.ListMovie
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class NewMoviesAdapter(
+internal class NewMoviesAdapter(
     private val items: MutableList<ListMovie>,
     private val clickListener: (Int, CardView) -> Unit
 ): RecyclerView.Adapter<NewMoviesAdapter.NewMoviesViewHolder>() {
@@ -47,7 +46,7 @@ class NewMoviesAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class NewMoviesViewHolder(
+    inner class NewMoviesViewHolder(
         viewBinding: RecyclerviewItemNewMoviesBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val movieCard = viewBinding.movieCard

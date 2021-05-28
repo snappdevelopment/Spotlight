@@ -1,11 +1,9 @@
-package com.snad.spotlight.repository
+package com.snad.feature.newmovies.repository
 
-import com.snad.spotlight.network.NewMoviesApi
-import com.snad.spotlight.network.NewMoviesApiResult
-import com.snad.spotlight.network.models.NewMovies
+import com.snad.feature.newmovies.model.NewMovies
 import javax.inject.Inject
 
-class NewMoviesRepository @Inject constructor(
+internal class NewMoviesRepository @Inject constructor(
     private val newMoviesApi: NewMoviesApi
 ) {
     suspend fun loadNewMovies(): NewMoviesResult {
@@ -23,7 +21,7 @@ class NewMoviesRepository @Inject constructor(
     }
 }
 
-sealed class NewMoviesResult {
+internal sealed class NewMoviesResult {
     class Success(val newMovies: NewMovies): NewMoviesResult()
     object NetworkError: NewMoviesResult()
     object ConnectionError: NewMoviesResult()

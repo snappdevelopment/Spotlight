@@ -1,4 +1,4 @@
-package com.snad.feature.library
+package com.snad.feature.library.repository
 
 import com.snad.core.persistence.LibraryDb
 import com.snad.core.persistence.LibraryDbResult

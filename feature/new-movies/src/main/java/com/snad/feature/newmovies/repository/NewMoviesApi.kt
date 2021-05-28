@@ -1,7 +1,7 @@
-package com.snad.spotlight.network
+package com.snad.feature.newmovies.repository
 
 import android.util.Log
-import com.snad.spotlight.network.models.NewMovies
+import com.snad.feature.newmovies.model.NewMovies
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -10,7 +10,7 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class NewMoviesApi @Inject constructor(
+internal class NewMoviesApi @Inject constructor(
     private val retrofit: Retrofit
 ) {
     private val language = "en-US"
@@ -41,15 +41,21 @@ class NewMoviesApi @Inject constructor(
                         Log.d("NewMoviesApi", "${error.code()} ${error.response().toString()}")
                         NewMoviesApiResult.ApiError
                     }
-                    else -> NewMoviesApiResult.Error
+                    else -> {
+                        Log.d("NewMoviesApi", "${error.code()} ${error.response().toString()}")
+                        NewMoviesApiResult.Error
+                    }
                 }
-                else -> NewMoviesApiResult.Error
+                else -> {
+                    Log.d("NewMoviesApi", "Unknown Error: ${error.message} ${error.cause}")
+                    NewMoviesApiResult.Error
+                }
             }
         }
     }
 }
 
-interface NewMoviesService {
+internal interface NewMoviesService {
     @GET("movie/now_playing")
     suspend fun getNewMovies(
         @Query("language") language: String,
@@ -57,7 +63,7 @@ interface NewMoviesService {
     ): NewMovies
 }
 
-sealed class NewMoviesApiResult {
+internal sealed class NewMoviesApiResult {
     class Success(val newMovies: NewMovies): NewMoviesApiResult()
     object NetworkError: NewMoviesApiResult()
     object ConnectionError: NewMoviesApiResult()
