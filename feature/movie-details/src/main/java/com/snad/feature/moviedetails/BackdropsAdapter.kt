@@ -1,15 +1,14 @@
-package com.snad.spotlight.ui.movieDetails
+package com.snad.feature.moviedetails
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.core.persistence.models.Image
-import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsImagesBinding
-import com.snad.spotlight.network.models.Backdrop
+import com.snad.feature.moviedetails.databinding.RecyclerviewItemMovieDetailsImagesBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class BackdropsAdapter(
+internal class BackdropsAdapter(
     private val items: MutableList<Image>
 ): RecyclerView.Adapter<BackdropsAdapter.ImagesViewHolder>() {
 
@@ -31,7 +30,7 @@ class BackdropsAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class ImagesViewHolder(
+    inner class ImagesViewHolder(
         viewBinding: RecyclerviewItemMovieDetailsImagesBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val imageImageView = viewBinding.imageImageView

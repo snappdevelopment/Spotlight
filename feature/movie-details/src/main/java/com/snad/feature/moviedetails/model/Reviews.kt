@@ -1,10 +1,10 @@
-package com.snad.spotlight.network.models
+package com.snad.feature.moviedetails.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class Reviews(
+internal class Reviews(
     @Json(name = "results")
     val reviews: List<Review>,
     val page: Int,
@@ -13,7 +13,7 @@ class Reviews(
 )
 
 @JsonClass(generateAdapter = true)
-class Review(
+internal class Review(
     val id: String,
     val author: String,
     val content: String,

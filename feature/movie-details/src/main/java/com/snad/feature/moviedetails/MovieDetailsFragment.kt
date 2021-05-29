@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.movieDetails
+package com.snad.feature.moviedetails
 
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
@@ -20,13 +20,11 @@ import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
 import com.snad.core.persistence.models.CastMember
 import com.snad.core.persistence.models.Image
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.FragmentMovieDetailsBinding
-import com.snad.spotlight.network.models.Backdrop
+import com.snad.feature.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.core.persistence.models.Review
-import com.snad.spotlight.repository.MovieDetailsRepository
-import com.snad.spotlight.ui.AnimationUtil
+import com.snad.feature.moviedetails.repository.MovieDetailsRepository
+import com.snad.core.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
@@ -43,11 +41,13 @@ class MovieDetailsFragment: Fragment() {
     private val castMember = mutableListOf<CastMember>()
     private val reviews = mutableListOf<Review>()
 
-    @Inject
-    lateinit var movieDetailsRepository: MovieDetailsRepository
+    internal lateinit var movieDetailsComponent: MovieDetailsComponent
 
     @Inject
-    lateinit var viewModelFactory: MovieDetailsViewModel.Factory
+    internal lateinit var movieDetailsRepository: MovieDetailsRepository
+
+    @Inject
+    internal lateinit var viewModelFactory: MovieDetailsViewModel.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

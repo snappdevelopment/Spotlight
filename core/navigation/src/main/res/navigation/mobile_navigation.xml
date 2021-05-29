@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/navigation_movie_details"
-        android:name="com.snad.spotlight.ui.movieDetails.MovieDetailsFragment"
+        android:name="com.snad.feature.moviedetails.MovieDetailsFragment"
         android:label="@string/title_movieDetails"
         tools:layout="@layout/fragment_movie_details" >
         <argument

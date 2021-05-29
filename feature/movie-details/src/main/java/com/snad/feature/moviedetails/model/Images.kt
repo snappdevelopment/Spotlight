@@ -1,15 +1,15 @@
-package com.snad.spotlight.network.models
+package com.snad.feature.moviedetails.model
 
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class Images(
+internal class Images(
     val backdrops: List<Backdrop>,
     val posters: List<Poster>
 )
 
 @JsonClass(generateAdapter = true)
-class Backdrop(
+internal class Backdrop(
     val aspect_ratio: Double,
     val file_path: String,
     val height: Int,
@@ -20,7 +20,7 @@ class Backdrop(
 )
 
 @JsonClass(generateAdapter = true)
-class Poster(
+internal class Poster(
     val aspect_ratio: Double,
     val file_path: String,
     val height: Int,

@@ -1,17 +1,14 @@
-package com.snad.spotlight.repository
+package com.snad.feature.moviedetails.repository
 
-import com.snad.spotlight.network.MovieApi
-import com.snad.spotlight.network.MovieApiResult
 import com.snad.core.persistence.LibraryDb
 import com.snad.core.persistence.LibraryDbResult
 import com.snad.core.persistence.models.LibraryMovie
-import com.snad.spotlight.persistence.toLibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import javax.inject.Inject
 
-class MovieDetailsRepository @Inject constructor(
+internal class MovieDetailsRepository @Inject constructor(
     private val libraryDb: LibraryDb,
     private val movieApi: MovieApi
 ) {
@@ -78,7 +75,7 @@ class MovieDetailsRepository @Inject constructor(
     }
 }
 
-sealed class MovieDetailsResult {
+internal sealed class MovieDetailsResult {
     data class Success(val movie: LibraryMovie, val isInLibrary: Boolean): MovieDetailsResult()
     object NetworkError: MovieDetailsResult()
     object ConnectionError: MovieDetailsResult()

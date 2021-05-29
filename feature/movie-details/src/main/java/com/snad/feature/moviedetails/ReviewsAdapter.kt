@@ -1,13 +1,13 @@
-package com.snad.spotlight.ui.movieDetails
+package com.snad.feature.moviedetails
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.snad.core.persistence.models.Review
-import com.snad.spotlight.databinding.RecyclerviewItemMovieDetailsReviewsBinding
+import com.snad.feature.moviedetails.databinding.RecyclerviewItemMovieDetailsReviewsBinding
 
-class ReviewsAdapter(
+internal class ReviewsAdapter(
     private val items: MutableList<Review>,
     var cardColor: Int = Color.WHITE,
     var authorTextColor: Int = Color.BLACK,
@@ -31,7 +31,7 @@ class ReviewsAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class ReviewViewHolder(
+    inner class ReviewViewHolder(
         viewBinding: RecyclerviewItemMovieDetailsReviewsBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val reviewCardView = viewBinding.reviewCardView

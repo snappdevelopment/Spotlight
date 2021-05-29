@@ -1,15 +1,15 @@
-package com.snad.spotlight.network.models
+package com.snad.feature.moviedetails.model
 
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class Credits(
+internal class Credits(
     val cast: List<CastMember>,
     val crew: List<CrewMember>
 )
 
 @JsonClass(generateAdapter = true)
-class CastMember(
+internal class CastMember(
     val cast_id: Int,
     val character: String,
     val credit_id: String,
@@ -21,7 +21,7 @@ class CastMember(
 )
 
 @JsonClass(generateAdapter = true)
-class CrewMember(
+internal class CrewMember(
     val credit_id: String,
     val department: String,
     val gender: Int?,

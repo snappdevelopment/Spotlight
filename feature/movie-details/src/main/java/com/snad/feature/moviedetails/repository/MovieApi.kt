@@ -1,7 +1,7 @@
-package com.snad.spotlight.network
+package com.snad.feature.moviedetails.repository
 
 import android.util.Log
-import com.snad.spotlight.network.models.Movie
+import com.snad.feature.moviedetails.model.Movie
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -11,7 +11,7 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class MovieApi @Inject constructor(
+internal class MovieApi @Inject constructor(
     private val retrofit: Retrofit
 ) {
     private val appendToResponse = "images,videos,credits,reviews"
@@ -50,7 +50,7 @@ class MovieApi @Inject constructor(
     }
 }
 
-interface MovieService {
+internal interface MovieService {
     @GET("movie/{movie_id}")
     suspend fun getMovie(
         @Path("movie_id") id: Int,
@@ -58,7 +58,7 @@ interface MovieService {
     ): Movie
 }
 
-sealed class MovieApiResult {
+internal sealed class MovieApiResult {
     class Success(val movie: Movie): MovieApiResult()
     object NetworkError: MovieApiResult()
     object ConnectionError: MovieApiResult()

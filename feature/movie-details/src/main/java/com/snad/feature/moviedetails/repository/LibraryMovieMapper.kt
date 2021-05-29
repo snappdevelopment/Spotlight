@@ -1,16 +1,16 @@
-package com.snad.spotlight.persistence
+package com.snad.feature.moviedetails.repository
 
 import com.snad.core.persistence.models.CastMember
 import com.snad.core.persistence.models.Image
-import com.snad.spotlight.network.models.Movie
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.core.persistence.models.Review
-import com.snad.spotlight.network.models.Backdrop
-import com.snad.spotlight.network.models.Review as ApiReview
-import com.snad.spotlight.network.models.CastMember as ApiCastMember
+import com.snad.feature.moviedetails.model.Movie
+import com.snad.feature.moviedetails.model.Backdrop
+import com.snad.feature.moviedetails.model.Review as ApiReview
+import com.snad.feature.moviedetails.model.CastMember as ApiCastMember
 import java.util.*
 
-fun Movie.toLibraryMovie(
+internal fun Movie.toLibraryMovie(
     addedAt: Calendar? = null,
     updatedAt: Calendar? = null,
     hasBeenWatched: Boolean = false

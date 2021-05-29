@@ -4,6 +4,8 @@ import androidx.multidex.MultiDexApplication
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.snad.feature.library.LibraryComponent
 import com.snad.feature.library.LibraryComponentProvider
+import com.snad.feature.moviedetails.MovieDetailsComponent
+import com.snad.feature.moviedetails.MovieDetailsComponentProvider
 import com.snad.feature.newmovies.NewMoviesComponent
 import com.snad.feature.newmovies.NewMoviesComponentProvider
 import com.snad.feature.search.SearchComponent
@@ -13,7 +15,8 @@ class App :
     MultiDexApplication(),
     LibraryComponentProvider,
     NewMoviesComponentProvider,
-    SearchComponentProvider {
+    SearchComponentProvider,
+    MovieDetailsComponentProvider {
 
     val appComponent = DaggerAppComponent
         .builder()
@@ -28,4 +31,5 @@ class App :
     override fun provideLibraryComponent(): LibraryComponent = appComponent.libraryComponent().create()
     override fun provideNewMoviesComponent(): NewMoviesComponent = appComponent.newMoviesComponent().create()
     override fun provideSearchComponent(): SearchComponent = appComponent.searchComponent().create()
+    override fun provideMovieDetailsComponent(): MovieDetailsComponent = appComponent.movieDetailsComponent().create()
 }

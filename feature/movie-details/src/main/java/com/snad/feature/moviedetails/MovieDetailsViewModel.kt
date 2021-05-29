@@ -1,11 +1,11 @@
-package com.snad.spotlight.ui.movieDetails
+package com.snad.feature.moviedetails
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.repository.MovieDetailsRepository
-import com.snad.spotlight.repository.MovieDetailsResult
+import com.snad.feature.moviedetails.repository.MovieDetailsRepository
+import com.snad.feature.moviedetails.repository.MovieDetailsResult
 import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
-class MovieDetailsViewModel(
+internal class MovieDetailsViewModel(
     private val movieDetailsRepository: MovieDetailsRepository
 ): ViewModel() {
 
@@ -34,13 +34,19 @@ class MovieDetailsViewModel(
                             }
                             val sortedCast = movieDetailsResult.movie.cast.sortedBy { castMember -> castMember.order }
                             state.value = MovieDetailsState.DoneState(
-                                movieDetailsResult.movie.copy(backdrops = sortedBackdrops, cast = sortedCast),
+                                movieDetailsResult.movie.copy(
+                                    backdrops = sortedBackdrops,
+                                    cast = sortedCast
+                                ),
                                 movieDetailsResult.isInLibrary
                             )
                         }
-                        is MovieDetailsResult.NetworkError -> state.value = MovieDetailsState.ErrorNetworkState
-                        is MovieDetailsResult.ConnectionError -> state.value = MovieDetailsState.ErrorNetworkState
-                        is MovieDetailsResult.AuthenticationError -> state.value = MovieDetailsState.ErrorAuthenticationState
+                        is MovieDetailsResult.NetworkError -> state.value =
+                            MovieDetailsState.ErrorNetworkState
+                        is MovieDetailsResult.ConnectionError -> state.value =
+                            MovieDetailsState.ErrorNetworkState
+                        is MovieDetailsResult.AuthenticationError -> state.value =
+                            MovieDetailsState.ErrorAuthenticationState
                         is MovieDetailsResult.ApiError -> state.value = MovieDetailsState.ErrorState
                         is MovieDetailsResult.Error -> state.value = MovieDetailsState.ErrorState
                     }
@@ -91,7 +97,7 @@ class MovieDetailsViewModel(
     }
 }
 
-sealed class MovieDetailsState {
+internal sealed class MovieDetailsState {
     data class DoneState(val movie: LibraryMovie, val isInLibrary: Boolean): MovieDetailsState()
     object LoadingState: MovieDetailsState()
     object ErrorNetworkState: MovieDetailsState()
