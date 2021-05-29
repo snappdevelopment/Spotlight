@@ -1,17 +1,16 @@
-package com.snad.spotlight.ui.search
+package com.snad.feature.search
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.RecyclerviewItemSearchBinding
-import com.snad.spotlight.network.models.ListMovie
+import com.snad.feature.search.model.ListMovie
+import com.snad.feature.search.databinding.RecyclerviewItemSearchBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class SearchAdapter(
+internal class SearchAdapter(
     private val items: MutableList<ListMovie>,
     private val clickListener: (Int, CardView) -> Unit
 ): RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
@@ -47,7 +46,7 @@ class SearchAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class SearchViewHolder(
+    inner class SearchViewHolder(
         viewBinding: RecyclerviewItemSearchBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val movieCard = viewBinding.movieCard

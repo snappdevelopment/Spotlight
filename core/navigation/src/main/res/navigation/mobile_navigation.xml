@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.snad.spotlight.ui.search.SearchFragment"
+        android:name="com.snad.feature.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action

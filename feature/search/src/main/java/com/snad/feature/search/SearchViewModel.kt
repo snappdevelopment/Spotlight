@@ -1,18 +1,18 @@
-package com.snad.spotlight.ui.search
+package com.snad.feature.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.network.models.ListMovie
-import com.snad.spotlight.repository.SearchRepository
-import com.snad.spotlight.repository.SearchRepositoryResult
+import com.snad.feature.search.model.ListMovie
+import com.snad.feature.search.repository.SearchRepository
+import com.snad.feature.search.repository.SearchRepositoryResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class SearchViewModel(
+internal class SearchViewModel(
     private val searchRepository: SearchRepository
 ) : ViewModel() {
 
@@ -25,7 +25,8 @@ class SearchViewModel(
             withContext(Dispatchers.Main) {
                 when(result) {
                     is SearchRepositoryResult.Success -> {
-                        if(result.searchResults.total_results == 0) state.value = SearchState.NoResultsState
+                        if(result.searchResults.total_results == 0) state.value =
+                            SearchState.NoResultsState
                         else {
                             val sortedList = result.searchResults.results.sortedByDescending { listMovie ->
                                 listMovie.popularity
@@ -33,9 +34,12 @@ class SearchViewModel(
                             state.value = SearchState.DoneState(sortedList)
                         }
                     }
-                    is SearchRepositoryResult.NetworkError -> state.value = SearchState.NetworkErrorState
-                    is SearchRepositoryResult.ConnectionError -> state.value = SearchState.NetworkErrorState
-                    is SearchRepositoryResult.AuthenticationError -> state.value = SearchState.AuthenticationErrorState
+                    is SearchRepositoryResult.NetworkError -> state.value =
+                        SearchState.NetworkErrorState
+                    is SearchRepositoryResult.ConnectionError -> state.value =
+                        SearchState.NetworkErrorState
+                    is SearchRepositoryResult.AuthenticationError -> state.value =
+                        SearchState.AuthenticationErrorState
                     is SearchRepositoryResult.ApiError -> state.value = SearchState.ErrorState
                     is SearchRepositoryResult.Error -> state.value = SearchState.ErrorState
                 }
@@ -52,7 +56,7 @@ class SearchViewModel(
     }
 }
 
-sealed class SearchState {
+internal sealed class SearchState {
     class DoneState(val searchResults: List<ListMovie>): SearchState()
     object InitialState: SearchState()
     object LoadingState: SearchState()

@@ -1,7 +1,7 @@
-package com.snad.spotlight.network
+package com.snad.feature.search.repository
 
 import android.util.Log
-import com.snad.spotlight.network.models.MovieSearchResults
+import com.snad.feature.search.model.MovieSearchResults
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -10,7 +10,7 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class MovieSearchApi @Inject constructor(
+internal class MovieSearchApi @Inject constructor(
     private val retrofit: Retrofit
 ) {
     private val page = 1
@@ -49,7 +49,7 @@ class MovieSearchApi @Inject constructor(
     }
 }
 
-interface SearchService {
+internal interface SearchService {
     @GET("search/movie")
     suspend fun searchMovie(
         @Query("query") title: String,
@@ -57,7 +57,7 @@ interface SearchService {
     ): MovieSearchResults
 }
 
-sealed class MovieSearchApiResult {
+internal sealed class MovieSearchApiResult {
     class Success(val searchResults: MovieSearchResults): MovieSearchApiResult()
     object NetworkError:MovieSearchApiResult()
     object ConnectionError: MovieSearchApiResult()

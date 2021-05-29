@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.search
+package com.snad.feature.search
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -13,10 +13,9 @@ import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.spotlight.R
-import com.snad.spotlight.network.models.ListMovie
-import com.snad.spotlight.repository.SearchRepository
-import com.snad.spotlight.databinding.FragmentSearchBinding
+import com.snad.feature.search.repository.SearchRepository
+import com.snad.feature.search.databinding.FragmentSearchBinding
+import com.snad.feature.search.model.ListMovie
 import java.util.*
 import javax.inject.Inject
 
@@ -30,11 +29,13 @@ class SearchFragment : Fragment() {
 
     private val movies = mutableListOf<ListMovie>()
 
-    @Inject
-    lateinit var searchRepository: SearchRepository
+    internal lateinit var searchComponent: SearchComponent
 
     @Inject
-    lateinit var viewModelFactory: SearchViewModel.Factory
+    internal lateinit var searchRepository: SearchRepository
+
+    @Inject
+    internal lateinit var viewModelFactory: SearchViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

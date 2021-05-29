@@ -1,11 +1,9 @@
-package com.snad.spotlight.repository
+package com.snad.feature.search.repository
 
-import com.snad.spotlight.network.MovieSearchApi
-import com.snad.spotlight.network.MovieSearchApiResult
-import com.snad.spotlight.network.models.MovieSearchResults
+import com.snad.feature.search.model.MovieSearchResults
 import javax.inject.Inject
 
-class SearchRepository @Inject constructor(
+internal class SearchRepository @Inject constructor(
     private val movieSearchApi: MovieSearchApi
 ) {
     suspend fun searchMovies(title: String): SearchRepositoryResult {
@@ -23,7 +21,7 @@ class SearchRepository @Inject constructor(
     }
 }
 
-sealed class SearchRepositoryResult {
+internal sealed class SearchRepositoryResult {
     class Success(val searchResults: MovieSearchResults): SearchRepositoryResult()
     object NetworkError: SearchRepositoryResult()
     object ConnectionError: SearchRepositoryResult()
