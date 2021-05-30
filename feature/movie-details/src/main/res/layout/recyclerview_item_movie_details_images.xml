@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
         android:layout_height="169dp"
-        android:layout_margin="@dimen/movie_detail_images_rv_item_margin"
+        android:layout_margin="@dimen/default_space"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
