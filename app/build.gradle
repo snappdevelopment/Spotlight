@@ -1,30 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'kotlin-kapt'
-
-apply plugin: "androidx.navigation.safeargs.kotlin"
+//common feature module config
+apply from: "$rootProject.projectDir/android-module.gradle"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.snad.spotlight"
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
     }
     buildTypes {
         release {
@@ -37,49 +22,34 @@ android {
             multiDexKeepFile file('multidex-config.txt')
         }
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-    compileOptions {
-        targetCompatibility = "8"
-        sourceCompatibility = "8"
-    }
-    viewBinding {
-        enabled = true
-    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'com.google.android.material:material:1.2.0-alpha05'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8' //adds coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-    //access to androids main dispatcher and correct crash logs
     implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
     implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
-    implementation 'com.squareup.moshi:moshi-kotlin:1.9.2' //is needed for kotlin annotation support
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2' //kotlin annotation support
-    implementation 'com.squareup.picasso:picasso:2.71828' //async image loading
-    implementation 'jp.wasabeef:picasso-transformations:2.2.1' //rounded corners for images
     implementation "androidx.room:room-runtime:2.2.6" //database for persistence
     implementation "androidx.room:room-ktx:2.2.6" //room kotlin extensions, coroutine support
     kapt "androidx.room:room-compiler:2.2.6" //room compiler for persistence
     implementation 'androidx.multidex:multidex:2.0.1' //because of max method count
-    implementation "androidx.palette:palette-ktx:1.0.0" //palette to extract image colors
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4' //JSR-310 Backport for java.time.* below API 26
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5' //catching memory leaks
     implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
     kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5' //catching memory leaks
+
+    implementation project(":feature:library")
+    implementation project(":feature:new-movies")
+    implementation project(":feature:search")
+    implementation project(":feature:movie-details")
+    implementation project(":feature:cast-details")
+    implementation project(":core:persistence")
+    implementation project(":core:ui")
+    implementation project(":core:navigation")
 }

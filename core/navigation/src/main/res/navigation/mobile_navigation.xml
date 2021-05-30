@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_library">
+
+    <fragment
+        android:id="@+id/navigation_new_movies"
+        android:name="com.snad.feature.newmovies.NewMoviesFragment"
+        android:label="@string/title_new_movies"
+        tools:layout="@layout/fragment_new_movies" >
+        <action
+            android:id="@+id/action_navigation_new_movies_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_library"
+        android:name="com.snad.feature.library.LibraryFragment"
+        android:label="@string/title_library"
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_navigation_library_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_movie_details"
+        android:name="com.snad.feature.moviedetails.MovieDetailsFragment"
+        android:label="@string/title_movieDetails"
+        tools:layout="@layout/fragment_movie_details" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_navigation_movie_details_to_navigation_cast_details"
+            app:destination="@id/navigation_cast_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.snad.feature.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_movie_details"
+            app:destination="@id/navigation_movie_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cast_details"
+        android:name="com.snad.feature.castdetails.CastDetailsFragment"
+        android:label="fragment_cast_details"
+        tools:layout="@layout/fragment_cast_details">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="backgroundColor"
+            app:argType="integer" />
+        <argument
+            android:name="titleColor"
+            app:argType="integer" />
+        <argument
+            android:name="bodyColor"
+            app:argType="integer" />
+        <argument
+            android:name="accentColor"
+            app:argType="integer" />
+        <argument
+            android:name="accentBodyColor"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

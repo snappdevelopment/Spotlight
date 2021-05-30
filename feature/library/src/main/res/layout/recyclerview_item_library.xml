@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movieCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/large_space"
+    android:layout_margin="@dimen/default_space"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/card_background"
+    android:elevation="4dp"
+    android:animateLayoutChanges="true"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/coverCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/coverImageView"
+            android:layout_width="92dp"
+            android:layout_height="138dp"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/libraryTitle"
+        android:layout_marginStart="@dimen/medium_space"
+        android:layout_marginEnd="@dimen/default_space"
+        android:textSize="20sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        app:layout_constraintTop_toTopOf="@id/coverCardView"
+        app:layout_constraintStart_toEndOf="@id/coverCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Fast and the Furious 9: Final Race"/>
+
+    <TextView
+        android:id="@+id/releaseDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="@dimen/medium_space"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toEndOf="@id/coverCardView"
+        tools:text="2020"/>
+
+    <TextView
+        android:id="@+id/runtimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_space"
+        android:layout_marginTop="5dp"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toEndOf="@id/releaseDateTextView"
+        tools:text="120 min"/>
+
+    <ImageView
+        android:id="@+id/averageVoteImageView"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="@dimen/medium_space"
+        android:src="@drawable/ic_star_filled"
+        app:layout_constraintTop_toTopOf="@+id/averageVoteTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/averageVoteTextView"
+        app:layout_constraintStart_toEndOf="@+id/runtimeTextView"/>
+
+    <TextView
+        android:id="@+id/averageVoteTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="5dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/averageVoteImageView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        tools:text="5.7"/>
+
+    <TextView
+        android:id="@+id/genreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_space"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/coverCardView"
+        app:layout_constraintStart_toEndOf="@+id/coverCardView"
+        tools:text="Drama, Thriller" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/hasBeenWatchedFAB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/medium_space"
+            android:elevation="6dp"
+            app:borderWidth="0dp"
+            android:src="@drawable/watched_icon_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            app:maxImageSize="20dp"
+            app:fabCustomSize="35dp"
+            app:backgroundTint="@drawable/fab_color_selector" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
