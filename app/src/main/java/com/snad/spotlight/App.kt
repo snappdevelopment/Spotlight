@@ -1,7 +1,8 @@
 package com.snad.spotlight
 
 import androidx.multidex.MultiDexApplication
-import com.jakewharton.threetenabp.AndroidThreeTen
+import com.snad.feature.castdetails.CastDetailsComponent
+import com.snad.feature.castdetails.CastDetailsComponentProvider
 import com.snad.feature.library.LibraryComponent
 import com.snad.feature.library.LibraryComponentProvider
 import com.snad.feature.moviedetails.MovieDetailsComponent
@@ -16,20 +17,17 @@ class App :
     LibraryComponentProvider,
     NewMoviesComponentProvider,
     SearchComponentProvider,
-    MovieDetailsComponentProvider {
+    MovieDetailsComponentProvider,
+    CastDetailsComponentProvider {
 
     val appComponent = DaggerAppComponent
         .builder()
         .application(this)
         .build()
 
-    override fun onCreate() {
-        super.onCreate()
-        AndroidThreeTen.init(this)
-    }
-
     override fun provideLibraryComponent(): LibraryComponent = appComponent.libraryComponent().create()
     override fun provideNewMoviesComponent(): NewMoviesComponent = appComponent.newMoviesComponent().create()
     override fun provideSearchComponent(): SearchComponent = appComponent.searchComponent().create()
     override fun provideMovieDetailsComponent(): MovieDetailsComponent = appComponent.movieDetailsComponent().create()
+    override fun provideCastDetailsComponent(): CastDetailsComponent = appComponent.castDetailsComponent().create()
 }

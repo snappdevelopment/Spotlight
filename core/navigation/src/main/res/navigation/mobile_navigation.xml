@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/navigation_cast_details"
-        android:name="com.snad.spotlight.ui.castDetails.CastDetailsFragment"
+        android:name="com.snad.feature.castdetails.CastDetailsFragment"
         android:label="fragment_cast_details"
         tools:layout="@layout/fragment_cast_details">
         <argument

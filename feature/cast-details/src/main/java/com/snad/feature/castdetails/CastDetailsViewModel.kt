@@ -1,22 +1,22 @@
-package com.snad.spotlight.ui.castDetails
+package com.snad.feature.castdetails
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.snad.spotlight.network.models.Person
-import com.snad.spotlight.repository.PersonRepository
-import com.snad.spotlight.repository.PersonResult
+import com.snad.feature.castdetails.model.Person
+import com.snad.feature.castdetails.repository.PersonRepository
+import com.snad.feature.castdetails.repository.PersonResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.threeten.bp.LocalDate
-import org.threeten.bp.Period
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
-class CastDetailsViewModel(
+internal class CastDetailsViewModel(
     private val personRepository: PersonRepository
 ) : ViewModel() {
 
@@ -30,8 +30,10 @@ class CastDetailsViewModel(
                 when(result) {
                     is PersonResult.Success -> state.value = prepareDoneState(result)
                     is PersonResult.NetworkError -> state.value = CastDetailsState.NetworkErrorState
-                    is PersonResult.ConnectionError -> state.value = CastDetailsState.NetworkErrorState
-                    is PersonResult.AuthenticationError -> state.value = CastDetailsState.AuthenticationErrorState
+                    is PersonResult.ConnectionError -> state.value =
+                        CastDetailsState.NetworkErrorState
+                    is PersonResult.AuthenticationError -> state.value =
+                        CastDetailsState.AuthenticationErrorState
                     is PersonResult.ApiError -> state.value = CastDetailsState.ErrorState
                     is PersonResult.Error -> state.value = CastDetailsState.ErrorState
                 }
@@ -61,7 +63,8 @@ class CastDetailsViewModel(
                 LocalDate.of(endDate.year, endDate.month, endDate.dayOfMonth)
             ).years
 
-            birthdayString = LocalDate.parse(birthday).format(DateTimeFormatter.ofLocalizedDate(
+            birthdayString = LocalDate.parse(birthday).format(
+                DateTimeFormatter.ofLocalizedDate(
                 FormatStyle.SHORT))
 
             if(deathday != null && deathday.isNotEmpty()) {
@@ -71,11 +74,13 @@ class CastDetailsViewModel(
             else birthdayString = birthdayString.plus(" (${age})")
         }
 
-        return CastDetailsState.DoneState(result.person.copy(
-            person_credits = result.person.person_credits.copy(cast = sortedMovies),
-            birthday = birthdayString,
-            deathday = deathdayString
-        ))
+        return CastDetailsState.DoneState(
+            result.person.copy(
+                person_credits = result.person.person_credits.copy(cast = sortedMovies),
+                birthday = birthdayString,
+                deathday = deathdayString
+            )
+        )
     }
 
     class Factory @Inject constructor(
@@ -87,7 +92,7 @@ class CastDetailsViewModel(
     }
 }
 
-sealed class CastDetailsState {
+internal sealed class CastDetailsState {
     class DoneState(val person: Person): CastDetailsState()
     object LoadingState: CastDetailsState()
     object NetworkErrorState: CastDetailsState()

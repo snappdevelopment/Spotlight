@@ -1,6 +1,6 @@
-package com.snad.spotlight.network
+package com.snad.feature.castdetails.repository
 
-import com.snad.spotlight.network.models.Person
+import com.snad.feature.castdetails.model.Person
 import android.util.Log
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -11,7 +11,7 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
-class PersonApi @Inject constructor(
+internal class PersonApi @Inject constructor(
     private val retrofit: Retrofit
 ) {
 
@@ -51,7 +51,7 @@ class PersonApi @Inject constructor(
     }
 }
 
-interface PersonService {
+internal interface PersonService {
     @GET("person/{person_id}")
     suspend fun getPerson(
         @Path("person_id") id: Int,
@@ -59,7 +59,7 @@ interface PersonService {
     ): Person
 }
 
-sealed class PersonApiResult {
+internal sealed class PersonApiResult {
     class Success(val person: Person): PersonApiResult()
     object NetworkError: PersonApiResult()
     object ConnectionError: PersonApiResult()

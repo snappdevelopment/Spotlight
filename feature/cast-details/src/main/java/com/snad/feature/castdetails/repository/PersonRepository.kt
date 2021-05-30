@@ -1,11 +1,9 @@
-package com.snad.spotlight.repository
+package com.snad.feature.castdetails.repository
 
-import com.snad.spotlight.network.PersonApi
-import com.snad.spotlight.network.PersonApiResult
-import com.snad.spotlight.network.models.Person
+import com.snad.feature.castdetails.model.Person
 import javax.inject.Inject
 
-class PersonRepository @Inject constructor(
+internal class PersonRepository @Inject constructor(
     private val personApi: PersonApi
 ) {
     suspend fun loadPerson(id: Int): PersonResult {
@@ -23,7 +21,7 @@ class PersonRepository @Inject constructor(
     }
 }
 
-sealed class PersonResult {
+internal sealed class PersonResult {
     class Success(val person: Person): PersonResult()
     object NetworkError: PersonResult()
     object ConnectionError: PersonResult()

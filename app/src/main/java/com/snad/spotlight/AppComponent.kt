@@ -3,11 +3,12 @@ package com.snad.spotlight
 import android.content.Context
 import com.snad.spotlight.network.RetrofitClient
 import com.snad.core.persistence.PersistenceModule
+import com.snad.feature.castdetails.CastDetailsComponent
 import com.snad.feature.library.LibraryComponent
 import com.snad.feature.moviedetails.MovieDetailsComponent
 import com.snad.feature.newmovies.NewMoviesComponent
 import com.snad.feature.search.SearchComponent
-import com.snad.spotlight.ui.castDetails.CastDetailsFragment
+import com.snad.feature.castdetails.CastDetailsFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -36,8 +37,7 @@ interface AppComponent {
     fun newMoviesComponent(): NewMoviesComponent.Factory
     fun searchComponent(): SearchComponent.Factory
     fun movieDetailsComponent(): MovieDetailsComponent.Factory
-
-    fun inject(castDetailsFragment: CastDetailsFragment)
+    fun castDetailsComponent(): CastDetailsComponent.Factory
 }
 
 @Module
@@ -60,6 +60,7 @@ class AppModule {
     LibraryComponent::class,
     NewMoviesComponent::class,
     SearchComponent::class,
-    MovieDetailsComponent::class
+    MovieDetailsComponent::class,
+    CastDetailsComponent::class
 ])
 class FeaturesModule

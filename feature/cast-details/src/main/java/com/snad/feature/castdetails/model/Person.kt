@@ -1,15 +1,37 @@
-package com.snad.spotlight.network.models
+package com.snad.feature.castdetails.model
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class PersonCredits(
+internal data class Person(
+    val adult: Boolean,
+    val also_known_as: List<String>,
+    val biography: String,
+    val birthday: String?,
+    val deathday: String?,
+    val gender: Int,
+    val homepage: String?,
+    val id: Int,
+    val imdb_id: String,
+    val known_for_department: String,
+    val name: String,
+    val place_of_birth: String?,
+    val popularity: Double,
+    val profile_path: String?,
+
+    @Json(name = "movie_credits")
+    val person_credits: PersonCredits
+)
+
+@JsonClass(generateAdapter = true)
+internal data class PersonCredits(
     val cast: List<Cast>,
     val crew: List<Crew>
 )
 
 @JsonClass(generateAdapter = true)
-data class Cast(
+internal data class Cast(
     val character: String,
     val credit_id: String,
     val release_date: String?,
@@ -29,7 +51,7 @@ data class Cast(
 )
 
 @JsonClass(generateAdapter = true)
-data class Crew(
+internal data class Crew(
     val id: Int,
     val department: String,
     val original_language: String,

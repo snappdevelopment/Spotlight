@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.castDetails
+package com.snad.feature.castdetails
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.RecyclerviewItemCastDetailsKnownForBinding
-import com.snad.spotlight.network.models.Cast
+import com.snad.feature.castdetails.databinding.RecyclerviewItemCastDetailsKnownForBinding
+import com.snad.feature.castdetails.model.Cast
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-class KnownForAdapter(
+internal class KnownForAdapter(
     private val items: MutableList<Cast>,
     var cardBackgroundColor: Int = Color.WHITE,
     var textColor: Int = Color.DKGRAY
@@ -56,7 +55,7 @@ class KnownForAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    class KnownForViewHolder(
+    inner class KnownForViewHolder(
         viewBinding: RecyclerviewItemCastDetailsKnownForBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
         val movieCardView = viewBinding.movieCard

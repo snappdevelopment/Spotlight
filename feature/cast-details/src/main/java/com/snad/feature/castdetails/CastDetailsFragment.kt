@@ -1,4 +1,4 @@
-package com.snad.spotlight.ui.castDetails
+package com.snad.feature.castdetails
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.snad.spotlight.R
-import com.snad.spotlight.databinding.FragmentCastDetailsBinding
-import com.snad.spotlight.network.models.Cast
-import com.snad.spotlight.network.models.Person
-import com.snad.spotlight.repository.PersonRepository
+import com.snad.feature.castdetails.databinding.FragmentCastDetailsBinding
+import com.snad.feature.castdetails.model.Cast
+import com.snad.feature.castdetails.model.Person
+import com.snad.feature.castdetails.repository.PersonRepository
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import javax.inject.Inject
@@ -26,11 +25,13 @@ class CastDetailsFragment : Fragment() {
 
     private val knownFor = mutableListOf<Cast>()
 
-    @Inject
-    lateinit var personRepository: PersonRepository
+    internal lateinit var castDetailsComponent: CastDetailsComponent
 
     @Inject
-    lateinit var viewModelFactory: CastDetailsViewModel.Factory
+    internal lateinit var personRepository: PersonRepository
+
+    @Inject
+    internal lateinit var viewModelFactory: CastDetailsViewModel.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater,
