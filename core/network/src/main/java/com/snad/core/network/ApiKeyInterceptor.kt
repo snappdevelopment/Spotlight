@@ -1,10 +1,9 @@
-package com.snad.spotlight.network
+package com.snad.core.network
 
-import com.snad.spotlight.API_KEY
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class ApiKeyInterceptor: Interceptor {
+internal class ApiKeyInterceptor: Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()

@@ -1,0 +1,14 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+apply from: "$rootProject.projectDir/android-module.gradle"
+
+dependencies {
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
+    implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
+    kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
+}

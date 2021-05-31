@@ -12,9 +12,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
 
-    implementation "androidx.room:room-runtime:2.2.6" //database for persistence
-    implementation "androidx.room:room-ktx:2.2.6" //room kotlin extensions, coroutine support
-    kapt "androidx.room:room-compiler:2.2.6" //room compiler for persistence
+    implementation "androidx.room:room-runtime:2.3.0" //database for persistence
+    implementation "androidx.room:room-ktx:2.3.0" //room kotlin extensions, coroutine support
+    kapt "androidx.room:room-compiler:2.3.0" //room compiler for persistence
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.2' //is needed for kotlin annotation support
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2' //kotlin annotation support
     implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection

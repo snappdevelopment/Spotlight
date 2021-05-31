@@ -1,4 +1,4 @@
-package com.snad.spotlight.network
+package com.snad.core.network
 
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -7,7 +7,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 import javax.inject.Inject
 
-class RetrofitClient @Inject constructor(
+internal class RetrofitClient @Inject constructor(
     private val cacheDir: File
 ) {
     fun get(): Retrofit {

@@ -1,28 +1,26 @@
 package com.snad.spotlight
 
 import android.content.Context
-import com.snad.spotlight.network.RetrofitClient
+import com.snad.core.network.NetworkModule
 import com.snad.core.persistence.PersistenceModule
 import com.snad.feature.castdetails.CastDetailsComponent
 import com.snad.feature.library.LibraryComponent
 import com.snad.feature.moviedetails.MovieDetailsComponent
 import com.snad.feature.newmovies.NewMoviesComponent
 import com.snad.feature.search.SearchComponent
-import com.snad.feature.castdetails.CastDetailsFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
 import java.io.File
 import javax.inject.Singleton
-
 
 @Singleton
 @Component(modules = [
     AppModule::class,
     FeaturesModule::class,
-    PersistenceModule::class
+    PersistenceModule::class,
+    NetworkModule::class
 ])
 interface AppComponent {
 
@@ -42,11 +40,6 @@ interface AppComponent {
 
 @Module
 class AppModule {
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(cacheDir: File): Retrofit = RetrofitClient(cacheDir).get()
-
     @Singleton
     @Provides
     fun provideCacheDir(app: App): File = app.cacheDir
