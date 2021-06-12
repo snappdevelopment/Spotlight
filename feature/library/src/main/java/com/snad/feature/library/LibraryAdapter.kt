@@ -13,12 +13,11 @@ import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import javax.inject.Inject
 
-internal class LibraryAdapter @Inject constructor()
-    : ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
-
-    var longClickListener: ((LibraryMovie) -> Unit)? = null
-    var clickListener: ((Int, CardView) -> Unit)? = null
+internal class LibraryAdapter(
+    var clickListener: ((Int, CardView) -> Unit)? = null,
+    var longClickListener: ((LibraryMovie) -> Unit)? = null,
     var watchedClickListener: ((LibraryMovie) -> Unit)? = null
+) : ListAdapter<LibraryMovie, LibraryAdapter.LibraryViewHolder>(LibraryMovieDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder {
         val binding = RecyclerviewItemLibraryBinding.inflate(LayoutInflater.from(parent.context), parent, false)

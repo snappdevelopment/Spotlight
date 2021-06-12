@@ -30,8 +30,7 @@ class LibraryFragment : Fragment() {
     @Inject
     internal lateinit var viewModelFactory: LibraryViewModel.Factory
 
-    @Inject
-    internal lateinit var libraryAdapter: LibraryAdapter
+    private var libraryAdapter: LibraryAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +43,11 @@ class LibraryFragment : Fragment() {
 
         inject()
 
-        libraryAdapter.clickListener = this::movieClickListener
-        libraryAdapter.longClickListener = this::movieLongClickListener
-        libraryAdapter.watchedClickListener = this::movieWatchedClickListener
+        libraryAdapter = LibraryAdapter(
+            this::movieClickListener,
+            this::movieLongClickListener,
+            this::movieWatchedClickListener
+        )
         viewBinding.recyclerView.adapter = libraryAdapter
 
         libraryViewModel = ViewModelProvider(this, viewModelFactory)[LibraryViewModel::class.java]
@@ -68,6 +69,7 @@ class LibraryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+        libraryAdapter = null
     }
 
     private fun movieLongClickListener(libraryMovie: LibraryMovie) {
@@ -103,7 +105,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.INVISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.INVISIBLE
 
-        libraryAdapter.submitList(libraryMovies)
+        libraryAdapter?.submitList(libraryMovies)
     }
 
     private fun showEmptyState() {
@@ -113,7 +115,7 @@ class LibraryFragment : Fragment() {
         viewBinding.emptyLibraryIconImageView.visibility = View.VISIBLE
         viewBinding.emptyLibraryTextView.visibility = View.VISIBLE
 
-        libraryAdapter.submitList(emptyList())
+        libraryAdapter?.submitList(emptyList())
     }
 
     private fun showLoadingState() {
