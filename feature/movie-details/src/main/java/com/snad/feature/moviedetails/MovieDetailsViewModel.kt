@@ -21,68 +21,73 @@ internal class MovieDetailsViewModel(
     val state: MutableLiveData<MovieDetailsState> = MutableLiveData()
 
     fun loadMovie(id: Int) {
-        state.value = MovieDetailsState.LoadingState
+        updateState(MovieDetailsState.LoadingState)
+
         viewModelScope.launch(Dispatchers.IO) {
             movieDetailsRepository.loadMovie(id).collect { movieDetailsResult ->
                 withContext(Dispatchers.Main) {
-                    when(movieDetailsResult) {
-                        is MovieDetailsResult.Success -> {
-                            val sortedBackdrops = movieDetailsResult.movie.backdrops.sortedByDescending { backdrop ->
-                                backdrop.vote_average
-                            }.filter { backdrop ->
-                                backdrop.file_path != movieDetailsResult.movie.backdrop_path
-                            }
-                            val sortedCast = movieDetailsResult.movie.cast.sortedBy { castMember -> castMember.order }
-                            state.value = MovieDetailsState.DoneState(
-                                movieDetailsResult.movie.copy(
-                                    backdrops = sortedBackdrops,
-                                    cast = sortedCast
-                                ),
-                                movieDetailsResult.isInLibrary
-                            )
-                        }
-                        is MovieDetailsResult.NetworkError -> state.value =
-                            MovieDetailsState.ErrorNetworkState
-                        is MovieDetailsResult.ConnectionError -> state.value =
-                            MovieDetailsState.ErrorNetworkState
-                        is MovieDetailsResult.AuthenticationError -> state.value =
-                            MovieDetailsState.ErrorAuthenticationState
-                        is MovieDetailsResult.ApiError -> state.value = MovieDetailsState.ErrorState
-                        is MovieDetailsResult.Error -> state.value = MovieDetailsState.ErrorState
-                    }
+                    updateState(movieDetailsResult.toMovieDetailsState())
                 }
-                if(movieDetailsResult is MovieDetailsResult.Success && movieDetailsResult.isInLibrary) {
+                if((movieDetailsResult as? MovieDetailsResult.Success)?.isInLibrary == true) {
                     movieDetailsRepository.updateMovieData(movieDetailsResult.movie)
                 }
             }
         }
     }
 
+    private fun MovieDetailsResult.toMovieDetailsState(): MovieDetailsState {
+        return when(this) {
+            is MovieDetailsResult.Success -> {
+                val sortedBackdrops = movie.backdrops
+                    .sortedByDescending { backdrop -> backdrop.vote_average }
+                    .filter { backdrop -> backdrop.file_path != movie.backdrop_path }
+                val sortedCast = movie.cast.sortedBy { castMember -> castMember.order }
+
+                MovieDetailsState.DoneState(
+                    movie = movie.copy(
+                        backdrops = sortedBackdrops,
+                        cast = sortedCast
+                    ),
+                    isInLibrary = isInLibrary
+                )
+            }
+            is MovieDetailsResult.NetworkError -> MovieDetailsState.ErrorNetworkState
+            is MovieDetailsResult.ConnectionError -> MovieDetailsState.ErrorNetworkState
+            is MovieDetailsResult.AuthenticationError -> MovieDetailsState.ErrorAuthenticationState
+            is MovieDetailsResult.ApiError -> MovieDetailsState.ErrorState
+            is MovieDetailsResult.Error -> MovieDetailsState.ErrorState
+        }
+    }
+
+    private fun updateState(newState: MovieDetailsState) {
+        state.value = newState
+    }
+
     fun addOrRemoveMovie() {
         val currentState = state.value
-        if(currentState is MovieDetailsState.DoneState) {
-            if(currentState.isInLibrary) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    movieDetailsRepository.deleteMovie(currentState.movie)
-                }
+        if((currentState as MovieDetailsState.DoneState).isInLibrary) {
+            viewModelScope.launch(Dispatchers.IO) {
+                movieDetailsRepository.deleteMovie(currentState.movie)
             }
-            else {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val libraryMovie = currentState.movie.copy(
-                        added_at = Calendar.getInstance(),
-                        updated_at = Calendar.getInstance()
-                    )
-                    movieDetailsRepository.addMovie(libraryMovie)
-                }
+        }
+        else {
+            viewModelScope.launch(Dispatchers.IO) {
+                val libraryMovie = currentState.movie.copy(
+                    added_at = Calendar.getInstance(),
+                    updated_at = Calendar.getInstance()
+                )
+                movieDetailsRepository.addMovie(libraryMovie)
             }
         }
     }
 
-    fun toogleHasBeenWatched() {
+    fun toggleHasBeenWatched() {
         val currentState = state.value
         if(currentState is MovieDetailsState.DoneState) {
             viewModelScope.launch(Dispatchers.IO) {
-                val updatedMovie = currentState.movie.copy(has_been_watched = !currentState.movie.has_been_watched)
+                val updatedMovie = currentState.movie.copy(
+                    has_been_watched = !currentState.movie.has_been_watched
+                )
                 movieDetailsRepository.updateMovie(updatedMovie)
             }
         }

@@ -89,7 +89,7 @@ class MovieDetailsFragment: Fragment() {
         }
 
         viewBinding.hasBeenWatchedFAB.setOnClickListener {
-            movieDetailsViewModel.toogleHasBeenWatched()
+            movieDetailsViewModel.toggleHasBeenWatched()
         }
 
         movieDetailsViewModel.loadMovie(movieId)
