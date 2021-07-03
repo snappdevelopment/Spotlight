@@ -66,7 +66,7 @@ internal class MovieDetailsViewModel(
         if((movieDetailsResult as? MovieDetailsResult.Success)?.isInLibrary == true) {
             val movieIsOutdated = movieDetailsResult.movie.updated_at
                 ?.plusDays(2)
-                ?.isBefore( LocalDate.now(clock))
+                ?.isBefore(LocalDate.now(clock))
 
             if(movieIsOutdated == true) movieDetailsRepository.updateMovieData(movieDetailsResult.movie)
         }

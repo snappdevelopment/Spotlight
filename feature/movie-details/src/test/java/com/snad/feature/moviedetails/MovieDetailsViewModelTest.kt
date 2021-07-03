@@ -24,7 +24,7 @@ internal class MovieDetailsViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
     private val testClock = Clock.fixed(Instant.EPOCH, ZoneId.systemDefault())
 
-    private val repository = FakeRepository()
+    private val repository = FakeRepository(testClock)
     private val underTest = MovieDetailsViewModel(
         movieDetailsRepository = repository,
         ioDispatcher = testDispatcher,
@@ -76,7 +76,8 @@ internal class MovieDetailsViewModelTest {
     fun `adding a movie produces correct state`() = runBlockingTest {
         val expectedState = MovieDetailsState.DoneState(
             movie = movie.copy(
-                added_at = LocalDate.now(testClock), updated_at = LocalDate.now(testClock)
+                added_at = LocalDate.now(testClock),
+                updated_at = LocalDate.now(testClock)
             ),
             isInLibrary = true
         )
@@ -94,11 +95,103 @@ internal class MovieDetailsViewModelTest {
             expectNoEvents()
         }
     }
+
+    @Test
+    fun `removing a movie produces correct state`() = runBlockingTest {
+        val expectedState = MovieDetailsState.DoneState(
+            movie = movie,
+            isInLibrary = false
+        )
+
+        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = true)
+
+        underTest.state.test {
+            underTest.loadMovie(movie.id)
+            assertEquals(MovieDetailsState.LoadingState, expectItem())
+            assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
+            underTest.addOrRemoveMovie()
+            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
+            underTest.loadMovie(movie.id)
+            assertEquals(expectedState, expectItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `clicking the watched button produces correct state`() = runBlockingTest {
+        val expectedState = MovieDetailsState.DoneState(
+            movie = movie.copy(has_been_watched = true),
+            isInLibrary = true
+        )
+
+        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = true)
+
+        underTest.state.test {
+            underTest.loadMovie(movie.id)
+            assertEquals(MovieDetailsState.LoadingState, expectItem())
+            assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
+            underTest.toggleHasBeenWatched()
+            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
+            underTest.loadMovie(movie.id)
+            assertEquals(expectedState, expectItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `data of movie in library gets updated after two days`() = runBlockingTest {
+        val expectedState = MovieDetailsState.DoneState(
+            movie = movie.copy(
+                genres = "fiction",
+                updated_at = LocalDate.now(testClock)
+            ),
+            isInLibrary = true
+        )
+
+        val outdatedMovie = movie.copy(updated_at = LocalDate.now(testClock).minusDays(3))
+        repository.result = MovieDetailsResult.Success(
+            movie = outdatedMovie,
+            isInLibrary = true
+        )
+
+        underTest.state.test {
+            underTest.loadMovie(movie.id)
+            assertEquals(MovieDetailsState.LoadingState, expectItem())
+            assertEquals(MovieDetailsState.DoneState(movie = outdatedMovie, isInLibrary = true), expectItem())
+            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
+            underTest.loadMovie(movie.id)
+            assertEquals(expectedState, expectItem())
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `data of movie in library does not get updated within two days`() = runBlockingTest {
+        val upToDateMovie = movie.copy(
+            genres = "fiction",
+            updated_at = LocalDate.now(testClock).minusDays(1)
+        )
+
+        repository.result = MovieDetailsResult.Success(
+            movie = upToDateMovie,
+            isInLibrary = true
+        )
+
+        underTest.state.test {
+            underTest.loadMovie(movie.id)
+            assertEquals(MovieDetailsState.LoadingState, expectItem())
+            assertEquals(MovieDetailsState.DoneState(movie = upToDateMovie, isInLibrary = true), expectItem())
+            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
+            underTest.loadMovie(movie.id)
+            //no new state expected
+            expectNoEvents()
+        }
+    }
 }
 
-private class FakeRepository: MovieDetailsRepository {
-
-    private val movies = mutableListOf<LibraryMovie>()
+private class FakeRepository(
+    val clock: Clock
+): MovieDetailsRepository {
 
     var result: MovieDetailsResult? = null
 
@@ -111,15 +204,17 @@ private class FakeRepository: MovieDetailsRepository {
     }
 
     override suspend fun deleteMovie(movie: LibraryMovie) {
-        movies.remove(movie)
+        result = MovieDetailsResult.Success(movie, false)
     }
 
     override suspend fun updateMovie(movie: LibraryMovie) {
-        movies.removeIf { it.id == movie.id }
-        movies.add(movie)
+        result = MovieDetailsResult.Success(movie, true)
     }
 
     override suspend fun updateMovieData(movie: LibraryMovie) {
-        //noop
+        result = MovieDetailsResult.Success(
+            movie.copy(genres = "fiction", updated_at = LocalDate.now(clock)),
+            isInLibrary = true
+        )
     }
 }
