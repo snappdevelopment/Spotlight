@@ -11,7 +11,7 @@ import java.lang.reflect.Type
 import java.time.LocalDate
 
 
-class DatabaseTypeConverter {
+internal class DatabaseTypeConverter {
     @TypeConverter
     fun dateFromTimestamp(timeInMillis: Long): LocalDate {
         return LocalDate.ofEpochDay(timeInMillis)

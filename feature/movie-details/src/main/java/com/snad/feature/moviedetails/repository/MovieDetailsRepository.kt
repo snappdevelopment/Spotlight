@@ -25,12 +25,11 @@ internal class MovieDetailsRepositoryImpl @Inject constructor(
         val result = libraryDb.getMovieById(id)
         return result.map { libraryDbResult ->
             when(libraryDbResult) {
-                is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(
-                    movie = libraryDbResult.libraryMovie,
+                is LibraryDbResult.Success -> MovieDetailsResult.Success(
+                    movie = libraryDbResult.libraryMovies.first(),
                     isInLibrary = true
                 )
-                is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
-                else -> MovieDetailsResult.Error
+                is LibraryDbResult.Error -> loadMovieFromApi(id)
             }
         }
     }

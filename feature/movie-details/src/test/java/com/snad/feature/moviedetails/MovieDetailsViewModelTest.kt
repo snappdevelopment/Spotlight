@@ -5,8 +5,8 @@ import com.snad.core.persistence.models.LibraryMovie
 import com.snad.feature.moviedetails.repository.MovieDetailsRepository
 import com.snad.feature.moviedetails.repository.MovieDetailsResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -62,11 +62,12 @@ internal class MovieDetailsViewModelTest {
     fun `loadMovie produces correct state`() = runBlockingTest {
         val expectedState = MovieDetailsState.DoneState(movie = movie, isInLibrary = true)
 
-        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = true)
-
         underTest.state.test {
             assertEquals(MovieDetailsState.LoadingState, expectItem())
+
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
+
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -82,15 +83,14 @@ internal class MovieDetailsViewModelTest {
             isInLibrary = true
         )
 
-        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = false)
-
         underTest.state.test {
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = false))
+
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = false), expectItem())
+
             underTest.addOrRemoveMovie()
-            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
-            underTest.loadMovie(movie.id)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -103,15 +103,14 @@ internal class MovieDetailsViewModelTest {
             isInLibrary = false
         )
 
-        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = true)
-
         underTest.state.test {
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
+
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
+
             underTest.addOrRemoveMovie()
-            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
-            underTest.loadMovie(movie.id)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -124,15 +123,14 @@ internal class MovieDetailsViewModelTest {
             isInLibrary = true
         )
 
-        repository.result = MovieDetailsResult.Success(movie = movie, isInLibrary = true)
-
         underTest.state.test {
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
+
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
+
             underTest.toggleHasBeenWatched()
-            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
-            underTest.loadMovie(movie.id)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -149,17 +147,13 @@ internal class MovieDetailsViewModelTest {
         )
 
         val outdatedMovie = movie.copy(updated_at = LocalDate.now(testClock).minusDays(3))
-        repository.result = MovieDetailsResult.Success(
-            movie = outdatedMovie,
-            isInLibrary = true
-        )
 
         underTest.state.test {
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = outdatedMovie, isInLibrary = true))
+
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = outdatedMovie, isInLibrary = true), expectItem())
-            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
-            underTest.loadMovie(movie.id)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -172,17 +166,12 @@ internal class MovieDetailsViewModelTest {
             updated_at = LocalDate.now(testClock).minusDays(1)
         )
 
-        repository.result = MovieDetailsResult.Success(
-            movie = upToDateMovie,
-            isInLibrary = true
-        )
-
         underTest.state.test {
             underTest.loadMovie(movie.id)
+            repository.result.emit(MovieDetailsResult.Success(movie = upToDateMovie, isInLibrary = true))
+
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = upToDateMovie, isInLibrary = true), expectItem())
-            //load movie again to get state update from fake repository (should be fixed by using a stateFlow or similar)
-            underTest.loadMovie(movie.id)
             //no new state expected
             expectNoEvents()
         }
@@ -193,28 +182,35 @@ private class FakeRepository(
     val clock: Clock
 ): MovieDetailsRepository {
 
-    var result: MovieDetailsResult? = null
+    val result = MutableSharedFlow<MovieDetailsResult>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     override suspend fun loadMovie(id: Int): Flow<MovieDetailsResult> {
-        return flowOf(result!!)
+        return flow {
+            result.collect { emit(it) }
+        }
     }
 
     override suspend fun addMovie(movie: LibraryMovie) {
-        result = MovieDetailsResult.Success(movie, true)
+        result.emit(MovieDetailsResult.Success(movie, true))
     }
 
     override suspend fun deleteMovie(movie: LibraryMovie) {
-        result = MovieDetailsResult.Success(movie, false)
+        result.emit(MovieDetailsResult.Success(movie, false))
     }
 
     override suspend fun updateMovie(movie: LibraryMovie) {
-        result = MovieDetailsResult.Success(movie, true)
+        result.emit(MovieDetailsResult.Success(movie, true))
     }
 
     override suspend fun updateMovieData(movie: LibraryMovie) {
-        result = MovieDetailsResult.Success(
-            movie.copy(genres = "fiction", updated_at = LocalDate.now(clock)),
-            isInLibrary = true
+        result.emit(
+            MovieDetailsResult.Success(
+                movie.copy(genres = "fiction", updated_at = LocalDate.now(clock)),
+                isInLibrary = true
+            )
         )
     }
 }
