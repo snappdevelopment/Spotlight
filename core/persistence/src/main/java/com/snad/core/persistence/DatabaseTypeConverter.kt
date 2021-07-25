@@ -8,20 +8,18 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import java.lang.reflect.Type
-import java.util.Calendar
+import java.time.LocalDate
 
 
-class DatabaseTypeConverter {
+internal class DatabaseTypeConverter {
     @TypeConverter
-    fun calendarFromTimestamp(timeInMillis: Long): Calendar {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = timeInMillis
-        return calendar
+    fun dateFromTimestamp(timeInMillis: Long): LocalDate {
+        return LocalDate.ofEpochDay(timeInMillis)
     }
 
     @TypeConverter
-    fun calendarToTimestamp(calendar: Calendar): Long {
-        return calendar.timeInMillis
+    fun dateToTimestamp(date: LocalDate): Long {
+        return date.toEpochDay()
     }
 
     @TypeConverter

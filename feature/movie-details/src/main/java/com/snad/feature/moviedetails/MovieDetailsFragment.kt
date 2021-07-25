@@ -13,7 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
@@ -28,6 +31,8 @@ import com.snad.core.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieDetailsFragment: Fragment() {
@@ -73,14 +78,18 @@ class MovieDetailsFragment: Fragment() {
         inject()
 
         movieDetailsViewModel = ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
-
-        movieDetailsViewModel.state.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
-                is MovieDetailsState.LoadingState -> showLoadingState()
-                is MovieDetailsState.ErrorNetworkState -> showNetworkErrorState(movieId)
-                is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
-                is MovieDetailsState.ErrorState -> showErrorState()
+        
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                movieDetailsViewModel.state.collect { state ->
+                    when(state) {
+                        is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
+                        is MovieDetailsState.LoadingState -> showLoadingState()
+                        is MovieDetailsState.ErrorNetworkState -> showNetworkErrorState(movieId)
+                        is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
+                        is MovieDetailsState.ErrorState -> showErrorState()
+                    }
+                }
             }
         }
 

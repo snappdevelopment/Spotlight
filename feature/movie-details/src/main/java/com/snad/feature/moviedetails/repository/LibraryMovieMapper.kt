@@ -6,13 +6,14 @@ import com.snad.core.persistence.models.LibraryMovie
 import com.snad.core.persistence.models.Review
 import com.snad.feature.moviedetails.model.Movie
 import com.snad.feature.moviedetails.model.Backdrop
+import java.time.LocalDate
 import com.snad.feature.moviedetails.model.Review as ApiReview
 import com.snad.feature.moviedetails.model.CastMember as ApiCastMember
 import java.util.*
 
 internal fun Movie.toLibraryMovie(
-    addedAt: Calendar? = null,
-    updatedAt: Calendar? = null,
+    addedAt: LocalDate? = null,
+    updatedAt: LocalDate? = null,
     hasBeenWatched: Boolean = false
 ): LibraryMovie {
 

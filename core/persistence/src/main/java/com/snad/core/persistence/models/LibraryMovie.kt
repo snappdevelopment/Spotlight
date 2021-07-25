@@ -5,14 +5,14 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.snad.core.persistence.DatabaseTypeConverter
 import com.squareup.moshi.JsonClass
-import java.util.Calendar
+import java.time.LocalDate
 
 @Entity(tableName = "movies")
 data class LibraryMovie(
     @PrimaryKey
     val id : Int,
-    val added_at: Calendar?,
-    val updated_at: Calendar?,
+    val added_at: LocalDate?,
+    val updated_at: LocalDate?,
     val adult : Boolean,
     val backdrop_path : String?,
     @TypeConverters(DatabaseTypeConverter::class)

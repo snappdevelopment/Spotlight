@@ -13,6 +13,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import java.io.File
+import java.time.Clock
 import javax.inject.Singleton
 
 @Singleton
@@ -47,6 +48,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideAppContext(app: App): Context = app.applicationContext
+
+    @Singleton
+    @Provides
+    fun provideClock(): Clock = Clock.systemDefaultZone()
 }
 
 @Module(subcomponents = [

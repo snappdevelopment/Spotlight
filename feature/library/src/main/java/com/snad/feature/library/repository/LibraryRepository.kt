@@ -10,12 +10,10 @@ import javax.inject.Inject
 internal class LibraryRepository @Inject constructor(
     private val libraryDb: LibraryDb
 ) {
-    suspend fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
+    fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
         return libraryDb.getAllMovies().map { result ->
             when(result) {
-                is LibraryDbResult.SuccessAllMovies -> LibraryRepositoryResult.Success(
-                    result.libraryMovies
-                )
+                is LibraryDbResult.Success -> LibraryRepositoryResult.Success(result.libraryMovies)
                 else -> LibraryRepositoryResult.DbError
             }
         }

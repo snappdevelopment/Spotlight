@@ -1,37 +1,74 @@
 package com.snad.feature.moviedetails
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snad.feature.moviedetails.repository.MovieDetailsRepository
 import com.snad.feature.moviedetails.repository.MovieDetailsResult
 import com.snad.core.persistence.models.LibraryMovie
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.*
+import java.time.Clock
+import java.time.LocalDate
 import javax.inject.Inject
 
 internal class MovieDetailsViewModel(
-    private val movieDetailsRepository: MovieDetailsRepository
+    private val movieDetailsRepository: MovieDetailsRepository,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val clock: Clock
 ): ViewModel() {
 
-    val state: MutableLiveData<MovieDetailsState> = MutableLiveData()
+    private val _state = MutableStateFlow<MovieDetailsState>(MovieDetailsState.LoadingState)
+    val state: StateFlow<MovieDetailsState> = _state
 
     fun loadMovie(id: Int) {
-        updateState(MovieDetailsState.LoadingState)
-
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             movieDetailsRepository.loadMovie(id).collect { movieDetailsResult ->
-                withContext(Dispatchers.Main) {
-                    updateState(movieDetailsResult.toMovieDetailsState())
-                }
-                if((movieDetailsResult as? MovieDetailsResult.Success)?.isInLibrary == true) {
-                    movieDetailsRepository.updateMovieData(movieDetailsResult.movie)
-                }
+                updateState(movieDetailsResult.toMovieDetailsState())
+                updateOutdatedMovie(movieDetailsResult)
             }
+        }
+    }
+
+    fun addOrRemoveMovie() {
+        val currentState = state.value
+        if((currentState as MovieDetailsState.DoneState).isInLibrary) {
+            viewModelScope.launch(ioDispatcher) {
+                movieDetailsRepository.deleteMovie(currentState.movie)
+            }
+        } else {
+            viewModelScope.launch(ioDispatcher) {
+                val libraryMovie = currentState.movie.copy(
+                    added_at = LocalDate.now(clock),
+                    updated_at = LocalDate.now(clock)
+                )
+                movieDetailsRepository.addMovie(libraryMovie)
+            }
+        }
+    }
+
+    fun toggleHasBeenWatched() {
+        val currentState = state.value
+        if(currentState is MovieDetailsState.DoneState) {
+            viewModelScope.launch(ioDispatcher) {
+                val updatedMovie = currentState.movie.copy(
+                    has_been_watched = !currentState.movie.has_been_watched
+                )
+                movieDetailsRepository.updateMovie(updatedMovie)
+            }
+        }
+    }
+
+    private suspend fun updateOutdatedMovie(movieDetailsResult: MovieDetailsResult) {
+        if((movieDetailsResult as? MovieDetailsResult.Success)?.isInLibrary == true) {
+            val movieIsOutdated = movieDetailsResult.movie.updated_at
+                ?.plusDays(2)
+                ?.isBefore(LocalDate.now(clock))
+
+            if(movieIsOutdated == true) movieDetailsRepository.updateMovieData(movieDetailsResult.movie)
         }
     }
 
@@ -60,44 +97,16 @@ internal class MovieDetailsViewModel(
     }
 
     private fun updateState(newState: MovieDetailsState) {
-        state.value = newState
-    }
-
-    fun addOrRemoveMovie() {
-        val currentState = state.value
-        if((currentState as MovieDetailsState.DoneState).isInLibrary) {
-            viewModelScope.launch(Dispatchers.IO) {
-                movieDetailsRepository.deleteMovie(currentState.movie)
-            }
-        }
-        else {
-            viewModelScope.launch(Dispatchers.IO) {
-                val libraryMovie = currentState.movie.copy(
-                    added_at = Calendar.getInstance(),
-                    updated_at = Calendar.getInstance()
-                )
-                movieDetailsRepository.addMovie(libraryMovie)
-            }
-        }
-    }
-
-    fun toggleHasBeenWatched() {
-        val currentState = state.value
-        if(currentState is MovieDetailsState.DoneState) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val updatedMovie = currentState.movie.copy(
-                    has_been_watched = !currentState.movie.has_been_watched
-                )
-                movieDetailsRepository.updateMovie(updatedMovie)
-            }
-        }
+        _state.value = newState
     }
 
     class Factory @Inject constructor(
-        private  val movieDetailsRepository: MovieDetailsRepository
+        private  val movieDetailsRepository: MovieDetailsRepository,
+        private val ioDispatcher: CoroutineDispatcher,
+        private val clock: Clock
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MovieDetailsViewModel(movieDetailsRepository) as T
+            return MovieDetailsViewModel(movieDetailsRepository, ioDispatcher, clock) as T
         }
     }
 }

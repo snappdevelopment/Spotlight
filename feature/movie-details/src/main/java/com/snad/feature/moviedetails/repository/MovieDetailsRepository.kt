@@ -5,56 +5,57 @@ import com.snad.core.persistence.LibraryDbResult
 import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Calendar
+import java.time.LocalDate
 import javax.inject.Inject
 
-internal class MovieDetailsRepository @Inject constructor(
+internal interface MovieDetailsRepository {
+    suspend fun loadMovie(id: Int): Flow<MovieDetailsResult>
+    suspend fun addMovie(movie: LibraryMovie)
+    suspend fun deleteMovie(movie: LibraryMovie)
+    suspend fun updateMovie(movie: LibraryMovie)
+    suspend fun updateMovieData(movie: LibraryMovie)
+}
+
+internal class MovieDetailsRepositoryImpl @Inject constructor(
     private val libraryDb: LibraryDb,
     private val movieApi: MovieApi
-) {
-    suspend fun loadMovie(id: Int): Flow<MovieDetailsResult> {
+): MovieDetailsRepository {
+
+    override suspend fun loadMovie(id: Int): Flow<MovieDetailsResult> {
         val result = libraryDb.getMovieById(id)
         return result.map { libraryDbResult ->
             when(libraryDbResult) {
-                is LibraryDbResult.SuccessMovieById -> MovieDetailsResult.Success(
-                    libraryDbResult.libraryMovie,
-                    true
+                is LibraryDbResult.Success -> MovieDetailsResult.Success(
+                    movie = libraryDbResult.libraryMovies.first(),
+                    isInLibrary = true
                 )
-                is LibraryDbResult.ErrorMovieById -> loadMovieFromApi(id)
-                else -> MovieDetailsResult.Error
+                is LibraryDbResult.Error -> loadMovieFromApi(id)
             }
         }
     }
 
-    suspend fun addMovie(movie: LibraryMovie) {
+    override suspend fun addMovie(movie: LibraryMovie) {
         libraryDb.insertMovie(movie)
     }
 
-    suspend fun deleteMovie(movie: LibraryMovie) {
+    override suspend fun deleteMovie(movie: LibraryMovie) {
         libraryDb.deleteMovie(movie)
     }
 
-    suspend fun updateMovie(movie: LibraryMovie) {
+    override suspend fun updateMovie(movie: LibraryMovie) {
         libraryDb.updateMovie(movie)
     }
 
-    suspend fun updateMovieData(movie: LibraryMovie) {
-        if(movie.updated_at != null) {
-            var daysDifference = Calendar.getInstance().timeInMillis - movie.updated_at!!.timeInMillis
-            daysDifference = daysDifference / (1000 * 60 * 60 * 24)
-
-            if(daysDifference >= 2) {
-                val result = movieApi.loadMovie(movie.id)
-                when(result) {
-                    is MovieApiResult.Success -> {
-                        val updatedMovie = result.movie.toLibraryMovie(
-                            addedAt = movie.added_at,
-                            updatedAt = Calendar.getInstance(),
-                            hasBeenWatched = movie.has_been_watched
-                        )
-                        libraryDb.updateMovie(updatedMovie)
-                    }
-                }
+    override suspend fun updateMovieData(movie: LibraryMovie) {
+        val result = movieApi.loadMovie(movie.id)
+        when(result) {
+            is MovieApiResult.Success -> {
+                val updatedMovie = result.movie.toLibraryMovie(
+                    addedAt = movie.added_at,
+                    updatedAt = LocalDate.now(),
+                    hasBeenWatched = movie.has_been_watched
+                )
+                libraryDb.updateMovie(updatedMovie)
             }
         }
     }
@@ -63,8 +64,8 @@ internal class MovieDetailsRepository @Inject constructor(
         val result = movieApi.loadMovie(id)
         return when(result) {
             is MovieApiResult.Success -> MovieDetailsResult.Success(
-                result.movie.toLibraryMovie(),
-                false
+                movie = result.movie.toLibraryMovie(),
+                isInLibrary = false
             )
             is MovieApiResult.NetworkError -> MovieDetailsResult.NetworkError
             is MovieApiResult.ConnectionError -> MovieDetailsResult.ConnectionError
