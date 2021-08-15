@@ -7,10 +7,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class LibraryRepository @Inject constructor(
+internal interface LibraryRepository {
+    fun loadLibraryMovies(): Flow<LibraryRepositoryResult>
+    suspend fun updateMovie(movie: LibraryMovie)
+    suspend fun deleteMovie(movie: LibraryMovie)
+}
+
+internal class LibraryRepositoryImpl @Inject constructor(
     private val libraryDb: LibraryDb
-) {
-    fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
+): LibraryRepository {
+    override fun loadLibraryMovies(): Flow<LibraryRepositoryResult> {
         return libraryDb.getAllMovies().map { result ->
             when(result) {
                 is LibraryDbResult.Success -> LibraryRepositoryResult.Success(result.libraryMovies)
@@ -19,11 +25,11 @@ internal class LibraryRepository @Inject constructor(
         }
     }
 
-    suspend fun updateMovie(movie: LibraryMovie) {
+    override suspend fun updateMovie(movie: LibraryMovie) {
         libraryDb.updateMovie(movie)
     }
 
-    suspend fun deleteMovie(movie: LibraryMovie) {
+    override suspend fun deleteMovie(movie: LibraryMovie) {
         libraryDb.deleteMovie(movie)
     }
 }

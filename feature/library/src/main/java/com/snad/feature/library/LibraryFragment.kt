@@ -7,12 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.snad.feature.library.databinding.FragmentLibraryBinding
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.feature.library.repository.LibraryRepository
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
@@ -52,12 +57,16 @@ class LibraryFragment : Fragment() {
 
         libraryViewModel = ViewModelProvider(this, viewModelFactory)[LibraryViewModel::class.java]
 
-        libraryViewModel.state.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is LibraryState.DoneState -> showDoneState(state.libraryMovies)
-                is LibraryState.EmptyState -> showEmptyState()
-                is LibraryState.LoadingState -> showLoadingState()
-                is LibraryState.ErrorState -> showErrorState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                libraryViewModel.state.collect { state ->
+                    when (state) {
+                        is LibraryState.DoneState -> showDoneState(state.libraryMovies)
+                        is LibraryState.EmptyState -> showEmptyState()
+                        is LibraryState.LoadingState -> showLoadingState()
+                        is LibraryState.ErrorState -> showErrorState()
+                    }
+                }
             }
         }
 
