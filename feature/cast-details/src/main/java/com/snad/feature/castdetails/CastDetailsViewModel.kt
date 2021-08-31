@@ -93,7 +93,7 @@ internal class CastDetailsViewModel(
 }
 
 internal sealed class CastDetailsState {
-    class DoneState(val person: Person): CastDetailsState()
+    data class DoneState(val person: Person): CastDetailsState()
     object LoadingState: CastDetailsState()
     object NetworkErrorState: CastDetailsState()
     object AuthenticationErrorState: CastDetailsState()

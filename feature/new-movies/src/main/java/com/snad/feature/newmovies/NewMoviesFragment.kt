@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.snad.feature.newmovies.repository.NewMoviesRepository
+import com.snad.feature.newmovies.repository.NewMoviesRepositoryImpl
 import com.snad.feature.newmovies.databinding.FragmentNewMoviesBinding
 import com.snad.feature.newmovies.model.ListMovie
 import com.snad.feature.newmovies.model.NewMovies
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -29,7 +34,7 @@ class NewMoviesFragment : Fragment() {
     internal lateinit var newMoviesComponent: NewMoviesComponent
 
     @Inject
-    internal lateinit var newMoviesRepository: NewMoviesRepository
+    internal lateinit var newMoviesRepository: NewMoviesRepositoryImpl
 
     @Inject
     internal lateinit var viewModelFactory: NewMoviesViewModel.Factory
@@ -51,13 +56,17 @@ class NewMoviesFragment : Fragment() {
 
         newMoviesViewModel = ViewModelProvider(this, viewModelFactory)[NewMoviesViewModel::class.java]
 
-        newMoviesViewModel.state.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is NewMoviesState.DoneState -> showDoneState(state.newMovies)
-                is NewMoviesState.LoadingState -> showLoadingState()
-                is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
-                is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
-                is NewMoviesState.ErrorState -> showErrorState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                newMoviesViewModel.state.collect { state ->
+                    when (state) {
+                        is NewMoviesState.DoneState -> showDoneState(state.newMovies)
+                        is NewMoviesState.LoadingState -> showLoadingState()
+                        is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
+                        is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
+                        is NewMoviesState.ErrorState -> showErrorState()
+                    }
+                }
             }
         }
 

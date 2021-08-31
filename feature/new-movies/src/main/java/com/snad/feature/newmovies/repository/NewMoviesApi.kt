@@ -64,7 +64,7 @@ internal interface NewMoviesService {
 }
 
 internal sealed class NewMoviesApiResult {
-    class Success(val newMovies: NewMovies): NewMoviesApiResult()
+    data class Success(val newMovies: NewMovies): NewMoviesApiResult()
     object NetworkError: NewMoviesApiResult()
     object ConnectionError: NewMoviesApiResult()
     object AuthenticationError: NewMoviesApiResult()
