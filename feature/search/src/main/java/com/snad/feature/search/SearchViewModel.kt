@@ -57,7 +57,7 @@ internal class SearchViewModel(
 }
 
 internal sealed class SearchState {
-    class DoneState(val searchResults: List<ListMovie>): SearchState()
+    data class DoneState(val searchResults: List<ListMovie>): SearchState()
     object InitialState: SearchState()
     object LoadingState: SearchState()
     object NoResultsState: SearchState()
