@@ -10,12 +10,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.snad.feature.search.repository.SearchRepository
 import com.snad.feature.search.databinding.FragmentSearchBinding
 import com.snad.feature.search.model.ListMovie
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -53,15 +58,19 @@ class SearchFragment : Fragment() {
 
         searchViewModel = ViewModelProvider(this, viewModelFactory)[SearchViewModel::class.java]
 
-        searchViewModel.state.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is SearchState.DoneState -> showDoneState(state.searchResults)
-                is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
-                is SearchState.NoResultsState -> showNoResultsState() //"Couldn't find any movies"
-                is SearchState.LoadingState -> showLoadingState()
-                is SearchState.AuthenticationErrorState -> showAuthenticationErrorState()
-                is SearchState.NetworkErrorState -> showNetworkErrorState()
-                is SearchState.ErrorState -> showErrorState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchViewModel.state.collect { state ->
+                    when(state) {
+                        is SearchState.DoneState -> showDoneState(state.searchResults)
+                        is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
+                        is SearchState.NoResultsState -> showNoResultsState() //"Couldn't find any movies"
+                        is SearchState.LoadingState -> showLoadingState()
+                        is SearchState.AuthenticationErrorState -> showAuthenticationErrorState()
+                        is SearchState.NetworkErrorState -> showNetworkErrorState()
+                        is SearchState.ErrorState -> showErrorState()
+                    }
+                }
             }
         }
 

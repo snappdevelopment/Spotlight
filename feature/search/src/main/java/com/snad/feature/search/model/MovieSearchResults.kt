@@ -3,7 +3,7 @@ package com.snad.feature.search.model
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-internal class MovieSearchResults(
+internal data class MovieSearchResults(
     val page: Int,
     val total_results: Int,
     val total_pages: Int,
