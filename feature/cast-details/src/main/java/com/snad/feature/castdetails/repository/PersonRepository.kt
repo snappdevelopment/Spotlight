@@ -3,15 +3,18 @@ package com.snad.feature.castdetails.repository
 import com.snad.feature.castdetails.model.Person
 import javax.inject.Inject
 
-internal class PersonRepository @Inject constructor(
+internal interface PersonRepository {
+    suspend fun loadPerson(id: Int): PersonResult
+}
+
+internal class PersonRepositoryImpl @Inject constructor(
     private val personApi: PersonApi
-) {
-    suspend fun loadPerson(id: Int): PersonResult {
+): PersonRepository {
+
+    override suspend fun loadPerson(id: Int): PersonResult {
         val result = personApi.loadPerson(id)
         return when(result) {
-            is PersonApiResult.Success -> PersonResult.Success(
-                result.person
-            )
+            is PersonApiResult.Success -> PersonResult.Success(result.person)
             is PersonApiResult.NetworkError -> PersonResult.NetworkError
             is PersonApiResult.ConnectionError -> PersonResult.ConnectionError
             is PersonApiResult.AuthenticationError -> PersonResult.AuthenticationError
@@ -22,7 +25,7 @@ internal class PersonRepository @Inject constructor(
 }
 
 internal sealed class PersonResult {
-    class Success(val person: Person): PersonResult()
+    data class Success(val person: Person): PersonResult()
     object NetworkError: PersonResult()
     object ConnectionError: PersonResult()
     object AuthenticationError: PersonResult()

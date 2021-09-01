@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.snad.feature.castdetails.databinding.FragmentCastDetailsBinding
 import com.snad.feature.castdetails.model.Cast
@@ -14,6 +17,8 @@ import com.snad.feature.castdetails.model.Person
 import com.snad.feature.castdetails.repository.PersonRepository
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CastDetailsFragment : Fragment() {
@@ -52,13 +57,17 @@ class CastDetailsFragment : Fragment() {
 
         castDetailsViewModel = ViewModelProvider(this, viewModelFactory)[CastDetailsViewModel::class.java]
 
-        castDetailsViewModel.state.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is CastDetailsState.DoneState -> showDoneState(state.person)
-                is CastDetailsState.LoadingState -> showLoadingState()
-                is CastDetailsState.AuthenticationErrorState -> showAuthenticationErrorState()
-                is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
-                is CastDetailsState.ErrorState -> showErrorState()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                castDetailsViewModel.state.collect { state ->
+                    when(state) {
+                        is CastDetailsState.DoneState -> showDoneState(state.person)
+                        is CastDetailsState.LoadingState -> showLoadingState()
+                        is CastDetailsState.AuthenticationErrorState -> showAuthenticationErrorState()
+                        is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
+                        is CastDetailsState.ErrorState -> showErrorState()
+                    }
+                }
             }
         }
 

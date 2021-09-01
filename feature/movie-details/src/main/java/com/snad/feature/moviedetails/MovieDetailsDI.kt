@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.Subcomponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import java.time.Clock
 import javax.inject.Scope
 
 @Scope
@@ -39,10 +40,4 @@ internal interface MovieDetailsModule {
     @MovieDetailsScope
     @Binds
     fun MovieDetailsRepositoryImpl.bind(): MovieDetailsRepository
-
-    companion object {
-        @MovieDetailsScope
-        @Provides
-        fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-    }
 }

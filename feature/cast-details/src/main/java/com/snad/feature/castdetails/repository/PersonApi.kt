@@ -60,7 +60,7 @@ internal interface PersonService {
 }
 
 internal sealed class PersonApiResult {
-    class Success(val person: Person): PersonApiResult()
+    data class Success(val person: Person): PersonApiResult()
     object NetworkError: PersonApiResult()
     object ConnectionError: PersonApiResult()
     object AuthenticationError: PersonApiResult()
