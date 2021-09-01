@@ -39,10 +39,4 @@ internal interface LibraryModule {
     @LibraryScope
     @Binds
     fun LibraryRepositoryImpl.binds(): LibraryRepository
-
-    companion object {
-        @LibraryScope
-        @Provides
-        fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
-    }
 }

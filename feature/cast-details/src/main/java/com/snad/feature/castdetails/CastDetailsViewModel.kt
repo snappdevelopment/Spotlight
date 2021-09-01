@@ -7,9 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.snad.feature.castdetails.model.Person
 import com.snad.feature.castdetails.repository.PersonRepository
 import com.snad.feature.castdetails.repository.PersonResult
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Clock
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -17,26 +21,26 @@ import java.time.format.FormatStyle
 import javax.inject.Inject
 
 internal class CastDetailsViewModel(
-    private val personRepository: PersonRepository
+    private val personRepository: PersonRepository,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val clock: Clock,
+    private val dateTimeFormatter: DateTimeFormatter
 ) : ViewModel() {
 
-    val state = MutableLiveData<CastDetailsState>()
+    private val _state = MutableStateFlow<CastDetailsState>(CastDetailsState.LoadingState)
+    val state = _state.asStateFlow()
 
     fun loadCastDetails(id: Int) {
-        state.value = CastDetailsState.LoadingState
-        viewModelScope.launch(Dispatchers.IO) {
+        updateState(CastDetailsState.LoadingState)
+        viewModelScope.launch(ioDispatcher) {
             val result = personRepository.loadPerson(id)
-            withContext(Dispatchers.Main) {
-                when(result) {
-                    is PersonResult.Success -> state.value = prepareDoneState(result)
-                    is PersonResult.NetworkError -> state.value = CastDetailsState.NetworkErrorState
-                    is PersonResult.ConnectionError -> state.value =
-                        CastDetailsState.NetworkErrorState
-                    is PersonResult.AuthenticationError -> state.value =
-                        CastDetailsState.AuthenticationErrorState
-                    is PersonResult.ApiError -> state.value = CastDetailsState.ErrorState
-                    is PersonResult.Error -> state.value = CastDetailsState.ErrorState
-                }
+            when(result) {
+                is PersonResult.Success -> updateState(prepareDoneState(result))
+                is PersonResult.NetworkError -> updateState(CastDetailsState.NetworkErrorState)
+                is PersonResult.ConnectionError -> updateState(CastDetailsState.NetworkErrorState)
+                is PersonResult.AuthenticationError -> updateState(CastDetailsState.AuthenticationErrorState)
+                is PersonResult.ApiError -> updateState(CastDetailsState.ErrorState)
+                is PersonResult.Error -> updateState(CastDetailsState.ErrorState)
             }
         }
     }
@@ -56,7 +60,7 @@ internal class CastDetailsViewModel(
         val deathday = result.person.deathday
         if(birthday != null && birthday.isNotEmpty()) {
             val birthdayDate = LocalDate.parse(birthday)
-            val endDate = if(deathday == null || deathday.isEmpty()) LocalDate.now() else LocalDate.parse(deathday)
+            val endDate = if(deathday == null || deathday.isEmpty()) LocalDate.now(clock) else LocalDate.parse(deathday)
 
             val age = Period.between(
                 LocalDate.of(birthdayDate.year, birthdayDate.month, birthdayDate.dayOfMonth),
@@ -64,12 +68,13 @@ internal class CastDetailsViewModel(
             ).years
 
             birthdayString = LocalDate.parse(birthday).format(
-                DateTimeFormatter.ofLocalizedDate(
-                FormatStyle.SHORT))
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+            )
 
             if(deathday != null && deathday.isNotEmpty()) {
-                deathdayString = LocalDate.parse(deathday).format(DateTimeFormatter.ofLocalizedDate(
-                    FormatStyle.SHORT)).plus(" (${age})")
+                deathdayString = LocalDate.parse(deathday).format(
+                    DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+                ).plus(" (${age})")
             }
             else birthdayString = birthdayString.plus(" (${age})")
         }
@@ -83,11 +88,18 @@ internal class CastDetailsViewModel(
         )
     }
 
+    private fun updateState(state: CastDetailsState) {
+        _state.value = state
+    }
+
     class Factory @Inject constructor(
-        private  val personRepository: PersonRepository
+        private  val personRepository: PersonRepository,
+        private val ioDispatcher: CoroutineDispatcher,
+        private val clock: Clock,
+        private val dateTimeFormatter: DateTimeFormatter
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CastDetailsViewModel(personRepository) as T
+            return CastDetailsViewModel(personRepository, ioDispatcher, clock, dateTimeFormatter) as T
         }
     }
 }

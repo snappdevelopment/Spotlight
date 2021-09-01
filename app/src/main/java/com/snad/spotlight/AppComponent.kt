@@ -12,6 +12,8 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.time.Clock
 import javax.inject.Singleton
@@ -52,6 +54,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideClock(): Clock = Clock.systemDefaultZone()
+
+    @Singleton
+    @Provides
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
 
 @Module(subcomponents = [
