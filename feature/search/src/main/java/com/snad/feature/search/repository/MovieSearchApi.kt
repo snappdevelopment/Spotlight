@@ -58,7 +58,7 @@ internal interface SearchService {
 }
 
 internal sealed class MovieSearchApiResult {
-    class Success(val searchResults: MovieSearchResults): MovieSearchApiResult()
+    data class Success(val searchResults: MovieSearchResults): MovieSearchApiResult()
     object NetworkError:MovieSearchApiResult()
     object ConnectionError: MovieSearchApiResult()
     object AuthenticationError: MovieSearchApiResult()
