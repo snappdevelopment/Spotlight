@@ -19,9 +19,10 @@ Spotlight shows details about a movie like the storyline, images, cast and revie
 
 ## Uses
 
+- Multi module app (feature and core modules)
 - Navigation Component (navigation between fragments)
 - Viewbinding
-- Viewmodel + LiveData
+- Viewmodel + StateFlow
 - Coroutines + Flow (async data flow)
 - Dagger 2 (dependency injection)
 - Repository Pattern
@@ -29,6 +30,7 @@ Spotlight shows details about a movie like the storyline, images, cast and revie
 - Room (database)
 - Picasso (image loading)
 - Palette (themeing)
+- Turbine + Mockito (testing)
 
 ## Building
 
