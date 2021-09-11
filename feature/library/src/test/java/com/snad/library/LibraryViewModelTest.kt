@@ -2,8 +2,7 @@ package com.snad.library
 
 import app.cash.turbine.test
 import com.snad.core.persistence.models.LibraryMovie
-import com.snad.feature.library.LibraryState
-import com.snad.feature.library.LibraryViewModel
+import com.snad.feature.library.*
 import com.snad.feature.library.repository.LibraryRepository
 import com.snad.feature.library.repository.LibraryRepositoryResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -64,7 +63,7 @@ internal class LibraryViewModelTest {
         underTest.state.test {
             assertEquals(LibraryState.LoadingState, expectItem())
 
-            underTest.loadLibraryMovies()
+            underTest.handleAction(LoadMovies)
             repository.result.emit(LibraryRepositoryResult.Success(listOf(libraryMovie)))
 
             assertEquals(expectedState, expectItem())
@@ -79,7 +78,7 @@ internal class LibraryViewModelTest {
         underTest.state.test {
             assertEquals(LibraryState.LoadingState, expectItem())
 
-            underTest.loadLibraryMovies()
+            underTest.handleAction(LoadMovies)
             repository.result.emit(LibraryRepositoryResult.Success(emptyList()))
 
             assertEquals(expectedState, expectItem())
@@ -94,7 +93,7 @@ internal class LibraryViewModelTest {
         underTest.state.test {
             assertEquals(LibraryState.LoadingState, expectItem())
 
-            underTest.loadLibraryMovies()
+            underTest.handleAction(LoadMovies)
             repository.result.emit(LibraryRepositoryResult.DbError)
 
             assertEquals(expectedState, expectItem())
@@ -110,11 +109,11 @@ internal class LibraryViewModelTest {
         underTest.state.test {
             assertEquals(LibraryState.LoadingState, expectItem())
 
-            underTest.loadLibraryMovies()
+            underTest.handleAction(LoadMovies)
             repository.result.emit(LibraryRepositoryResult.Success(listOf(libraryMovie)))
             assertEquals(LibraryState.DoneState(listOf(libraryMovie)), expectItem())
 
-            underTest.updateLibraryMovie(updatedMovie)
+            underTest.handleAction(UpdateMovie(updatedMovie))
 
             assertEquals(expectedState, expectItem())
             expectNoEvents()
@@ -128,11 +127,11 @@ internal class LibraryViewModelTest {
         underTest.state.test {
             assertEquals(LibraryState.LoadingState, expectItem())
 
-            underTest.loadLibraryMovies()
+            underTest.handleAction(LoadMovies)
             repository.result.emit(LibraryRepositoryResult.Success(listOf(libraryMovie)))
             assertEquals(LibraryState.DoneState(listOf(libraryMovie)), expectItem())
 
-            underTest.deleteLibraryMovie(libraryMovie)
+            underTest.handleAction(DeleteMovie(libraryMovie))
 
             assertEquals(expectedState, expectItem())
             expectNoEvents()

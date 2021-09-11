@@ -1,40 +1,40 @@
 package com.snad.feature.library
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.snad.core.arch.StateMachine
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.feature.library.repository.LibraryRepository
 import com.snad.feature.library.repository.LibraryRepositoryResult
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class LibraryViewModel(
     private val libraryRepository: LibraryRepository,
     private val ioDispatcher: CoroutineDispatcher
-) : ViewModel() {
+) : StateMachine<LibraryState, LibraryAction>(LibraryState.LoadingState) {
 
-    private val _state = MutableStateFlow<LibraryState>(LibraryState.LoadingState)
-    val state: StateFlow<LibraryState> = _state
+    override fun handleAction(action: LibraryAction) {
+        when(action) {
+            is LoadMovies -> loadLibraryMovies()
+            is DeleteMovie -> deleteLibraryMovie(action.libraryMovie)
+            is UpdateMovie -> updateLibraryMovie(action.libraryMovie)
+        }
+    }
 
-    fun loadLibraryMovies() {
-        updateState(LibraryState.LoadingState)
-
+    private fun loadLibraryMovies() {
         viewModelScope.launch(ioDispatcher) {
+            updateState(LibraryState.LoadingState)
+
             libraryRepository.loadLibraryMovies().collect {
                 when(it) {
                     is LibraryRepositoryResult.Success -> {
                         if(it.libraryMovies.isEmpty()) {
                             updateState(LibraryState.EmptyState)
-                        }
-                        else {
+                        } else {
                             val sortedLibraryMovies = it.libraryMovies
                                 .sortedByDescending { libraryMovie -> libraryMovie.added_at }
                             updateState(LibraryState.DoneState(sortedLibraryMovies))
@@ -46,20 +46,16 @@ internal class LibraryViewModel(
         }
     }
 
-    fun updateLibraryMovie(libraryMovie: LibraryMovie) {
+    private fun updateLibraryMovie(libraryMovie: LibraryMovie) {
         viewModelScope.launch(ioDispatcher) {
             libraryRepository.updateMovie(libraryMovie)
         }
     }
 
-    fun deleteLibraryMovie(libraryMovie: LibraryMovie) {
+    private fun deleteLibraryMovie(libraryMovie: LibraryMovie) {
         viewModelScope.launch(ioDispatcher) {
             libraryRepository.deleteMovie(libraryMovie)
         }
-    }
-
-    private fun updateState(newState: LibraryState) {
-        _state.value = newState
     }
 
     class Factory @Inject constructor(

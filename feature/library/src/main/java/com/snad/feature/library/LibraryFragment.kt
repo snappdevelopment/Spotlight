@@ -7,22 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.*
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.snad.core.arch.observeWithLifecycle
 import com.snad.feature.library.databinding.FragmentLibraryBinding
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.feature.library.repository.LibraryRepository
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
 
-    private lateinit var libraryViewModel: LibraryViewModel
+    private val libraryViewModel: LibraryViewModel by viewModels { viewModelFactory }
     private var binding: FragmentLibraryBinding? = null
     private val viewBinding: FragmentLibraryBinding
         get() = binding!!
@@ -55,22 +52,16 @@ class LibraryFragment : Fragment() {
         )
         viewBinding.recyclerView.adapter = libraryAdapter
 
-        libraryViewModel = ViewModelProvider(this, viewModelFactory)[LibraryViewModel::class.java]
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                libraryViewModel.state.collect { state ->
-                    when (state) {
-                        is LibraryState.DoneState -> showDoneState(state.libraryMovies)
-                        is LibraryState.EmptyState -> showEmptyState()
-                        is LibraryState.LoadingState -> showLoadingState()
-                        is LibraryState.ErrorState -> showErrorState()
-                    }
-                }
+        libraryViewModel.state.observeWithLifecycle(this) { state ->
+            when (state) {
+                is LibraryState.DoneState -> showDoneState(state.libraryMovies)
+                is LibraryState.EmptyState -> showEmptyState()
+                is LibraryState.LoadingState -> showLoadingState()
+                is LibraryState.ErrorState -> showErrorState()
             }
         }
 
-        libraryViewModel.loadLibraryMovies()
+        libraryViewModel.handleAction(LoadMovies)
 
         return viewBinding.root
     }
@@ -86,7 +77,7 @@ class LibraryFragment : Fragment() {
             .setTitle(R.string.dialog_delete_movie_title)
             .setMessage(R.string.dialog_delete_movie_message)
             .setPositiveButton(android.R.string.ok) { dialog, which ->
-                libraryViewModel.deleteLibraryMovie(libraryMovie)
+                libraryViewModel.handleAction(DeleteMovie(libraryMovie))
             }
             .setNegativeButton(android.R.string.cancel) { dialog, which ->
                 dialog.dismiss()
@@ -104,7 +95,7 @@ class LibraryFragment : Fragment() {
     }
 
     private fun movieWatchedClickListener(libraryMovie: LibraryMovie) {
-        libraryViewModel.updateLibraryMovie(libraryMovie)
+        libraryViewModel.handleAction(UpdateMovie(libraryMovie))
     }
 
     private fun showDoneState(libraryMovies: List<LibraryMovie>) {
