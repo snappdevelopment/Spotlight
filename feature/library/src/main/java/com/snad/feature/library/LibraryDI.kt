@@ -4,10 +4,7 @@ import com.snad.feature.library.repository.LibraryRepository
 import com.snad.feature.library.repository.LibraryRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.Subcomponent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Scope
 
 @Scope

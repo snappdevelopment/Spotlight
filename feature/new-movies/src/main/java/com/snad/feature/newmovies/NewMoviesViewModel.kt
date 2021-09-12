@@ -3,27 +3,29 @@ package com.snad.feature.newmovies
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.snad.core.arch.StateMachine
 import com.snad.feature.newmovies.repository.NewMoviesRepositoryImpl
 import com.snad.feature.newmovies.repository.NewMoviesResult
 import com.snad.feature.newmovies.model.NewMovies
 import com.snad.feature.newmovies.repository.NewMoviesRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class NewMoviesViewModel(
     private val newMoviesRepository: NewMoviesRepository,
     private val ioDispatcher: CoroutineDispatcher
-) : ViewModel() {
+) : StateMachine<NewMoviesState, NewMoviesAction>(NewMoviesState.LoadingState) {
 
-    private val _state = MutableStateFlow<NewMoviesState>(NewMoviesState.LoadingState)
-    val state = _state.asStateFlow()
+    override fun handleAction(action: NewMoviesAction) {
+        when(action) {
+            is LoadMovies -> loadNewMovies()
+        }
+    }
 
-    fun loadNewMovies() {
-        updateState(NewMoviesState.LoadingState)
+    private fun loadNewMovies() {
         viewModelScope.launch(ioDispatcher) {
+            updateState(NewMoviesState.LoadingState)
             val result = newMoviesRepository.loadNewMovies()
             when(result) {
                 is NewMoviesResult.Success -> {
@@ -37,10 +39,6 @@ internal class NewMoviesViewModel(
                 is NewMoviesResult.Error -> updateState(NewMoviesState.ErrorState)
             }
         }
-    }
-
-    private fun updateState(state: NewMoviesState) {
-        _state.value = state
     }
 
     class Factory @Inject constructor(

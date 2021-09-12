@@ -29,7 +29,6 @@ internal class NewMoviesViewModelTest {
 
     private val repository = TestNewMoviesRepository()
 
-
     private val underTest = NewMoviesViewModel(
         newMoviesRepository = repository,
         ioDispatcher = TestCoroutineDispatcher()
@@ -40,7 +39,7 @@ internal class NewMoviesViewModelTest {
         val expectedState = NewMoviesState.DoneState(newMovies)
 
         underTest.state.test {
-            underTest.loadNewMovies()
+            underTest.handleAction(LoadMovies)
             repository.setResult(NewMoviesResult.Success(newMovies))
 
             assertEquals(NewMoviesState.LoadingState, expectItem())
@@ -54,7 +53,7 @@ internal class NewMoviesViewModelTest {
         val expectedState = NewMoviesState.NetworkErrorState
 
         underTest.state.test {
-            underTest.loadNewMovies()
+            underTest.handleAction(LoadMovies)
             repository.setResult(NewMoviesResult.NetworkError)
 
             assertEquals(NewMoviesState.LoadingState, expectItem())
@@ -68,7 +67,7 @@ internal class NewMoviesViewModelTest {
         val expectedState = NewMoviesState.AuthenticationErrorState
 
         underTest.state.test {
-            underTest.loadNewMovies()
+            underTest.handleAction(LoadMovies)
             repository.setResult(NewMoviesResult.AuthenticationError)
 
             assertEquals(NewMoviesState.LoadingState, expectItem())
@@ -82,7 +81,7 @@ internal class NewMoviesViewModelTest {
         val expectedState = NewMoviesState.ErrorState
 
         underTest.state.test {
-            underTest.loadNewMovies()
+            underTest.handleAction(LoadMovies)
             repository.setResult(NewMoviesResult.ApiError)
 
             assertEquals(NewMoviesState.LoadingState, expectItem())

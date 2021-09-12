@@ -1,18 +1,14 @@
 package com.snad.feature.castdetails
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.snad.core.arch.StateMachine
 import com.snad.feature.castdetails.model.Person
 import com.snad.feature.castdetails.repository.PersonRepository
 import com.snad.feature.castdetails.repository.PersonResult
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Clock
 import java.time.LocalDate
 import java.time.Period
@@ -24,15 +20,17 @@ internal class CastDetailsViewModel(
     private val personRepository: PersonRepository,
     private val ioDispatcher: CoroutineDispatcher,
     private val clock: Clock,
-    private val dateTimeFormatter: DateTimeFormatter
-) : ViewModel() {
+) : StateMachine<CastDetailsState, CastDetailsAction>(CastDetailsState.LoadingState) {
 
-    private val _state = MutableStateFlow<CastDetailsState>(CastDetailsState.LoadingState)
-    val state = _state.asStateFlow()
+    override fun handleAction(action: CastDetailsAction) {
+        when(action) {
+            is LoadCastDetails -> loadCastDetails(action.id)
+        }
+    }
 
-    fun loadCastDetails(id: Int) {
-        updateState(CastDetailsState.LoadingState)
+    private fun loadCastDetails(id: Int) {
         viewModelScope.launch(ioDispatcher) {
+            updateState(CastDetailsState.LoadingState)
             val result = personRepository.loadPerson(id)
             when(result) {
                 is PersonResult.Success -> updateState(prepareDoneState(result))
@@ -88,18 +86,13 @@ internal class CastDetailsViewModel(
         )
     }
 
-    private fun updateState(state: CastDetailsState) {
-        _state.value = state
-    }
-
     class Factory @Inject constructor(
         private  val personRepository: PersonRepository,
         private val ioDispatcher: CoroutineDispatcher,
         private val clock: Clock,
-        private val dateTimeFormatter: DateTimeFormatter
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CastDetailsViewModel(personRepository, ioDispatcher, clock, dateTimeFormatter) as T
+            return CastDetailsViewModel(personRepository, ioDispatcher, clock) as T
         }
     }
 }

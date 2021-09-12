@@ -70,8 +70,7 @@ internal class CastDetailsViewModelTest {
     private val underTest = CastDetailsViewModel(
         personRepository = repository,
         ioDispatcher = TestCoroutineDispatcher(),
-        clock = clock,
-        dateTimeFormatter = DateTimeFormatter.ISO_DATE
+        clock = clock
     )
 
     @Test
@@ -85,7 +84,7 @@ internal class CastDetailsViewModelTest {
         val expectedState = CastDetailsState.DoneState(person)
 
         underTest.state.test {
-            underTest.loadCastDetails(id = 0)
+            underTest.handleAction(LoadCastDetails(0))
             repository.setResult(PersonResult.Success(person.copy(birthday = "2010-01-01")))
 
             assertEquals(CastDetailsState.LoadingState, expectItem())
@@ -106,7 +105,7 @@ internal class CastDetailsViewModelTest {
         val expectedState = CastDetailsState.DoneState(person)
 
         underTest.state.test {
-            underTest.loadCastDetails(id = 0)
+            underTest.handleAction(LoadCastDetails(0))
             repository.setResult(PersonResult.Success(person.copy(birthday = "2010-01-01", deathday = "2011-01-01")))
 
             assertEquals(CastDetailsState.LoadingState, expectItem())
@@ -120,7 +119,7 @@ internal class CastDetailsViewModelTest {
         val expectedState = CastDetailsState.NetworkErrorState
 
         underTest.state.test {
-            underTest.loadCastDetails(id = 0)
+            underTest.handleAction(LoadCastDetails(0))
             repository.setResult(PersonResult.NetworkError)
 
             assertEquals(CastDetailsState.LoadingState, expectItem())
@@ -134,7 +133,7 @@ internal class CastDetailsViewModelTest {
         val expectedState = CastDetailsState.AuthenticationErrorState
 
         underTest.state.test {
-            underTest.loadCastDetails(id = 0)
+            underTest.handleAction(LoadCastDetails(0))
             repository.setResult(PersonResult.AuthenticationError)
 
             assertEquals(CastDetailsState.LoadingState, expectItem())
@@ -148,7 +147,7 @@ internal class CastDetailsViewModelTest {
         val expectedState = CastDetailsState.ErrorState
 
         underTest.state.test {
-            underTest.loadCastDetails(id = 0)
+            underTest.handleAction(LoadCastDetails(0))
             repository.setResult(PersonResult.ApiError)
 
             assertEquals(CastDetailsState.LoadingState, expectItem())

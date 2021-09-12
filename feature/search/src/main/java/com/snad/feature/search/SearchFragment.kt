@@ -10,24 +10,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.snad.core.arch.observeWithLifecycle
 import com.snad.feature.search.repository.SearchRepository
 import com.snad.feature.search.databinding.FragmentSearchBinding
 import com.snad.feature.search.model.ListMovie
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 
 class SearchFragment : Fragment() {
 
-    private lateinit var searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel by viewModels { viewModelFactory }
     private var binding: FragmentSearchBinding? = null
     private val viewBinding: FragmentSearchBinding
         get() = binding!!
@@ -56,27 +52,21 @@ class SearchFragment : Fragment() {
 
         inject()
 
-        searchViewModel = ViewModelProvider(this, viewModelFactory)[SearchViewModel::class.java]
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                searchViewModel.state.collect { state ->
-                    when(state) {
-                        is SearchState.DoneState -> showDoneState(state.searchResults)
-                        is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
-                        is SearchState.NoResultsState -> showNoResultsState() //"Couldn't find any movies"
-                        is SearchState.LoadingState -> showLoadingState()
-                        is SearchState.AuthenticationErrorState -> showAuthenticationErrorState()
-                        is SearchState.NetworkErrorState -> showNetworkErrorState()
-                        is SearchState.ErrorState -> showErrorState()
-                    }
-                }
+        searchViewModel.state.observeWithLifecycle(this) { state ->
+            when(state) {
+                is SearchState.DoneState -> showDoneState(state.searchResults)
+                is SearchState.InitialState -> showInitialState() //"Search for movies (with Icon)"
+                is SearchState.NoResultsState -> showNoResultsState() //"Couldn't find any movies"
+                is SearchState.LoadingState -> showLoadingState()
+                is SearchState.AuthenticationErrorState -> showAuthenticationErrorState()
+                is SearchState.NetworkErrorState -> showNetworkErrorState()
+                is SearchState.ErrorState -> showErrorState()
             }
         }
 
         viewBinding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(query != null && query != "") searchViewModel.searchMovies(query)
+                if(query != null && query != "") searchViewModel.handleAction(SearchMovies(query))
                 viewBinding.searchView.clearFocus()
                 return true
             }
@@ -170,7 +160,7 @@ class SearchFragment : Fragment() {
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
                 if(viewBinding.searchView.query != null && viewBinding.searchView.query != "") {
-                    searchViewModel.searchMovies(viewBinding.searchView.query.toString())
+                    searchViewModel.handleAction(SearchMovies(viewBinding.searchView.query.toString()))
                 }
                 dialog.dismiss()
             }

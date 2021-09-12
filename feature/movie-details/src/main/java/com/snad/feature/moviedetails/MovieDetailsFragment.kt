@@ -13,14 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import androidx.transition.TransitionInflater
+import com.snad.core.arch.observeWithLifecycle
 import com.snad.core.persistence.models.CastMember
 import com.snad.core.persistence.models.Image
 import com.snad.feature.moviedetails.databinding.FragmentMovieDetailsBinding
@@ -31,13 +29,11 @@ import com.snad.core.ui.AnimationUtil
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieDetailsFragment: Fragment() {
 
-    private lateinit var movieDetailsViewModel: MovieDetailsViewModel
+    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels { viewModelFactory }
     private var binding: FragmentMovieDetailsBinding? = null
     private val viewBinding: FragmentMovieDetailsBinding
         get() = binding!!
@@ -77,31 +73,25 @@ class MovieDetailsFragment: Fragment() {
 
         inject()
 
-        movieDetailsViewModel = ViewModelProvider(this, viewModelFactory)[MovieDetailsViewModel::class.java]
-        
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                movieDetailsViewModel.state.collect { state ->
-                    when(state) {
-                        is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
-                        is MovieDetailsState.LoadingState -> showLoadingState()
-                        is MovieDetailsState.ErrorNetworkState -> showNetworkErrorState(movieId)
-                        is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
-                        is MovieDetailsState.ErrorState -> showErrorState()
-                    }
-                }
+        movieDetailsViewModel.state.observeWithLifecycle(this) { state ->
+            when(state) {
+                is MovieDetailsState.DoneState -> showDoneState(state.movie, state.isInLibrary)
+                is MovieDetailsState.LoadingState -> showLoadingState()
+                is MovieDetailsState.ErrorNetworkState -> showNetworkErrorState(movieId)
+                is MovieDetailsState.ErrorAuthenticationState -> showAuthenticationErrorState()
+                is MovieDetailsState.ErrorState -> showErrorState()
             }
         }
 
         viewBinding.addOrRemoveMovieFAB.setOnClickListener {
-            movieDetailsViewModel.addOrRemoveMovie()
+            movieDetailsViewModel.handleAction(CtaClicked)
         }
 
         viewBinding.hasBeenWatchedFAB.setOnClickListener {
-            movieDetailsViewModel.toggleHasBeenWatched()
+            movieDetailsViewModel.handleAction(WatchedClicked)
         }
 
-        movieDetailsViewModel.loadMovie(movieId)
+        movieDetailsViewModel.handleAction(LoadMovie(movieId))
 
         return viewBinding.root
     }
@@ -332,7 +322,7 @@ class MovieDetailsFragment: Fragment() {
             .setMessage(R.string.dialog_error_network_message)
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
-                movieDetailsViewModel.loadMovie(id)
+                movieDetailsViewModel.handleAction(LoadMovie(id))
                 dialog.dismiss()
             }
             .create()

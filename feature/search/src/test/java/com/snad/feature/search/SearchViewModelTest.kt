@@ -55,7 +55,7 @@ internal class SearchViewModelTest {
         val expectedState = SearchState.DoneState(listOf(listMovie))
 
         underTest.state.test {
-            underTest.searchMovies(title = "")
+            underTest.handleAction(SearchMovies(title = ""))
             repository.setResult(SearchRepositoryResult.Success(movieSearchResults))
 
             assertEquals(SearchState.InitialState, expectItem())
@@ -70,7 +70,7 @@ internal class SearchViewModelTest {
         val expectedState = SearchState.NoResultsState
 
         underTest.state.test {
-            underTest.searchMovies(title = "")
+            underTest.handleAction(SearchMovies(title = ""))
             repository.setResult(
                 SearchRepositoryResult.Success(movieSearchResults.copy(total_results = 0))
             )
@@ -87,7 +87,7 @@ internal class SearchViewModelTest {
         val expectedState = SearchState.NetworkErrorState
 
         underTest.state.test {
-            underTest.searchMovies(title = "")
+            underTest.handleAction(SearchMovies(title = ""))
             repository.setResult(SearchRepositoryResult.NetworkError)
 
             assertEquals(SearchState.InitialState, expectItem())
@@ -102,7 +102,7 @@ internal class SearchViewModelTest {
         val expectedState = SearchState.AuthenticationErrorState
 
         underTest.state.test {
-            underTest.searchMovies(title = "")
+            underTest.handleAction(SearchMovies(title = ""))
             repository.setResult(SearchRepositoryResult.AuthenticationError)
 
             assertEquals(SearchState.InitialState, expectItem())
@@ -117,7 +117,7 @@ internal class SearchViewModelTest {
         val expectedState = SearchState.ErrorState
 
         underTest.state.test {
-            underTest.searchMovies(title = "")
+            underTest.handleAction(SearchMovies(title = ""))
             repository.setResult(SearchRepositoryResult.ApiError)
 
             assertEquals(SearchState.InitialState, expectItem())
