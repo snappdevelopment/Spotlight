@@ -6,24 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.snad.core.arch.observeWithLifecycle
 import com.snad.feature.castdetails.databinding.FragmentCastDetailsBinding
 import com.snad.feature.castdetails.model.Cast
 import com.snad.feature.castdetails.model.Person
 import com.snad.feature.castdetails.repository.PersonRepository
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CastDetailsFragment : Fragment() {
 
-    private lateinit var castDetailsViewModel: CastDetailsViewModel
+    private val castDetailsViewModel: CastDetailsViewModel by viewModels { viewModelFactory }
     private var binding: FragmentCastDetailsBinding? = null
     private val viewBinding: FragmentCastDetailsBinding
         get() = binding!!
@@ -55,23 +51,17 @@ class CastDetailsFragment : Fragment() {
 
         inject()
 
-        castDetailsViewModel = ViewModelProvider(this, viewModelFactory)[CastDetailsViewModel::class.java]
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                castDetailsViewModel.state.collect { state ->
-                    when(state) {
-                        is CastDetailsState.DoneState -> showDoneState(state.person)
-                        is CastDetailsState.LoadingState -> showLoadingState()
-                        is CastDetailsState.AuthenticationErrorState -> showAuthenticationErrorState()
-                        is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
-                        is CastDetailsState.ErrorState -> showErrorState()
-                    }
-                }
+        castDetailsViewModel.state.observeWithLifecycle(this) { state ->
+            when(state) {
+                is CastDetailsState.DoneState -> showDoneState(state.person)
+                is CastDetailsState.LoadingState -> showLoadingState()
+                is CastDetailsState.AuthenticationErrorState -> showAuthenticationErrorState()
+                is CastDetailsState.NetworkErrorState -> showNetworkErrorState(castId)
+                is CastDetailsState.ErrorState -> showErrorState()
             }
         }
 
-        castDetailsViewModel.loadCastDetails(castId)
+        castDetailsViewModel.handleAction(LoadCastDetails(castId))
 
         return viewBinding.root
     }
@@ -163,7 +153,7 @@ class CastDetailsFragment : Fragment() {
             .setMessage(R.string.dialog_error_network_message)
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
-                castDetailsViewModel.loadCastDetails(id)
+                castDetailsViewModel.handleAction(LoadCastDetails(id))
                 dialog.dismiss()
             }
             .create()

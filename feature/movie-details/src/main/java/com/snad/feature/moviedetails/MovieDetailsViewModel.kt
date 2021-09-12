@@ -3,12 +3,11 @@ package com.snad.feature.moviedetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.snad.core.arch.StateMachine
 import com.snad.feature.moviedetails.repository.MovieDetailsRepository
 import com.snad.feature.moviedetails.repository.MovieDetailsResult
 import com.snad.core.persistence.models.LibraryMovie
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.Clock
@@ -19,12 +18,17 @@ internal class MovieDetailsViewModel(
     private val movieDetailsRepository: MovieDetailsRepository,
     private val ioDispatcher: CoroutineDispatcher,
     private val clock: Clock
-): ViewModel() {
+): StateMachine<MovieDetailsState, MovieDetailsAction>(MovieDetailsState.LoadingState) {
 
-    private val _state = MutableStateFlow<MovieDetailsState>(MovieDetailsState.LoadingState)
-    val state: StateFlow<MovieDetailsState> = _state
+    override fun handleAction(action: MovieDetailsAction) {
+        when(action) {
+            is LoadMovie -> loadMovie(action.id)
+            is CtaClicked -> addOrRemoveMovie()
+            is WatchedClicked -> toggleHasBeenWatched()
+        }
+    }
 
-    fun loadMovie(id: Int) {
+    private fun loadMovie(id: Int) {
         viewModelScope.launch(ioDispatcher) {
             movieDetailsRepository.loadMovie(id).collect { movieDetailsResult ->
                 updateState(movieDetailsResult.toMovieDetailsState())
@@ -33,7 +37,7 @@ internal class MovieDetailsViewModel(
         }
     }
 
-    fun addOrRemoveMovie() {
+    private fun addOrRemoveMovie() {
         val currentState = state.value
         if((currentState as MovieDetailsState.DoneState).isInLibrary) {
             viewModelScope.launch(ioDispatcher) {
@@ -50,7 +54,7 @@ internal class MovieDetailsViewModel(
         }
     }
 
-    fun toggleHasBeenWatched() {
+    private fun toggleHasBeenWatched() {
         val currentState = state.value
         if(currentState is MovieDetailsState.DoneState) {
             viewModelScope.launch(ioDispatcher) {
@@ -94,10 +98,6 @@ internal class MovieDetailsViewModel(
             is MovieDetailsResult.ApiError -> MovieDetailsState.ErrorState
             is MovieDetailsResult.Error -> MovieDetailsState.ErrorState
         }
-    }
-
-    private fun updateState(newState: MovieDetailsState) {
-        _state.value = newState
     }
 
     class Factory @Inject constructor(

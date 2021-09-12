@@ -7,24 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.snad.core.arch.observeWithLifecycle
 import com.snad.feature.newmovies.repository.NewMoviesRepositoryImpl
 import com.snad.feature.newmovies.databinding.FragmentNewMoviesBinding
 import com.snad.feature.newmovies.model.ListMovie
 import com.snad.feature.newmovies.model.NewMovies
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class NewMoviesFragment : Fragment() {
 
-    private lateinit var newMoviesViewModel: NewMoviesViewModel
+    private val newMoviesViewModel: NewMoviesViewModel by viewModels { viewModelFactory }
     private var binding: FragmentNewMoviesBinding? = null
     private val viewBinding: FragmentNewMoviesBinding
         get() = binding!!
@@ -54,23 +50,17 @@ class NewMoviesFragment : Fragment() {
 
         inject()
 
-        newMoviesViewModel = ViewModelProvider(this, viewModelFactory)[NewMoviesViewModel::class.java]
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newMoviesViewModel.state.collect { state ->
-                    when (state) {
-                        is NewMoviesState.DoneState -> showDoneState(state.newMovies)
-                        is NewMoviesState.LoadingState -> showLoadingState()
-                        is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
-                        is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
-                        is NewMoviesState.ErrorState -> showErrorState()
-                    }
-                }
+        newMoviesViewModel.state.observeWithLifecycle(this) { state ->
+            when (state) {
+                is NewMoviesState.DoneState -> showDoneState(state.newMovies)
+                is NewMoviesState.LoadingState -> showLoadingState()
+                is NewMoviesState.AuthenticationErrorState -> showAuthenticationErrorState()
+                is NewMoviesState.NetworkErrorState -> showNetworkErrorState()
+                is NewMoviesState.ErrorState -> showErrorState()
             }
         }
 
-        newMoviesViewModel.loadNewMovies()
+        newMoviesViewModel.handleAction(LoadMovies)
 
         return viewBinding.root
     }
@@ -122,7 +112,7 @@ class NewMoviesFragment : Fragment() {
             .setMessage(R.string.dialog_error_network_message)
             .setCancelable(false)
             .setPositiveButton(R.string.dialog_error_network_button_retry) { dialog, which ->
-                newMoviesViewModel.loadNewMovies()
+                newMoviesViewModel.handleAction(LoadMovies)
                 dialog.dismiss()
             }
             .create()

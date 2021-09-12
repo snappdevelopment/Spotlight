@@ -4,7 +4,7 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 }
 
-//common feature module config
+//common module config
 apply from: "$rootProject.projectDir/android-module.gradle"
 
 dependencies {

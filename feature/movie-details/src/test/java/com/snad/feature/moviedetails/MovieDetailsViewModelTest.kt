@@ -65,7 +65,7 @@ internal class MovieDetailsViewModelTest {
         underTest.state.test {
             assertEquals(MovieDetailsState.LoadingState, expectItem())
 
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
 
             assertEquals(expectedState, expectItem())
@@ -84,13 +84,13 @@ internal class MovieDetailsViewModelTest {
         )
 
         underTest.state.test {
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = false))
 
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = false), expectItem())
 
-            underTest.addOrRemoveMovie()
+            underTest.handleAction(CtaClicked)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -104,13 +104,13 @@ internal class MovieDetailsViewModelTest {
         )
 
         underTest.state.test {
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
 
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
 
-            underTest.addOrRemoveMovie()
+            underTest.handleAction(CtaClicked)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -124,13 +124,13 @@ internal class MovieDetailsViewModelTest {
         )
 
         underTest.state.test {
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = movie, isInLibrary = true))
 
             assertEquals(MovieDetailsState.LoadingState, expectItem())
             assertEquals(MovieDetailsState.DoneState(movie = movie, isInLibrary = true), expectItem())
 
-            underTest.toggleHasBeenWatched()
+            underTest.handleAction(WatchedClicked)
             assertEquals(expectedState, expectItem())
             expectNoEvents()
         }
@@ -149,7 +149,7 @@ internal class MovieDetailsViewModelTest {
         val outdatedMovie = movie.copy(updated_at = LocalDate.now(testClock).minusDays(3))
 
         underTest.state.test {
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = outdatedMovie, isInLibrary = true))
 
             assertEquals(MovieDetailsState.LoadingState, expectItem())
@@ -167,7 +167,7 @@ internal class MovieDetailsViewModelTest {
         )
 
         underTest.state.test {
-            underTest.loadMovie(movie.id)
+            underTest.handleAction(LoadMovie(movie.id))
             repository.result.emit(MovieDetailsResult.Success(movie = upToDateMovie, isInLibrary = true))
 
             assertEquals(MovieDetailsState.LoadingState, expectItem())
