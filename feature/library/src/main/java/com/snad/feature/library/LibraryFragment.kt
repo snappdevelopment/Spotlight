@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -14,6 +18,7 @@ import com.snad.core.arch.observeWithLifecycle
 import com.snad.feature.library.databinding.FragmentLibraryBinding
 import com.snad.core.persistence.models.LibraryMovie
 import com.snad.feature.library.repository.LibraryRepository
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class LibraryFragment : Fragment() {
@@ -61,6 +66,20 @@ class LibraryFragment : Fragment() {
         }
 
         libraryViewModel.handleAction(LoadMovies)
+
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+            )
+
+            setContent {
+                val state by libraryViewModel.state.collectAsState()
+                LibraryUi(
+                    state = state,
+                    sendAction = libraryViewModel::handleAction
+                )
+            }
+        }
 
         return viewBinding.root
     }

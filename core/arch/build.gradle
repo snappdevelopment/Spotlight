@@ -9,4 +9,6 @@ apply from: "$rootProject.projectDir/android-module.gradle"
 dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha02'
+    //need to force the latest version in transitive dependencies
+    implementation "androidx.compose.runtime:runtime:$compose_version"
 }

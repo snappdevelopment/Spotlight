@@ -10,4 +10,6 @@ apply from: "$rootProject.projectDir/android-module.gradle"
 dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    //need to force the latest version in transitive dependencies
+    implementation "androidx.compose.runtime:runtime:$compose_version"
 }
