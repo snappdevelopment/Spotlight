@@ -66,11 +66,13 @@ internal class CastDetailsViewModelTest {
 
     private val repository = TestPersonRepository()
     private val clock = Clock.fixed(Instant.parse("2020-06-06T10:15:30.00Z"), ZoneId.of("Europe/Paris"))
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
     private val underTest = CastDetailsViewModel(
         personRepository = repository,
         ioDispatcher = TestCoroutineDispatcher(),
-        clock = clock
+        clock = clock,
+        dateTimeFormatter = dateTimeFormatter
     )
 
     @Test
@@ -79,7 +81,7 @@ internal class CastDetailsViewModelTest {
             person_credits = person.person_credits.copy(
                 cast = listOf(cast.copy(popularity = 2.0), cast)
             ),
-            birthday = "01/01/10 (10)"
+            birthday = "01/01/2010 (10)"
         )
         val expectedState = CastDetailsState.DoneState(person)
 
@@ -99,8 +101,8 @@ internal class CastDetailsViewModelTest {
             person_credits = person.person_credits.copy(
                 cast = listOf(cast.copy(popularity = 2.0), cast)
             ),
-            birthday = "01/01/10",
-            deathday = "01/01/11 (1)"
+            birthday = "01/01/2010",
+            deathday = "01/01/2011 (1)"
         )
         val expectedState = CastDetailsState.DoneState(person)
 
