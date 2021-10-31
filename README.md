@@ -35,7 +35,7 @@ Spotlight shows details about a movie like the storyline, images, cast and revie
 ## Building
 
 1. Get a API key for the tmdb.org movie database [here](https://www.themoviedb.org/settings/api)
-2. Paste the key into the `Credentials.kt` file
+2. Add the line 'apiKey="YOUR_KEY"' to your 'local.properties' file
 3. Build the app in Android Studio
 
 ## License
