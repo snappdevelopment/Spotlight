@@ -20,6 +20,7 @@ internal class CastDetailsViewModel(
     private val personRepository: PersonRepository,
     private val ioDispatcher: CoroutineDispatcher,
     private val clock: Clock,
+    private val dateTimeFormatter: DateTimeFormatter
 ) : StateMachine<CastDetailsState, CastDetailsAction>(CastDetailsState.LoadingState) {
 
     override fun handleAction(action: CastDetailsAction) {
@@ -65,14 +66,10 @@ internal class CastDetailsViewModel(
                 LocalDate.of(endDate.year, endDate.month, endDate.dayOfMonth)
             ).years
 
-            birthdayString = LocalDate.parse(birthday).format(
-                DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-            )
+            birthdayString = LocalDate.parse(birthday).format(dateTimeFormatter)
 
             if(deathday != null && deathday.isNotEmpty()) {
-                deathdayString = LocalDate.parse(deathday).format(
-                    DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-                ).plus(" (${age})")
+                deathdayString = LocalDate.parse(deathday).format(dateTimeFormatter).plus(" (${age})")
             }
             else birthdayString = birthdayString.plus(" (${age})")
         }
@@ -90,9 +87,10 @@ internal class CastDetailsViewModel(
         private  val personRepository: PersonRepository,
         private val ioDispatcher: CoroutineDispatcher,
         private val clock: Clock,
+        private val dateTimeFormatter: DateTimeFormatter
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CastDetailsViewModel(personRepository, ioDispatcher, clock) as T
+            return CastDetailsViewModel(personRepository, ioDispatcher, clock, dateTimeFormatter) as T
         }
     }
 }

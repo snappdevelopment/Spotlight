@@ -49,4 +49,4 @@ jobs:
         run: echo apiKey=\"$API_KEY\" > ./local.properties
 
       - name: Run unit tests
-        run: ./gradlew testDebug --stacktrace
+        run: ./gradlew testDebug
