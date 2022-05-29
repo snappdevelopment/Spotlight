@@ -67,19 +67,19 @@ class LibraryFragment : Fragment() {
 
         libraryViewModel.handleAction(LoadMovies)
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-
-            setContent {
-                val state by libraryViewModel.state.collectAsState()
-                LibraryUi(
-                    state = state,
-                    sendAction = libraryViewModel::handleAction
-                )
-            }
-        }
+//        return ComposeView(requireContext()).apply {
+//            setViewCompositionStrategy(
+//                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
+//            )
+//
+//            setContent {
+//                val state by libraryViewModel.state.collectAsState()
+//                LibraryUi(
+//                    state = state,
+//                    sendAction = libraryViewModel::handleAction
+//                )
+//            }
+//        }
 
         return viewBinding.root
     }

@@ -7,7 +7,7 @@ localProperties.load(new FileInputStream(localPropertiesFile))
 android {
     compileSdkVersion 31
     defaultConfig {
-        minSdkVersion 26
+        minSdkVersion 30
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
