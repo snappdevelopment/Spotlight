@@ -10,13 +10,17 @@ import com.snad.sniffer.NetworkSniffer
 import com.snad.sniffer.feed.FeedViewModel
 import com.snad.sniffer.feed.navigation.FeedDestination
 import com.snad.sniffer.feed.navigation.feedGraph
+import com.snad.sniffer.util.LocalDateTimeFormatter
 
 internal class NetworkSnifferActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val repository = NetworkSniffer.Factory.repository
-        val feedViewModel by viewModels<FeedViewModel> { FeedViewModel.Factory(repository) }
+        val dateTimeFormatter = LocalDateTimeFormatter()
+        val feedViewModel by viewModels<FeedViewModel> {
+            FeedViewModel.Factory(repository, dateTimeFormatter)
+        }
 
         setContent {
             val navController = rememberNavController()

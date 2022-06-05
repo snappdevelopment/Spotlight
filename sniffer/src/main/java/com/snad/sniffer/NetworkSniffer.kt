@@ -5,15 +5,15 @@ import com.snad.sniffer.logging.NetworkDataRepository
 import com.snad.sniffer.logging.NetworkSnifferInterceptor
 import okhttp3.Interceptor
 
-interface NetworkSniffer {
-    fun getInterceptor(): Interceptor
+public interface NetworkSniffer {
+    public fun getInterceptor(): Interceptor
 
-    fun start(context: Context)
+    public fun start(context: Context)
 
-    object Factory {
+    public object Factory {
         internal val repository = NetworkDataRepository.get()
 
-        fun get(): NetworkSniffer {
+        public fun get(): NetworkSniffer {
             return AndroidNetworkSniffer(repository)
         }
     }
