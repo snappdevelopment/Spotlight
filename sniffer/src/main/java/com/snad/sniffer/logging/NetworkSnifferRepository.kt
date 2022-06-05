@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 internal interface NetworkDataRepository {
-    val requests: StateFlow<List<String>>
-    fun add(data: String)
+    val requests: StateFlow<List<NetworkRequest>>
+    fun add(data: NetworkRequest)
     fun clear()
 
     companion object {
@@ -18,12 +18,12 @@ internal interface NetworkDataRepository {
 
 private class InMemoryNetworkDataRepository : NetworkDataRepository {
 
-    private val networkRequests = mutableListOf<String>()
+    private val networkRequests = mutableListOf<NetworkRequest>()
     private val updates = MutableStateFlow(networkRequests)
 
     override val requests = updates.asStateFlow()
 
-    override fun add(data: String) {
+    override fun add(data: NetworkRequest) {
         networkRequests.add(data)
         updates.tryEmit(networkRequests)
     }

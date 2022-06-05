@@ -1,12 +1,11 @@
 package com.snad.sniffer.logging
 
-import android.util.Log
-import java.nio.charset.Charset
 import okhttp3.Interceptor
+import okhttp3.Request
 import okhttp3.Response
 import okio.Buffer
 import okio.GzipSource
-import okio.buffer
+import java.util.concurrent.TimeUnit
 
 internal class NetworkSnifferInterceptor(
     private val networkDataRepository: NetworkDataRepository
@@ -15,22 +14,10 @@ internal class NetworkSnifferInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
-        //Todo: remove
-        Log.d("NetworkSniffer", request.url.toString())
-
         val timeStamp = System.currentTimeMillis()
         val url = request.url.toString()
         val method = request.method
-        var requestBodyString: String? = null
-
-        val requestBody = request.body
-        if (requestBody != null) {
-            runCatching {
-                val buffer = Buffer()
-                requestBody.writeTo(buffer)
-                requestBodyString = buffer.readString(Charset.forName("UTF8"))
-            }
-        }
+        val requestBodyString = request.toRequestBodyString()
 
         val startTime = System.nanoTime()
         val response: Response
@@ -40,41 +27,63 @@ internal class NetworkSnifferInterceptor(
             throw e
         }
 
-        val durationMillis = (System.nanoTime() - startTime) / 1000
+        val durationMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)
         val statusCode = response.code
-        var responseBodyString: String? = null
+        val responseBodyString: String? = response.toResponseBodyString()
 
-        val responseBody = response.body
-        if (responseBody != null && response.headers["Content-Encoding"].equals("gzip", ignoreCase = true)) {
-            runCatching {
-                val buffer = GzipSource(responseBody.source()).buffer()
-                responseBodyString = buffer.readString(Charset.forName("UTF8"))
-            }
-        }
-
-        val data = """
-            Timestamp: $timeStamp
-            Url: $url
-            method: $method
-            requestBody: $requestBodyString
-            statusCode: $statusCode
-            duration: $durationMillis
-            responseBody: $responseBodyString
-        """.trimIndent()
+        val data = NetworkRequest(
+            timestampMillis = timeStamp,
+            url = url,
+            requestBody = requestBodyString,
+            method = method,
+            statusCode = statusCode,
+            durationMillis = durationMillis,
+            responseBody = responseBodyString,
+        )
 
         networkDataRepository.add(data)
 
-//        NetworkRequest(
-//            timestampMillis = timeStamp,
-//            url = url,
-//            body = null,
-//            method = method,
-//            statusCode = statusCode,
-//            size = ,
-//            duration = durationMillis,
-//            response = responseBody,
-//        )
-
         return response
+    }
+
+    private fun Request.toRequestBodyString(): String? {
+        val body = this.body ?: return null
+
+        var buffer = Buffer()
+        runCatching { body.writeTo(buffer) }
+
+        if (headers["Content-Encoding"].equals("gzip", ignoreCase = true)) {
+            GzipSource(buffer).use { gzippedResponseBody ->
+                buffer = Buffer()
+                buffer.writeAll(gzippedResponseBody)
+            }
+        }
+
+        val result = runCatching {
+            val charset = body.contentType()?.charset() ?: Charsets.UTF_8
+            buffer.readString(charset)
+        }
+
+        return result.getOrNull()
+    }
+
+    private fun Response.toResponseBodyString(): String? {
+        val body = this.body ?: return null
+
+        var buffer = body.source().apply { request(Long.MAX_VALUE) }.buffer
+
+        if (headers["Content-Encoding"].equals("gzip", ignoreCase = true)) {
+            GzipSource(buffer.clone()).use { gzippedResponseBody ->
+                buffer = Buffer()
+                buffer.writeAll(gzippedResponseBody)
+            }
+        }
+
+        val result = runCatching {
+            val charset = body.contentType()?.charset() ?: Charsets.UTF_8
+            buffer.clone().readString(charset)
+        }
+
+        return result.getOrNull()
     }
 }

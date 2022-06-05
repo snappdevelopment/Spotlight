@@ -3,6 +3,7 @@ package com.snad.core.network
 import com.snad.sniffer.NetworkSniffer
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
@@ -20,6 +21,7 @@ internal class RetrofitClient @Inject constructor(
         val httpClient = OkHttpClient.Builder()
             .cache(cache)
             .addInterceptor(ApiKeyInterceptor())
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .addInterceptor(networkSnifferInterceptor)
             .build()
 

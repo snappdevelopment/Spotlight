@@ -13,5 +13,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version" //dagger annotation processor
     //need to force the latest version in transitive dependencies
     implementation "androidx.compose.runtime:runtime:$compose_version"
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation project(":sniffer")
 }
