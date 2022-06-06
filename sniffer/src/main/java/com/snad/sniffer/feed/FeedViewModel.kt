@@ -13,17 +13,33 @@ internal class FeedViewModel(
     private val dateTimeFormatter: DateTimeFormatter
 ): ViewModel() {
 
-    val state: Flow<List<FeedUiModel>> = repository.requests.map { it.toFeedUiModel() }
+    val state: Flow<List<NetworkRequestListItem>> = repository.requests.map { it.toNetworkRequestListItem() }
 
-    private fun List<NetworkRequest>.toFeedUiModel(): List<FeedUiModel> {
+    private fun List<NetworkRequest>.toNetworkRequestListItem(): List<NetworkRequestListItem> {
         return map {
-            FeedUiModel(
-                dateTime = dateTimeFormatter.format(it.timestampMillis),
-                method = it.method,
-                statusCode = it.statusCode,
-                duration = "${it.durationMillis}ms",
-                url = it.url
-            )
+            when(it) {
+                is NetworkRequest.Ongoing -> NetworkRequestListItem.Ongoing(
+                    id = it.id,
+                    dateTime = dateTimeFormatter.format(it.timestampMillis),
+                    url = it.url,
+                    method = it.method
+                )
+                is NetworkRequest.Finished -> NetworkRequestListItem.Finished(
+                    id = it.id,
+                    dateTime = dateTimeFormatter.format(it.timestampMillis),
+                    url = it.url,
+                    method = it.method,
+                    duration = "${it.durationMillis}ms",
+                    statusCode = it.statusCode
+                )
+                is NetworkRequest.Failed -> NetworkRequestListItem.Failed(
+                    id = it.id,
+                    dateTime = dateTimeFormatter.format(it.timestampMillis),
+                    url = it.url,
+                    method = it.method,
+                    errorMessage = it.errorMessage
+                )
+            }
         }
     }
 

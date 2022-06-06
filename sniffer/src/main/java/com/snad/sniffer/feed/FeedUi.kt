@@ -3,14 +3,16 @@ package com.snad.sniffer.feed
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,13 +31,7 @@ internal fun FeedUi(
             .background(color = Color.White),
     ) {
         itemsIndexed(state.value) { index, item ->
-            Request(
-                dateTime = item.dateTime,
-                method = item.method,
-                statusCode = item.statusCode,
-                duration = item.duration,
-                url = item.url,
-            )
+            Request(item = item)
 
             if(index < state.value.size - 1) {
                 Divider(
@@ -51,99 +47,147 @@ internal fun FeedUi(
 
 @Composable
 private fun Request(
-    dateTime: String,
-    method: String,
-    statusCode: Int,
-    duration: String,
-    url: String
+    item: NetworkRequestListItem
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .alpha(alpha = if (item is NetworkRequestListItem.Ongoing) 0.3F else 1F)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
         Row(
             modifier = Modifier.height(IntrinsicSize.Min)
         ) {
             Text(
-                text = dateTime,
+                text = item.dateTime,
                 style = MaterialTheme.typography.body2,
                 color = Color.DarkGray,
-
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp),
-                color = Color.DarkGray
-            )
+            VerticalDivider()
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = method,
+                text = item.method,
                 style = MaterialTheme.typography.body2,
                 color = Color.DarkGray
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp),
-                color = Color.DarkGray
-            )
+            VerticalDivider()
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
-                text = statusCode.toString(),
-                style = MaterialTheme.typography.body2,
-                color = if(statusCode >= 400) Color.Red else Color.DarkGray
-            )
+            when(item) {
+                is NetworkRequestListItem.Ongoing -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .size(14.dp),
+                        color = Color.DarkGray,
+                        strokeWidth = 2.dp
+                    )
+                }
+                is NetworkRequestListItem.Finished -> {
+                    Text(
+                        text = item.statusCode.toString(),
+                        style = MaterialTheme.typography.body2,
+                        color = if(item.statusCode >= 400) Color.Red else Color.DarkGray
+                    )
 
-            Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-            Divider(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp),
-                color = Color.DarkGray
-            )
+                    VerticalDivider()
 
-            Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-            Text(
-                text = duration,
-                style = MaterialTheme.typography.body2,
-                color = Color.DarkGray
-            )
+                    Text(
+                        text = item.duration,
+                        style = MaterialTheme.typography.body2,
+                        color = Color.DarkGray
+                    )
+                }
+                is NetworkRequestListItem.Failed -> {}
+            }
         }
 
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = url,
+            text = item.url,
             style = MaterialTheme.typography.body1,
             color = Color.Black,
-            maxLines = 2,
+            maxLines = 3,
             overflow = TextOverflow.Ellipsis
         )
+
+        if(item is NetworkRequestListItem.Failed) {
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = item.errorMessage,
+                style = MaterialTheme.typography.body2,
+                color = Color.Red,
+            )
+        }
     }
 }
 
-@Preview
 @Composable
-private fun RequestPreview() {
+private fun VerticalDivider() {
+    Divider(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(1.dp),
+        color = Color.DarkGray
+    )
+}
+
+@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
+@Composable
+private fun OngoingRequestPreview() {
     Request(
-        dateTime = "15:13:24",
-        method = "GET",
-        statusCode = 200,
-        duration = "25ms",
-        url = "www.example.com/api?id=5"
+        NetworkRequestListItem.Ongoing(
+            id = 0L,
+            dateTime = "15:13:24",
+            method = "GET",
+            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
+                    " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        )
+    )
+}
+
+@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
+@Composable
+private fun FinishedRequestPreview() {
+    Request(
+        NetworkRequestListItem.Finished(
+            id = 0L,
+            dateTime = "15:13:24",
+            method = "GET",
+            statusCode = 200,
+            duration = "25ms",
+            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing " +
+                    "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        )
+    )
+}
+
+@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
+@Composable
+private fun FailedRequestPreview() {
+    Request(
+        NetworkRequestListItem.Failed(
+            id = 0L,
+            dateTime = "15:13:24",
+            method = "GET",
+            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
+                    " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            errorMessage = "This is an error message, because the api call failed",
+        )
     )
 }

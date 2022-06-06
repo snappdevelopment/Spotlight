@@ -5,6 +5,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okio.Buffer
 import okio.GzipSource
+import java.util.Random
 import java.util.concurrent.TimeUnit
 
 internal class NetworkSnifferInterceptor(
@@ -19,11 +20,30 @@ internal class NetworkSnifferInterceptor(
         val method = request.method
         val requestBodyString = request.toRequestBodyString()
 
+        val id = timeStamp + Random().nextLong()
+        val networkRequest = NetworkRequest.Ongoing(
+            id = id,
+            timestampMillis = timeStamp,
+            url = url,
+            method = method,
+            requestBody = requestBodyString
+        )
+        networkDataRepository.add(networkRequest)
+
         val startTime = System.nanoTime()
         val response: Response
         try {
             response = chain.proceed(request)
         } catch (e: Exception) {
+            val failedNetworkRequest = NetworkRequest.Failed(
+                id = id,
+                timestampMillis = timeStamp,
+                url = url,
+                method = method,
+                requestBody = requestBodyString,
+                errorMessage = e.toString()
+            )
+            networkDataRepository.update(failedNetworkRequest)
             throw e
         }
 
@@ -31,17 +51,18 @@ internal class NetworkSnifferInterceptor(
         val statusCode = response.code
         val responseBodyString: String? = response.toResponseBodyString()
 
-        val data = NetworkRequest(
+        val finishedNetworkRequest = NetworkRequest.Finished(
+            id = id,
             timestampMillis = timeStamp,
             url = url,
-            requestBody = requestBodyString,
             method = method,
+            requestBody = requestBodyString,
             statusCode = statusCode,
             durationMillis = durationMillis,
             responseBody = responseBodyString,
         )
 
-        networkDataRepository.add(data)
+        networkDataRepository.update(finishedNetworkRequest)
 
         return response
     }
