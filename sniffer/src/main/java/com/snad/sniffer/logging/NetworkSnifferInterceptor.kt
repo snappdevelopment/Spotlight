@@ -20,7 +20,7 @@ internal class NetworkSnifferInterceptor(
         val method = request.method
         val requestBodyString = request.toRequestBodyString()
 
-        val id = timeStamp + Random().nextLong()
+        val id = Random().nextLong()
         val networkRequest = NetworkRequest.Ongoing(
             id = id,
             timestampMillis = timeStamp,

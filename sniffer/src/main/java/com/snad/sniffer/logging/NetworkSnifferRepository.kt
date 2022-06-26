@@ -11,6 +11,12 @@ internal interface NetworkDataRepository {
     val requests: Flow<List<NetworkRequest>>
 
     /**
+     * Returns a flow which emits updates of the [NetworkRequest] with the given [id] or
+     * null if the request doesn't exist.
+     */
+    fun request(id: Long): Flow<NetworkRequest?>
+
+    /**
      * Adds a new [NetworkRequest] to the list of requests.
      */
     fun add(data: NetworkRequest)
@@ -38,7 +44,15 @@ private class InMemoryNetworkDataRepository : NetworkDataRepository {
     private val networkRequests = mutableListOf<NetworkRequest>()
     private val updates = Channel<List<NetworkRequest>>(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override val requests = updates.consumeAsFlow()
+    override val requests = updates.receiveAsFlow()
+
+    override fun request(id: Long): Flow<NetworkRequest?> {
+        return updates
+            .receiveAsFlow()
+            .map { it.firstOrNull { it.id == id } }
+            .onStart { emit(networkRequests.firstOrNull { it.id == id }) }
+            .distinctUntilChanged()
+    }
 
     override fun add(data: NetworkRequest) {
         networkRequests.add(data)

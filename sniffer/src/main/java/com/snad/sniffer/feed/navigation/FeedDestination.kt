@@ -11,10 +11,11 @@ internal object FeedDestination : NavigationDestination {
 }
 
 internal fun NavGraphBuilder.feedGraph(
-    viewModel: FeedViewModel,
-    onBackClick: () -> Unit
+    viewModelFactory: FeedViewModel.Factory,
+    onBackClick: () -> Unit,
+    onRequestClick: (Long) -> Unit
 ) {
     composable(route = FeedDestination.route) {
-        FeedUi(viewModel, onBackClick)
+        FeedUi(viewModelFactory, onBackClick, onRequestClick)
     }
 }

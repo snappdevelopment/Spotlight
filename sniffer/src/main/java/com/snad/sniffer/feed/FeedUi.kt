@@ -1,6 +1,7 @@
 package com.snad.sniffer.feed
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -17,13 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 internal fun FeedUi(
-    viewModel: FeedViewModel,
-    onBackClick: () -> Unit
+    viewModelFactory: FeedViewModel.Factory,
+    onBackClick: () -> Unit,
+    onRequestClick: (Long) -> Unit
 ) {
-    val state = viewModel.state.collectAsState(emptyList())
+    val viewModel: FeedViewModel = viewModel(factory = viewModelFactory)
+    val state = viewModel.state.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -31,7 +35,7 @@ internal fun FeedUi(
             .background(color = Color.White),
     ) {
         itemsIndexed(state.value) { index, item ->
-            Request(item = item)
+            Request(item = item, onRequestClick = onRequestClick)
 
             if(index < state.value.size - 1) {
                 Divider(
@@ -47,11 +51,13 @@ internal fun FeedUi(
 
 @Composable
 private fun Request(
-    item: NetworkRequestListItem
+    item: NetworkRequestListItem,
+    onRequestClick: (Long) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(enabled = item !is NetworkRequestListItem.Ongoing) { onRequestClick(item.id) }
             .alpha(alpha = if (item is NetworkRequestListItem.Ongoing) 0.3F else 1F)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
@@ -157,7 +163,8 @@ private fun OngoingRequestPreview() {
             method = "GET",
             url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
                     " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        )
+        ),
+        onRequestClick = {}
     )
 }
 
@@ -173,7 +180,8 @@ private fun FinishedRequestPreview() {
             duration = "25ms",
             url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing " +
                     "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        )
+        ),
+        onRequestClick = {}
     )
 }
 
@@ -188,6 +196,7 @@ private fun FailedRequestPreview() {
             url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
                     " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             errorMessage = "This is an error message, because the api call failed",
-        )
+        ),
+        onRequestClick = {}
     )
 }
