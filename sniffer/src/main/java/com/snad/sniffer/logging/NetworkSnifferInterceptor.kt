@@ -18,6 +18,7 @@ internal class NetworkSnifferInterceptor(
         val timeStamp = System.currentTimeMillis()
         val url = request.url.toString()
         val method = request.method
+        val requestHeaders = request.headers.toMultimap()
         val requestBodyString = request.toRequestBodyString()
 
         val id = Random().nextLong()
@@ -26,7 +27,8 @@ internal class NetworkSnifferInterceptor(
             timestampMillis = timeStamp,
             url = url,
             method = method,
-            requestBody = requestBodyString
+            requestBody = requestBodyString,
+            requestHeaders = requestHeaders,
         )
         networkDataRepository.add(networkRequest)
 
@@ -41,6 +43,7 @@ internal class NetworkSnifferInterceptor(
                 url = url,
                 method = method,
                 requestBody = requestBodyString,
+                requestHeaders = requestHeaders,
                 errorMessage = e.toString()
             )
             networkDataRepository.update(failedNetworkRequest)
@@ -49,6 +52,7 @@ internal class NetworkSnifferInterceptor(
 
         val durationMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)
         val statusCode = response.code
+        val responseHeaders = response.headers.toMultimap()
         val responseBodyString: String? = response.toResponseBodyString()
 
         val finishedNetworkRequest = NetworkRequest.Finished(
@@ -57,9 +61,11 @@ internal class NetworkSnifferInterceptor(
             url = url,
             method = method,
             requestBody = requestBodyString,
+            requestHeaders = requestHeaders,
             statusCode = statusCode,
             durationMillis = durationMillis,
             responseBody = responseBodyString,
+            responseHeaders = responseHeaders
         )
 
         networkDataRepository.update(finishedNetworkRequest)

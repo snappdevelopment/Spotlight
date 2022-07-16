@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.json.JSONObject
 
 internal class DetailsViewModel(
     private val repository: NetworkDataRepository
@@ -29,7 +30,47 @@ internal class DetailsViewModel(
     }
 
     private fun NetworkRequest.toNetworkRequestDetailsItem(): NetworkRequestDetailsItem {
-        return NetworkRequestDetailsItem(url)
+        val formattedRequestBody = requestBody?.runCatching {
+            JSONObject(this).toString(4)
+        }?.getOrNull()
+
+        val formattedRequestHeaders = requestHeaders.mapValues {
+            it.value.reduce { acc, s -> "$acc, $s" }
+        }
+
+        return when(this) {
+            is NetworkRequest.Finished -> {
+                val formattedResponseBody = responseBody?.runCatching {
+                    JSONObject(this).toString(4)
+                }?.getOrNull()
+
+                val formattedResponseHeaders = responseHeaders.mapValues {
+                    it.value.reduce { acc, s -> "$acc, $s" }
+                }
+
+                NetworkRequestDetailsItem(
+                    url = url,
+                    requestBody = formattedRequestBody,
+                    requestHeaders = formattedRequestHeaders,
+                    responseBody = formattedResponseBody,
+                    responseHeaders = formattedResponseHeaders
+                )
+            }
+            is NetworkRequest.Ongoing -> NetworkRequestDetailsItem(
+                url = url,
+                requestBody = formattedRequestBody,
+                requestHeaders = formattedRequestHeaders,
+                responseBody = null,
+                responseHeaders = null
+            )
+            is NetworkRequest.Failed -> NetworkRequestDetailsItem(
+                url = url,
+                requestBody = formattedRequestBody,
+                requestHeaders = formattedRequestHeaders,
+                responseBody = null,
+                responseHeaders = null
+            )
+        }
     }
 
     class Factory(
