@@ -9,8 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -18,8 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun FeedUi(
     viewModelFactory: FeedViewModel.Factory,
@@ -27,23 +29,71 @@ internal fun FeedUi(
     onRequestClick: (Long) -> Unit
 ) {
     val viewModel: FeedViewModel = viewModel(factory = viewModelFactory)
-    val state = viewModel.state.collectAsState()
+    val state: FeedState by viewModel.state.collectAsStateWithLifecycle()
 
-    LazyColumn(
+    Feed(
+        state = state,
+        onRequestClick = onRequestClick,
+        onClearClick = viewModel::clearClicked
+    )
+}
+
+@Composable
+private fun Feed(
+    state: FeedState,
+    onRequestClick: (Long) -> Unit,
+    onClearClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        when(state) {
+            is Content -> FeedList(state, onRequestClick, onClearClick)
+            is Loading -> Loading()
+            is Empty -> Empty()
+        }
+    }
+}
+
+@Composable
+private fun FeedList(
+    state: Content,
+    onRequestClick: (Long) -> Unit,
+    onClearClick: () -> Unit
+) {
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White),
+            .background(color = Color.White)
     ) {
-        itemsIndexed(state.value) { index, item ->
-            Request(item = item, onRequestClick = onRequestClick)
+        Spacer(modifier = Modifier.height(8.dp))
 
-            if(index < state.value.size - 1) {
-                Divider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    color = Color.LightGray
-                )
+        Text(
+            modifier = Modifier
+                .align(Alignment.End)
+                .clickable { onClearClick() }
+                .padding(8.dp),
+            text = "Clear",
+            style = MaterialTheme.typography.body1,
+            color = Color.Black,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            itemsIndexed(state.requests) { index, item ->
+                Request(item = item, onRequestClick = onRequestClick)
+
+                if(index < state.requests.size - 1) {
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        color = Color.LightGray
+                    )
+                }
             }
         }
     }
@@ -141,6 +191,25 @@ private fun Request(
             )
         }
     }
+}
+
+@Composable
+private fun BoxScope.Loading() {
+    CircularProgressIndicator(
+        modifier = Modifier.align(Alignment.Center)
+    )
+}
+
+@Composable
+private fun BoxScope.Empty() {
+    Text(
+        modifier = Modifier
+            .align(Alignment.Center)
+            .padding(horizontal = 16.dp),
+        text = "No requests yet",
+        style = MaterialTheme.typography.h5,
+        color = Color.Black.copy(alpha = 0.3f),
+    )
 }
 
 @Composable

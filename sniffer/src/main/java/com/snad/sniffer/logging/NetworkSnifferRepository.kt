@@ -1,7 +1,5 @@
 package com.snad.sniffer.logging
 
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 internal interface NetworkDataRepository {
@@ -11,10 +9,10 @@ internal interface NetworkDataRepository {
     val requests: Flow<List<NetworkRequest>>
 
     /**
-     * Returns a flow which emits updates of the [NetworkRequest] with the given [id] or
+     * Returns the [NetworkRequest] with the given [id] or
      * null if the request doesn't exist.
      */
-    fun request(id: Long): Flow<NetworkRequest?>
+    fun request(id: Long): NetworkRequest?
 
     /**
      * Adds a new [NetworkRequest] to the list of requests.
@@ -41,36 +39,42 @@ internal interface NetworkDataRepository {
 
 private class InMemoryNetworkDataRepository : NetworkDataRepository {
 
+    private val lock = Any()
+
     private val networkRequests = mutableListOf<NetworkRequest>()
-    private val updates = Channel<List<NetworkRequest>>(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val updates = MutableSharedFlow<List<NetworkRequest>>(replay = 1)
 
-    override val requests = updates.receiveAsFlow()
+    override val requests: Flow<List<NetworkRequest>> = updates
 
-    override fun request(id: Long): Flow<NetworkRequest?> {
-        return updates
-            .receiveAsFlow()
-            .map { it.firstOrNull { it.id == id } }
-            .onStart { emit(networkRequests.firstOrNull { it.id == id }) }
-            .distinctUntilChanged()
+    override fun request(id: Long): NetworkRequest? {
+        return networkRequests.firstOrNull { it.id == id }
     }
 
     override fun add(data: NetworkRequest) {
-        networkRequests.add(data)
-        updates.trySend(networkRequests)
+        synchronized(lock) {
+            networkRequests.add(data)
+            updates.tryEmit(networkRequests.toList())
+        }
     }
 
     override fun update(data: NetworkRequest) {
-        val requests = networkRequests
-        val index = requests.indexOfFirst { it.id == data.id }
-        if(index != -1) {
-            requests.removeAt(index)
-            requests.add(index, data)
-            updates.trySend(requests)
+        synchronized(lock) {
+            val requests = networkRequests.toMutableList()
+            val index = requests.indexOfFirst { it.id == data.id }
+            if(index != -1) {
+                requests.removeAt(index)
+                requests.add(index, data)
+                networkRequests.clear()
+                networkRequests.addAll(requests)
+                updates.tryEmit(networkRequests.toList())
+            }
         }
     }
 
     override fun clear() {
-        networkRequests.clear()
-        updates.trySend(networkRequests)
+        synchronized(lock) {
+            networkRequests.clear()
+            updates.tryEmit(networkRequests.toList())
+        }
     }
 }

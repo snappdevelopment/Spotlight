@@ -4,19 +4,26 @@ import androidx.lifecycle.*
 import com.snad.sniffer.logging.NetworkDataRepository
 import com.snad.sniffer.logging.NetworkRequest
 import com.snad.sniffer.util.DateTimeFormatter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class FeedViewModel(
     private val repository: NetworkDataRepository,
     private val dateTimeFormatter: DateTimeFormatter
 ): ViewModel() {
 
-    val state: StateFlow<List<NetworkRequestListItem>> = repository.requests
-        .map { it.toNetworkRequestListItem() }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    val state: StateFlow<FeedState> = repository.requests
+        .map { it.toFeedState() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = Loading
+        )
 
-    private fun List<NetworkRequest>.toNetworkRequestListItem(): List<NetworkRequestListItem> {
-        return map {
+    private fun List<NetworkRequest>.toFeedState(): FeedState {
+        val newList = this.toList()
+        val items = newList.map {
             when(it) {
                 is NetworkRequest.Ongoing -> NetworkRequestListItem.Ongoing(
                     id = it.id,
@@ -41,6 +48,12 @@ internal class FeedViewModel(
                 )
             }
         }
+
+        return if(items.isEmpty()) Empty else Content(items)
+    }
+
+    fun clearClicked() {
+        repository.clear()
     }
 
     class Factory(
@@ -48,7 +61,7 @@ internal class FeedViewModel(
         private val dateTimeFormatter: DateTimeFormatter
     ): ViewModelProvider.Factory {
         @Suppress("Unchecked_cast")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return FeedViewModel(repository, dateTimeFormatter) as T
         }
     }
