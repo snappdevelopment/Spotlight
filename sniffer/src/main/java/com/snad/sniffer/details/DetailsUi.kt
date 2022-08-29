@@ -5,25 +5,30 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.Navigation
+import com.snad.sniffer.R
+import com.snad.sniffer.feed.Loading
 import kotlin.math.max
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun DetailsUi(
     requestId: Long,
@@ -31,12 +36,37 @@ internal fun DetailsUi(
     onBackClicked: () -> Unit
 ) {
     val viewModel: DetailsViewModel = viewModel(factory = viewModelFactory)
-    val state by viewModel.state(requestId).collectAsState()
+    val state by viewModel.state(requestId).collectAsStateWithLifecycle()
 
-    when(val currentState = state) {
-        is DetailsState.Initial -> {}
-        is DetailsState.Content -> Content(currentState.networkRequestDetailsItem)
-        is DetailsState.Error -> Error()
+    Details(state, onBackClicked)
+}
+
+@Composable
+private fun Details(
+    state: DetailsState,
+    onBackClicked: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            IconButton(onClick = onBackClicked) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back),
+                    contentDescription = null
+                )
+            }
+
+            Box(modifier = Modifier.fillMaxSize()){
+                when(val currentState = state) {
+                    is DetailsState.Initial -> Loading()
+                    is DetailsState.Content -> Content(currentState.networkRequestDetailsItem)
+                    is DetailsState.Error -> Error()
+                }
+            }
+        }
     }
 }
 
@@ -47,7 +77,6 @@ private fun Content(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
@@ -131,13 +160,13 @@ private fun Headers(
             color = Color.DarkGray
         )
     } else {
-        headers.forEach {
+        headers.entries.forEachIndexed { index, entry ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = it.key,
+                    text = entry.key,
                     style = MaterialTheme.typography.body2,
                     color = Color.DarkGray
                 )
@@ -146,31 +175,54 @@ private fun Headers(
 
                 Text(
                     modifier = Modifier.weight(1F),
-                    text = it.value,
+                    text = entry.value,
                     style = MaterialTheme.typography.body2,
                     color = Color.DarkGray
                 )
+            }
+
+            if(index < headers.size - 1) {
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.LightGray
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }
 }
 
 @Composable
-private fun Error() {
+private fun BoxScope.Loading() {
+    CircularProgressIndicator(
+        modifier = Modifier.align(Alignment.Center),
+        color = Color.Black.copy(alpha = 0.3f)
+    )
+}
+
+@Composable
+private fun BoxScope.Error() {
     Text(
-        text = "Error",
-        style = MaterialTheme.typography.body2,
-        color = Color.DarkGray
+        modifier = Modifier
+            .align(Alignment.Center)
+            .padding(horizontal = 16.dp),
+        text = "Couldn't find request",
+        style = MaterialTheme.typography.h5,
+        color = Color.Black.copy(alpha = 0.3f),
     )
 }
 
 @Composable
 @Preview
 private fun ContentPreview() {
-    Content(
-        networkRequestDetailsItem = NetworkRequestDetailsItem(
-            url = "www.example.com",
-            requestBody = """
+    Details(
+        state = DetailsState.Content(
+            networkRequestDetailsItem = NetworkRequestDetailsItem(
+                url = "www.example.com",
+                requestBody = """
                 {
                     "data": [
                         {
@@ -181,7 +233,7 @@ private fun ContentPreview() {
                     ]
                 }
             """.trimIndent(),
-            responseBody = """
+                responseBody = """
                 {
                     "data": [
                         {
@@ -192,14 +244,28 @@ private fun ContentPreview() {
                     ]
                 }
             """.trimIndent(),
-            requestHeaders = mapOf(
-                "Content-Type" to "image/jpeg",
-                "Accept-Encoding" to "gzip"
-            ),
-            responseHeaders = mapOf(
-                "Content-Type" to "image/jpeg",
-                "Accept-Encoding" to "gzip"
-            ),
-        )
+                requestHeaders = mapOf(
+                    "Content-Type" to "image/jpeg",
+                    "Accept-Encoding" to "gzip"
+                ),
+                responseHeaders = mapOf(
+                    "Content-Type" to "image/jpeg",
+                    "Accept-Encoding" to "gzip"
+                ),
+            )
+        ),
+        onBackClicked = {}
     )
+}
+
+@Composable
+@Preview
+private fun ErrorPreview() {
+    Details(state = DetailsState.Error, onBackClicked = {})
+}
+
+@Composable
+@Preview
+private fun LoadingPreview() {
+    Details(state = DetailsState.Initial, onBackClicked = {})
 }

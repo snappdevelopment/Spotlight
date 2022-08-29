@@ -59,13 +59,9 @@ private class InMemoryNetworkDataRepository : NetworkDataRepository {
 
     override fun update(data: NetworkRequest) {
         synchronized(lock) {
-            val requests = networkRequests.toMutableList()
-            val index = requests.indexOfFirst { it.id == data.id }
+            val index = networkRequests.indexOfFirst { it.id == data.id }
             if(index != -1) {
-                requests.removeAt(index)
-                requests.add(index, data)
-                networkRequests.clear()
-                networkRequests.addAll(requests)
+                networkRequests[index] = data
                 updates.tryEmit(networkRequests.toList())
             }
         }

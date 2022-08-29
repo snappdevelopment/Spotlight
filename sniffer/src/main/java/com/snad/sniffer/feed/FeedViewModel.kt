@@ -22,32 +22,33 @@ internal class FeedViewModel(
         )
 
     private fun List<NetworkRequest>.toFeedState(): FeedState {
-        val newList = this.toList()
-        val items = newList.map {
-            when(it) {
-                is NetworkRequest.Ongoing -> NetworkRequestListItem.Ongoing(
-                    id = it.id,
-                    dateTime = dateTimeFormatter.format(it.timestampMillis),
-                    url = it.url,
-                    method = it.method
-                )
-                is NetworkRequest.Finished -> NetworkRequestListItem.Finished(
-                    id = it.id,
-                    dateTime = dateTimeFormatter.format(it.timestampMillis),
-                    url = it.url,
-                    method = it.method,
-                    duration = "${it.durationMillis}ms",
-                    statusCode = it.statusCode
-                )
-                is NetworkRequest.Failed -> NetworkRequestListItem.Failed(
-                    id = it.id,
-                    dateTime = dateTimeFormatter.format(it.timestampMillis),
-                    url = it.url,
-                    method = it.method,
-                    errorMessage = it.errorMessage
-                )
+        val items = this
+            .reversed()
+            .map {
+                when(it) {
+                    is NetworkRequest.Ongoing -> NetworkRequestListItem.Ongoing(
+                        id = it.id,
+                        dateTime = dateTimeFormatter.format(it.timestampMillis),
+                        url = it.url,
+                        method = it.method
+                    )
+                    is NetworkRequest.Finished -> NetworkRequestListItem.Finished(
+                        id = it.id,
+                        dateTime = dateTimeFormatter.format(it.timestampMillis),
+                        url = it.url,
+                        method = it.method,
+                        duration = "${it.durationMillis}ms",
+                        statusCode = it.statusCode
+                    )
+                    is NetworkRequest.Failed -> NetworkRequestListItem.Failed(
+                        id = it.id,
+                        dateTime = dateTimeFormatter.format(it.timestampMillis),
+                        url = it.url,
+                        method = it.method,
+                        errorMessage = it.errorMessage
+                    )
+                }
             }
-        }
 
         return if(items.isEmpty()) Empty else Content(items)
     }

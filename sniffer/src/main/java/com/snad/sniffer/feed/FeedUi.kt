@@ -5,21 +5,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snad.sniffer.R
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -45,7 +45,9 @@ private fun Feed(
     onClearClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
     ) {
         when(state) {
             is Content -> FeedList(state, onRequestClick, onClearClick)
@@ -62,28 +64,23 @@ private fun FeedList(
     onClearClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
+        modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            modifier = Modifier
-                .align(Alignment.End)
-                .clickable { onClearClick() }
-                .padding(8.dp),
-            text = "Clear",
-            style = MaterialTheme.typography.body1,
-            color = Color.Black,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
+        IconButton(
+            modifier = Modifier.align(Alignment.End),
+            onClick = onClearClick
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_delete),
+                tint = Color.DarkGray,
+                contentDescription = null
+            )
+        }
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            itemsIndexed(state.requests) { index, item ->
+            itemsIndexed(items = state.requests, key = { _, item -> item.id }) { index, item ->
                 Request(item = item, onRequestClick = onRequestClick)
 
                 if(index < state.requests.size - 1) {
@@ -196,7 +193,8 @@ private fun Request(
 @Composable
 private fun BoxScope.Loading() {
     CircularProgressIndicator(
-        modifier = Modifier.align(Alignment.Center)
+        modifier = Modifier.align(Alignment.Center),
+        color = Color.Black.copy(alpha = 0.3f)
     )
 }
 
@@ -222,50 +220,59 @@ private fun VerticalDivider() {
     )
 }
 
-@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
+@Preview
 @Composable
-private fun OngoingRequestPreview() {
-    Request(
-        NetworkRequestListItem.Ongoing(
-            id = 0L,
-            dateTime = "15:13:24",
-            method = "GET",
-            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
-                    " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+private fun FeedPreview() {
+    Feed(
+        state = Content(
+            requests = listOf(
+                NetworkRequestListItem.Ongoing(
+                    id = 0L,
+                    dateTime = "15:13:24",
+                    method = "GET",
+                    url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
+                            " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                ),
+                NetworkRequestListItem.Finished(
+                    id = 0L,
+                    dateTime = "15:13:24",
+                    method = "GET",
+                    statusCode = 200,
+                    duration = "25ms",
+                    url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing " +
+                            "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                ),
+                NetworkRequestListItem.Failed(
+                    id = 0L,
+                    dateTime = "15:13:24",
+                    method = "GET",
+                    url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
+                            " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                    errorMessage = "This is an error message, because the api call failed",
+                ),
+            )
         ),
-        onRequestClick = {}
+        onRequestClick = {},
+        onClearClick = {}
     )
 }
 
-@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
 @Composable
-private fun FinishedRequestPreview() {
-    Request(
-        NetworkRequestListItem.Finished(
-            id = 0L,
-            dateTime = "15:13:24",
-            method = "GET",
-            statusCode = 200,
-            duration = "25ms",
-            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing " +
-                    "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        ),
-        onRequestClick = {}
+@Preview
+private fun EmptyPreview() {
+    Feed(
+        state = Empty,
+        onRequestClick = {},
+        onClearClick = {}
     )
 }
 
-@Preview(backgroundColor = 0xFFFFFF, showBackground = true)
 @Composable
-private fun FailedRequestPreview() {
-    Request(
-        NetworkRequestListItem.Failed(
-            id = 0L,
-            dateTime = "15:13:24",
-            method = "GET",
-            url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
-                    " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            errorMessage = "This is an error message, because the api call failed",
-        ),
-        onRequestClick = {}
+@Preview
+private fun LoadingPreview() {
+    Feed(
+        state = Loading,
+        onRequestClick = {},
+        onClearClick = {}
     )
 }
