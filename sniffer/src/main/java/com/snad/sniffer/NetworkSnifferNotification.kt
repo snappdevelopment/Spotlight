@@ -22,15 +22,13 @@ internal object NetworkSnifferNotification {
 
         val bubbleData = Notification.BubbleMetadata.Builder(
             bubbleIntent,
-            Icon.createWithResource(context, R.drawable.ic_youtube)
+            Icon.createWithResource(context, R.drawable.ic_notification_icon)
         )
-//            .setAutoExpandBubble(true)
-//            .setSuppressNotification(true)
             .setDesiredHeight(600)
             .build()
 
         val person = Person.Builder()
-            .setName("Network Sniffer")
+            .setName(context.getString(R.string.notification_name))
             .setImportant(true)
             .build()
 
@@ -38,10 +36,11 @@ internal object NetworkSnifferNotification {
 
         val notification = Notification.Builder(context, CHANNEL_ID)
             .setContentIntent(bubbleIntent)
-            .setContentTitle("Network Sniffer")
-            .setContentText("Monitor api calls and their responses")
-            .setSmallIcon(R.drawable.ic_youtube)
+            .setContentTitle(context.getString(R.string.notification_name))
+            .setContentText(context.getString(R.string.notification_text))
+            .setSmallIcon(R.drawable.ic_notification_icon)
             .setBubbleMetadata(bubbleData)
+            .setOnlyAlertOnce(true)
             .addPerson(person)
             .setCategory(Notification.CATEGORY_MESSAGE)
             .setStyle(Notification.MessagingStyle(person))
@@ -49,8 +48,12 @@ internal object NetworkSnifferNotification {
             .setLocusId(LocusId(person.name.toString()))
             .build()
 
-        val channel = NotificationChannel(CHANNEL_ID, "NetworkSniffer", NotificationManager.IMPORTANCE_DEFAULT).apply {
-            description = "Notification for the NetworkSniffer"
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            context.getString(R.string.notification_name),
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = context.getString(R.string.notification_channel_description)
         }
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -64,7 +67,7 @@ internal object NetworkSnifferNotification {
         val shortcut = ShortcutInfo.Builder(context, shortcutId)
             .setLocusId(LocusId(shortcutId))
             .setShortLabel(shortcutId)
-            .setIcon(Icon.createWithResource(context, R.drawable.ic_youtube))
+            .setIcon(Icon.createWithResource(context, R.drawable.ic_notification_icon))
             .setLongLived(true)
             .setPerson(person)
             .setCategories(setOf(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION))

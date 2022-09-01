@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -204,7 +205,7 @@ private fun BoxScope.Empty() {
         modifier = Modifier
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
-        text = "No requests yet",
+        text = stringResource(R.string.feed_state_empty),
         style = MaterialTheme.typography.h5,
         color = Color.Black.copy(alpha = 0.3f),
     )

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,7 @@ private fun Content(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Headline(text = "URL")
+        Headline(text = stringResource(R.string.details_headline_url))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -92,7 +93,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = "Request Headers")
+        Headline(text = stringResource(R.string.details_headline_request_headers))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -100,7 +101,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = "Request Body")
+        Headline(text = stringResource(R.string.details_headline_request_body))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -108,14 +109,14 @@ private fun Content(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.requestBody ?: "Empty Request Body",
+            text = networkRequestDetailsItem.requestBody ?: stringResource(R.string.details_request_body_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = "Response Headers")
+        Headline(text = stringResource(R.string.details_headline_response_headers))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -123,7 +124,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = "Response Body")
+        Headline(text = stringResource(R.string.details_headline_response_body))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -131,7 +132,7 @@ private fun Content(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.responseBody ?: "Empty Response Body",
+            text = networkRequestDetailsItem.responseBody ?: stringResource(R.string.details_response_body_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
@@ -155,7 +156,7 @@ private fun Headers(
 ) {
     if(headers.isNullOrEmpty()) {
         Text(
-            text = "Empty Headers",
+            text = stringResource(R.string.details_headers_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
@@ -209,7 +210,7 @@ private fun BoxScope.Error() {
         modifier = Modifier
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
-        text = "Couldn't find request",
+        text = stringResource(R.string.details_state_error),
         style = MaterialTheme.typography.h5,
         color = Color.Black.copy(alpha = 0.3f),
     )

@@ -44,7 +44,7 @@ private class InMemoryNetworkDataRepository : NetworkDataRepository {
     private val networkRequests = mutableListOf<NetworkRequest>()
     private val updates = MutableSharedFlow<List<NetworkRequest>>(replay = 1)
 
-    override val requests: Flow<List<NetworkRequest>> = updates
+    override val requests: Flow<List<NetworkRequest>> = updates.onStart { emit(networkRequests) }
 
     override fun request(id: Long): NetworkRequest? {
         return networkRequests.firstOrNull { it.id == id }
