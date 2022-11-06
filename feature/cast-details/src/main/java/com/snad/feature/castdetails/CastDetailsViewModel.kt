@@ -89,7 +89,7 @@ internal class CastDetailsViewModel(
         private val clock: Clock,
         private val dateTimeFormatter: DateTimeFormatter
     ): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return CastDetailsViewModel(personRepository, ioDispatcher, clock, dateTimeFormatter) as T
         }
     }

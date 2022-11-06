@@ -57,6 +57,7 @@ internal class MovieDetailsRepositoryImpl @Inject constructor(
                 )
                 libraryDb.updateMovie(updatedMovie)
             }
+            else -> { /* Do nothing */ }
         }
     }
 

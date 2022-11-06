@@ -11,17 +11,26 @@ android {
     defaultConfig {
         applicationId "com.snad.spotlight"
     }
+
+    signingConfigs {
+        debug {}
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             multiDexKeepFile file('multidex-config.txt')
+            //for testing only, don't do this in your app
+            signingConfig signingConfigs.debug
         }
         debug {
             applicationIdSuffix ".debug"
             multiDexKeepFile file('multidex-config.txt')
+            signingConfig signingConfigs.debug
         }
     }
+    namespace 'com.snad.spotlight'
 }
 
 dependencies {
@@ -33,16 +42,18 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
-    implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
-    implementation "androidx.room:room-runtime:2.3.0" //database for persistence
-    implementation "androidx.room:room-ktx:2.3.0" //room kotlin extensions, coroutine support
-    kapt "androidx.room:room-compiler:2.3.0" //room compiler for persistence
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0' //adds retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0' //json converter for retrofit
+    implementation "androidx.room:room-runtime:2.4.3" //database for persistence
+    implementation "androidx.room:room-ktx:2.4.3" //room kotlin extensions, coroutine support
+    kapt "androidx.room:room-compiler:2.4.3" //room compiler for persistence
     implementation 'androidx.multidex:multidex:2.0.1' //because of max method count
-    implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
-    kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
+    implementation 'com.google.dagger:dagger:2.44' //dagger for dependency injection
+    kapt 'com.google.dagger:dagger-compiler:2.44' //dagger annotation processor
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5' //catching memory leaks
+    debugImplementation 'com.sebastianneubauer:kommute:0.0.1'
+    releaseImplementation 'com.sebastianneubauer:kommute-no-op:0.0.1'
 
     implementation project(":feature:library")
     implementation project(":feature:new-movies")

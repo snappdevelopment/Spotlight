@@ -62,7 +62,7 @@ internal class LibraryViewModel(
         private  val libraryRepository: LibraryRepository,
         private val ioDispatcher: CoroutineDispatcher
     ): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return LibraryViewModel(libraryRepository, ioDispatcher) as T
         }
     }

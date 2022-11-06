@@ -45,7 +45,7 @@ internal class NewMoviesViewModel(
         private  val newMoviesRepository: NewMoviesRepositoryImpl,
         private val ioDispatcher: CoroutineDispatcher
     ): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return NewMoviesViewModel(newMoviesRepository, ioDispatcher) as T
         }
     }

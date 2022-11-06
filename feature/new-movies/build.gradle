@@ -5,6 +5,9 @@ plugins {
 }
 
 apply from: "$rootProject.projectDir/android-module.gradle"
+android {
+    namespace 'com.snad.feature.newmovies'
+}
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.5.0'
@@ -14,14 +17,14 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha02'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
-    implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2' //kotlin annotation support
-    implementation 'com.squareup.moshi:moshi-kotlin:1.9.2' //is needed for kotlin annotation support
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0' //adds retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0' //json converter for retrofit
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.14.0' //kotlin annotation support
+    implementation 'com.squareup.moshi:moshi-kotlin:1.14.0' //is needed for kotlin annotation support
     implementation 'com.squareup.picasso:picasso:2.71828' //async image loading
     implementation 'jp.wasabeef:picasso-transformations:2.2.1' //rounded corners for images
-    implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
-    kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
+    implementation 'com.google.dagger:dagger:2.44' //dagger for dependency injection
+    kapt 'com.google.dagger:dagger-compiler:2.44' //dagger annotation processor
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8' //adds coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
