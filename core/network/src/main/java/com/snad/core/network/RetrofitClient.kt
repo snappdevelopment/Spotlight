@@ -1,6 +1,5 @@
 package com.snad.core.network
 
-import com.sebastianneubauer.kommute.Kommute
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,7 +17,6 @@ internal class RetrofitClient @Inject constructor(
         val httpClient = OkHttpClient.Builder()
             .cache(cache)
             .addInterceptor(ApiKeyInterceptor())
-            .addInterceptor(Kommute.getInstance().getInterceptor())
             .build()
 
         return Retrofit.Builder()

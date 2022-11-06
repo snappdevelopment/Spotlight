@@ -5,6 +5,7 @@ plugins {
 
 //common module config
 apply from: "$rootProject.projectDir/android-module.gradle"
+
 android {
     namespace 'com.snad.core.ui'
 }

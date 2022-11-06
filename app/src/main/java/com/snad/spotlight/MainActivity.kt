@@ -6,8 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.sebastianneubauer.kommute.Kommute
-//import com.sebastianneubauer.kommute.Kommute
 import com.snad.spotlight.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,8 +16,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
-        Kommute.getInstance().start(this)
 
         val navView: BottomNavigationView = viewBinding.navView
         val navController = findNavController(R.id.nav_host_fragment)
