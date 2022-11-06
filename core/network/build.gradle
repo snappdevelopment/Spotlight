@@ -6,9 +6,13 @@ plugins {
 
 apply from: "$rootProject.projectDir/android-module.gradle"
 
+android {
+    namespace 'com.snad.core.network'
+}
+
 dependencies {
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2' //adds retrofit
-    implementation 'com.squareup.retrofit2:converter-moshi:2.7.2' //json converter for retrofit
-    implementation 'com.google.dagger:dagger:2.29.1' //dagger for dependency injection
-    kapt 'com.google.dagger:dagger-compiler:2.29.1' //dagger annotation processor
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0' //adds retrofit
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0' //json converter for retrofit
+    implementation 'com.google.dagger:dagger:2.44' //dagger for dependency injection
+    kapt 'com.google.dagger:dagger-compiler:2.44' //dagger annotation processor
 }

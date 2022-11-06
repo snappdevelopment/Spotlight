@@ -6,6 +6,10 @@ plugins {
 //common feature module config
 apply from: "$rootProject.projectDir/android-module.gradle"
 
+android {
+    namespace 'com.snad.spotlight.persistence.testing'
+}
+
 dependencies {
     implementation project(":core:persistence")
 

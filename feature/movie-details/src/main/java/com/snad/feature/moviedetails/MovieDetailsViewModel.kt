@@ -105,7 +105,7 @@ internal class MovieDetailsViewModel(
         private val ioDispatcher: CoroutineDispatcher,
         private val clock: Clock
     ): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MovieDetailsViewModel(movieDetailsRepository, ioDispatcher, clock) as T
         }
     }

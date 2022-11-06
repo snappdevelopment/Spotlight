@@ -52,7 +52,7 @@ class MovieDetailsFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
     }
 
     override fun onCreateView(
@@ -103,12 +103,12 @@ class MovieDetailsFragment: Fragment() {
 
     private fun castClickListener(id: Int) {
         val action = MovieDetailsFragmentDirections.actionNavigationMovieDetailsToNavigationCastDetails(
-            id = id,
-            backgroundColor = (viewBinding.background.background as ColorDrawable).color,
-            titleColor = viewBinding.castHeadline.currentTextColor,
-            bodyColor = viewBinding.runtimeTextView.currentTextColor,
-            accentColor = (viewBinding.overviewBackground.background as ColorDrawable).color,
-            accentBodyColor = viewBinding.overviewTextView.currentTextColor
+            id,
+            (viewBinding.background.background as ColorDrawable).color,
+            viewBinding.castHeadline.currentTextColor,
+            viewBinding.runtimeTextView.currentTextColor,
+            (viewBinding.overviewBackground.background as ColorDrawable).color,
+            viewBinding.overviewTextView.currentTextColor
         )
         findNavController().navigate(action)
     }

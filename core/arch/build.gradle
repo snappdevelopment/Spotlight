@@ -6,6 +6,10 @@ plugins {
 //common module config
 apply from: "$rootProject.projectDir/android-module.gradle"
 
+android {
+    namespace 'com.snad.core.arch'
+}
+
 dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-alpha02'
